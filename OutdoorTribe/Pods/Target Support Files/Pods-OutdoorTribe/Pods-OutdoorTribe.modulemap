@@ -1,0 +1,6 @@
+framework module Pods_OutdoorTribe {
+  umbrella header "Pods-OutdoorTribe-umbrella.h"
+
+  export *
+  module * { export * }
+}
