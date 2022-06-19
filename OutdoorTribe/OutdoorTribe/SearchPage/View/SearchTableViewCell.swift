@@ -11,6 +11,8 @@ class SearchTableViewCell: UITableViewCell {
     
     @IBOutlet weak var photoImage: UIImageView!
     
+    @IBOutlet weak var titleLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

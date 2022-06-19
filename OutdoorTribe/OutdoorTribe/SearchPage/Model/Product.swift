@@ -8,20 +8,24 @@
 import Foundation
 
 struct Product {
+    var renter: String
+//    var lessor: String
     var title: String
     var rent: Int
     var address: String
-    var amount: Int
+    var totalAmount: Int
     var availableDate: [Date]
     var description: String
     var photoUrl: [String]
     
     var toDict: [String: Any] {
         return [
+            "renter": renter as Any,
+//            "lessor": lessor as Any,
             "title": title as Any,
             "rent": rent as Any,
             "address": address as Any,
-            "amount": amount as Any,
+            "totalAmount": totalAmount as Any,
             "availableDate": availableDate as Any,
             "description": description as Any,
             "photoUrl": photoUrl as Any

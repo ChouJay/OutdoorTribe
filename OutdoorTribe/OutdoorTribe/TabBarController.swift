@@ -22,9 +22,9 @@ class TabBarController: UITabBarController {
         super.viewDidLoad()
         childVc = storyboard?.instantiateViewController(withIdentifier: "PostViewController") as? PostViewController
         setUpPlusButtonUI()
+        self.delegate = self
         // Do any additional setup after loading the view.
     }
-    
 
     func setUpPlusButtonUI() {
         plusButton.addTarget(self, action: #selector(tapPlus), for: .touchUpInside)
@@ -33,5 +33,16 @@ class TabBarController: UITabBarController {
         plusButton.translatesAutoresizingMaskIntoConstraints = false
         plusButton.centerYAnchor.constraint(equalTo: self.tabBar.centerYAnchor, constant: -50).isActive = true
         plusButton.centerXAnchor.constraint(equalTo: self.tabBar.centerXAnchor).isActive = true
+    }
+}
+
+extension TabBarController: UITabBarControllerDelegate {
+    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        print(item.tag)
+        if item.tag == 0 {
+            plusButton.isHidden = false
+        } else {
+            plusButton.isHidden = true
+        }
     }
 }

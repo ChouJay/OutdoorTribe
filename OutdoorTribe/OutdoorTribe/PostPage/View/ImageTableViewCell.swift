@@ -44,7 +44,6 @@ extension ImageTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let imageItem = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionViewCell", for: indexPath) as? ImageCollectionViewCell else { fatalError() }
         imageItem.iamgeView.image = nil
-        
         imageItem.gestureRecognizers?.removeAll()
         if indexPath.row == 0 {
             imageItem.iamgeView.backgroundColor = .lightGray

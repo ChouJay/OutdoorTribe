@@ -15,13 +15,17 @@ class PostViewController: UIViewController {
     var targetCell: ImageTableViewCell?
     var uploadedPhoto = [UIImage]()
     let imagePickerController = UIImagePickerController()
-    var product = Product(title: "", rent: 0, address: "", amount: 0, availableDate: [Date()], description: "", photoUrl: [])
-    
+    var product = Product(renter: "Choujay", title: "", rent: 0, address: "", totalAmount: 0, availableDate: [Date()], description: "", photoUrl: [])
+    var startDate = Date()
+    var endDate = Date()
+    var leaseTerm = [Date]()
     
     @IBOutlet weak var postTableView: UITableView!
     @IBAction func tapPost(_ sender: Any) {
         uploadPhoto()
+        uploadedPhoto = []
         dismiss(animated: true)
+        postTableView.reloadData()
     }
     
     override func viewDidLoad() {
@@ -31,6 +35,7 @@ class PostViewController: UIViewController {
         imagePickerController.delegate = self
         // Do any additional setup after loading the view.
     }
+    
     
     func uploadPhoto() {
         let group: DispatchGroup = DispatchGroup()
@@ -62,16 +67,16 @@ class PostViewController: UIViewController {
         }
         
         group.notify(queue: DispatchQueue.main) {
-            print("test GCD")
+            guard paths.isEmpty == false else { return }
             self.product.photoUrl = paths
             print(self.product.photoUrl)
-            firstoreDb.collection("image").document("hhh").setData(self.product.toDict)
+            firstoreDb.collection("image").document().setData(self.product.toDict)
 
         }
     }
 }
 
-// MARK: post tableView dataSource
+// MARK: - post tableView dataSource
 extension PostViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         2
@@ -139,7 +144,7 @@ extension PostViewController: UploadPhotoDelegate {
     }
 }
 
-// MARK: ImagePickerControllerDelegate
+// MARK: - ImagePickerControllerDelegate
 extension PostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.originalImage] as? UIImage {
@@ -166,7 +171,7 @@ extension PostViewController: UIImagePickerControllerDelegate, UINavigationContr
     }
 }
 
-// MARK: text field delegate
+// MARK: - text field delegate
 extension PostViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         print(textField)
@@ -180,13 +185,49 @@ extension PostViewController: UITextFieldDelegate {
             product.address = textField.text ?? ""
         case "amount":
             guard let amountString = textField.text else { return }
-            product.amount = Int(amountString) ?? 1
+            product.totalAmount = Int(amountString) ?? 1
         case "begin date":
             print(textField.text)
+            guard let dateString = textField.text else { return }
+            startDate = convertDateStringToDate(textFieldText: dateString)
+            daysBetweenTwoDate()
+            
         case "last date":
             print(textField.text)
+            guard let dateString = textField.text else { return }
+            endDate = convertDateStringToDate(textFieldText: dateString)
+            daysBetweenTwoDate()
+            
         default:
             print("error")
         }
+    }
+// MARK: - Date related function
+    func daysBetweenTwoDate() {
+        leaseTerm = []
+        let calendar = Calendar.current
+        guard startDate < endDate else { return }
+        let components = calendar.dateComponents([.day], from: startDate, to: endDate)
+        guard let days = components.day else { return }
+        for round in 0...days {
+            guard let dateBeAdded = calendar.date(byAdding: .day, value: round, to: startDate) else { return}
+            leaseTerm.append(dateBeAdded)
+        }
+        product.availableDate = leaseTerm
+        print(leaseTerm)
+    }
+    
+    func convertDateStringToDate(textFieldText: String) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM dd"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        let dateString = textFieldText
+        guard let date = dateFormatter.date(from: dateString) else { fatalError() }
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone(identifier: "UTC")!  // 指定calendar的TimeZone這樣用component改year才不會差一天
+        var component = calendar.dateComponents([.year, .month, .day], from: date)
+        component.year = 2022
+        guard let correctDate = calendar.date(from: component) else { fatalError() }
+        return correctDate
     }
 }

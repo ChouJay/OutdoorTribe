@@ -32,11 +32,14 @@ class InfoTableViewCell: UITableViewCell {
     @objc func dateChange(datePicker: UIDatePicker) {
         beginDateTextField.text = formatDate(date: datePicker.date)
         beginDateTextField.resignFirstResponder()
+        
+        // Replace the hour (time) of both dates with 00:00
     }
     
     @objc func dateChangeForLast(datePicker: UIDatePicker) {
         lastDateTextField.text = formatDate(date: datePicker.date)
         lastDateTextField.resignFirstResponder()
+
     }
     
     func formatDate(date: Date) -> String {
