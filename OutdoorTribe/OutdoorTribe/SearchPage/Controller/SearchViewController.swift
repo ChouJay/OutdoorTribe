@@ -10,21 +10,20 @@ import FirebaseFirestore
 import Kingfisher
 
 class SearchViewController: UIViewController {
-    var documentsFromFirestore = [QueryDocumentSnapshot]()
     var products = [Product]()
+    
 
     @IBOutlet weak var searchTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         searchTableView.dataSource = self
-        // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        ProductManager.shared.retrievePhotos { documents in
-            self.documentsFromFirestore = documents
+        ProductManager.shared.retrievePostedProduct { productsFromFireStore in
+            self.products = productsFromFireStore
             self.searchTableView.reloadData()
         }
         navigationController?.navigationBar.isHidden = false
@@ -36,17 +35,15 @@ class SearchViewController: UIViewController {
 // MARK: table view delegate
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        documentsFromFirestore.count
+        products.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchTableViewCell", for: indexPath) as? SearchTableViewCell else { fatalError() }
         
-        guard let urlStrings = documentsFromFirestore[indexPath.row].data()["photoUrl"] as? [String],
-        let title = documentsFromFirestore[indexPath.row].data()["title"] as? String else { return cell }
-        guard let urlString = urlStrings.first else { return cell }
+        guard let urlString = products[indexPath.row].photoUrl.first else { return cell }
         cell.photoImage.kf.setImage(with: URL(string: urlString))
-        cell.titleLabel.text = title
+        cell.titleLabel.text = products[indexPath.row].title
         return cell
     }
 }
@@ -58,6 +55,6 @@ extension SearchViewController {
               let detailViewController = segue.destination as? DetailViewController,
               let indexPath = searchTableView.indexPath(for: searchTableViewCell)
         else { return }
-        detailViewController.chooseProduct = documentsFromFirestore[indexPath.row]
+        detailViewController.chooseProduct = products[indexPath.row]
     }
 }

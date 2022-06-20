@@ -6,13 +6,15 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
-struct Product {
+struct Product: Codable {
     var renter: String
 //    var lessor: String
     var title: String
     var rent: Int
-    var address: String
+    var address: GeoPoint
+    var addressString: String
     var totalAmount: Int
     var availableDate: [Date]
     var description: String
@@ -25,6 +27,7 @@ struct Product {
             "title": title as Any,
             "rent": rent as Any,
             "address": address as Any,
+            "addressString": addressString as Any,
             "totalAmount": totalAmount as Any,
             "availableDate": availableDate as Any,
             "description": description as Any,

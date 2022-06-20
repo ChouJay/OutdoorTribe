@@ -14,3 +14,6 @@ file_length:
 type_body_length:
   - 500 # warning
   - 700 # error
+line_length:
+  error: 205
+

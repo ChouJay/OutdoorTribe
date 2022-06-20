@@ -7,6 +7,7 @@
 
 import UIKit
 import AVKit
+import MapKit
 import FirebaseStorage
 import FirebaseFirestore
 
@@ -15,7 +16,7 @@ class PostViewController: UIViewController {
     var targetCell: ImageTableViewCell?
     var uploadedPhoto = [UIImage]()
     let imagePickerController = UIImagePickerController()
-    var product = Product(renter: "Choujay", title: "", rent: 0, address: "", totalAmount: 0, availableDate: [Date()], description: "", photoUrl: [])
+    var product = Product(renter: "Choujay", title: "", rent: 0, address: GeoPoint(latitude: 0, longitude: 0), addressString: "", totalAmount: 0, availableDate: [Date()], description: "", photoUrl: [])
     var startDate = Date()
     var endDate = Date()
     var leaseTerm = [Date]()
@@ -36,6 +37,20 @@ class PostViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    func convertAddressToGeoPoint(address: String) {
+        let geoCorder = CLGeocoder()
+        geoCorder.geocodeAddressString(address) { placemarks, error in
+            if error != nil {
+                print(error)
+                return
+            }
+            guard let latitude = placemarks?.first?.location?.coordinate.latitude,
+                  let longitude = placemarks?.first?.location?.coordinate.longitude else { return }
+            print(latitude)
+            print(longitude)
+            self.product.address = GeoPoint(latitude: latitude, longitude: longitude)
+        }
+    }
     
     func uploadPhoto() {
         let group: DispatchGroup = DispatchGroup()
@@ -70,7 +85,7 @@ class PostViewController: UIViewController {
             guard paths.isEmpty == false else { return }
             self.product.photoUrl = paths
             print(self.product.photoUrl)
-            firstoreDb.collection("image").document().setData(self.product.toDict)
+            firstoreDb.collection("product").document().setData(self.product.toDict)
 
         }
     }
@@ -92,6 +107,8 @@ extension PostViewController: UITableViewDataSource {
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "InfoTableViewCell", for: indexPath) as? InfoTableViewCell else { fatalError() }
             cell.titleTextField.delegate = self
+            cell.rentTextField.delegate = self
+            cell.addressTextField.delegate = self
             cell.beginDateTextField.delegate = self
             cell.lastDateTextField.delegate = self
             return cell
@@ -102,11 +119,11 @@ extension PostViewController: UITableViewDataSource {
     }
 }
 
-// MARK: post tableView delegate
+// MARK: - post tableView delegate
 extension PostViewController: UITableViewDelegate {
 }
 
-// MARK: uploade photo delegate
+// MARK: - uploade photo delegate
 extension PostViewController: UploadPhotoDelegate {
     func askToUploadPhoto() {
         let controller = UIAlertController(title: "請上傳照片", message: nil, preferredStyle: .actionSheet)
@@ -174,7 +191,6 @@ extension PostViewController: UIImagePickerControllerDelegate, UINavigationContr
 // MARK: - text field delegate
 extension PostViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
-        print(textField)
         switch textField.placeholder {
         case "title":
             product.title = textField.text ?? ""
@@ -182,18 +198,20 @@ extension PostViewController: UITextFieldDelegate {
             guard let rentString = textField.text else { return }
             product.rent = Int(rentString) ?? 0
         case "address":
-            product.address = textField.text ?? ""
+            product.addressString = textField.text ?? ""
+            // convert address to geoPoint
+            guard let addressString = textField.text else { return }
+            print(addressString)
+            convertAddressToGeoPoint(address: addressString)
         case "amount":
             guard let amountString = textField.text else { return }
             product.totalAmount = Int(amountString) ?? 1
         case "begin date":
-            print(textField.text)
             guard let dateString = textField.text else { return }
             startDate = convertDateStringToDate(textFieldText: dateString)
             daysBetweenTwoDate()
             
         case "last date":
-            print(textField.text)
             guard let dateString = textField.text else { return }
             endDate = convertDateStringToDate(textFieldText: dateString)
             daysBetweenTwoDate()

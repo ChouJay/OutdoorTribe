@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct Order {
+struct Order: Codable {
     var lessor: String
+    var renter: String
     var orderID: String
     var requiredAmount: Int
     var leaseTerm: [Date]
@@ -18,10 +19,11 @@ struct Order {
     var toDict: [String: Any] {
         return [
             "lessor": lessor as Any,
+            "renter": renter as Any,
             "orderID": orderID as Any,
             "requiredAmount": requiredAmount as Any,
             "leaseTerm": leaseTerm as Any,
-            "product": product as Any,
+            "product": product?.toDict as Any,
             "orderState": orderState as Any
         ]
     }

@@ -12,15 +12,24 @@ import FirebaseStorage
 class ProductManager {
     static let shared = ProductManager()
     
-    func retrievePhotos(_ completion: @escaping ([QueryDocumentSnapshot]) -> ()) {
+    func retrievePostedProduct(_ completion: @escaping ([Product]) -> ()) {
         var documents = [QueryDocumentSnapshot]()
-        let db = Firestore.firestore()
-        db.collection("image").getDocuments(source: .server) { querySnapShot, error in
+        var products = [Product]()
+        let firstoreDb = Firestore.firestore()
+        firstoreDb.collection("product").getDocuments(source: .server) { querySnapShot, error in
             if error == nil && querySnapShot != nil {
                 for document in querySnapShot!.documents {
                     documents.append(document)
+                    let product: Product?
+                    do {
+                        product = try document.data(as: Product.self, decoder: Firestore.Decoder())
+                        guard let product = product else { return }
+                        products.append(product)
+                    } catch {
+                        print("decode failure: \(error)")
+                    }
                 }
-                completion(documents)
+                completion(products)
             }
         }
 //        return retrieveImages

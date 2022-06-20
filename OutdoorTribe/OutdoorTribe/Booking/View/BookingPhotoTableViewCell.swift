@@ -1,24 +1,27 @@
 //
-//  DetailGalleryTableViewCell.swift
+//  BookingPhotoTableViewCell.swift
 //  OutdoorTribe
 //
-//  Created by Jay Chou on 2022/6/17.
+//  Created by Jay Chou on 2022/6/19.
 //
 
 import UIKit
+import FirebaseFirestore
 import Kingfisher
 
-class DetailGalleryTableViewCell: UITableViewCell {
-    var imageUrlStings = [String]()
+class BookingPhotoTableViewCell: UITableViewCell {
+    
+    var galleryUrlStrings = [String]()
     
     @IBOutlet weak var galleryCollectionView: UICollectionView!
     
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-//        galleryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createCompositionalLayout())
         galleryCollectionView.collectionViewLayout = createCompositionalLayout()
         galleryCollectionView.dataSource = self
+        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -42,16 +45,16 @@ class DetailGalleryTableViewCell: UITableViewCell {
     }
 }
 
-// MARK: - collection view dataSource
-extension DetailGalleryTableViewCell: UICollectionViewDataSource {
+// MARK: - Collection view dataSource
+extension BookingPhotoTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        imageUrlStings.count
+        galleryUrlStrings.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let item = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCollectionViewCell", for: indexPath) as? GalleryCollectionViewCell else { fatalError() }
+        guard let item = collectionView.dequeueReusableCell(withReuseIdentifier: "BookingPhotoCollectionViewCell", for: indexPath) as? BookingPhotoCollectionViewCell else { fatalError() }
         item.galleryView.image = nil
-        guard let url = URL(string: imageUrlStings[indexPath.row]) else { return item }
+        guard let url = URL(string: galleryUrlStrings[indexPath.row]) else { return item }
         item.galleryView.kf.setImage(with: url)
         return item
     }
