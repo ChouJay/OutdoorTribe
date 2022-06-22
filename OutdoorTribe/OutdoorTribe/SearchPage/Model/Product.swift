@@ -19,6 +19,7 @@ struct Product: Codable {
     var availableDate: [Date]
     var description: String
     var photoUrl: [String]
+    var classification: String
     
     var toDict: [String: Any] {
         return [
@@ -31,7 +32,8 @@ struct Product: Codable {
             "totalAmount": totalAmount as Any,
             "availableDate": availableDate as Any,
             "description": description as Any,
-            "photoUrl": photoUrl as Any
+            "photoUrl": photoUrl as Any,
+            "classification": classification as Any
         ]
     }
 }

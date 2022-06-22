@@ -16,7 +16,16 @@ class PostViewController: UIViewController {
     var targetCell: ImageTableViewCell?
     var uploadedPhoto = [UIImage]()
     let imagePickerController = UIImagePickerController()
-    var product = Product(renter: "Choujay", title: "", rent: 0, address: GeoPoint(latitude: 0, longitude: 0), addressString: "", totalAmount: 0, availableDate: [Date()], description: "", photoUrl: [])
+    var product = Product(renter: "Choujay",
+                          title: "",
+                          rent: 0,
+                          address: GeoPoint(latitude: 0, longitude: 0),
+                          addressString: "",
+                          totalAmount: 0,
+                          availableDate: [Date()],
+                          description: "",
+                          photoUrl: [],
+                          classification: "")
     var startDate = Date()
     var endDate = Date()
     var leaseTerm = [Date]()
@@ -111,6 +120,7 @@ extension PostViewController: UITableViewDataSource {
             cell.addressTextField.delegate = self
             cell.beginDateTextField.delegate = self
             cell.lastDateTextField.delegate = self
+            cell.classificationTextField.delegate = self
             return cell
         default:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "ImageTableViewCell", for: indexPath) as? ImageTableViewCell else { fatalError() }
@@ -199,7 +209,6 @@ extension PostViewController: UITextFieldDelegate {
             product.rent = Int(rentString) ?? 0
         case "address":
             product.addressString = textField.text ?? ""
-            // convert address to geoPoint
             guard let addressString = textField.text else { return }
             print(addressString)
             convertAddressToGeoPoint(address: addressString)
@@ -210,11 +219,12 @@ extension PostViewController: UITextFieldDelegate {
             guard let dateString = textField.text else { return }
             startDate = convertDateStringToDate(textFieldText: dateString)
             daysBetweenTwoDate()
-            
         case "last date":
             guard let dateString = textField.text else { return }
             endDate = convertDateStringToDate(textFieldText: dateString)
             daysBetweenTwoDate()
+        case "classification":
+            product.classification = textField.text ?? ""
             
         default:
             print("error")

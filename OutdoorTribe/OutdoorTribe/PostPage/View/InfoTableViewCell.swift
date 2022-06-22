@@ -15,6 +15,7 @@ class InfoTableViewCell: UITableViewCell {
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var beginDateTextField: UITextField!
     @IBOutlet weak var lastDateTextField: UITextField!
+    @IBOutlet weak var classificationTextField: UITextField!
     
     override func awakeFromNib() {
         super.awakeFromNib()
