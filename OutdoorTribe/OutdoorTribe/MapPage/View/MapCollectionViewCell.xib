@@ -41,6 +41,22 @@
                         <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30" scale="large" weight="regular"/>
                     </state>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iIN-1r-NgE">
+                    <rect key="frame" x="286" y="130" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="50" id="7bu-YJ-I7f"/>
+                        <constraint firstAttribute="height" constant="50" id="GcK-lC-B1f"/>
+                    </constraints>
+                    <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal">
+                        <imageReference key="image" image="car.circle" catalog="system" symbolScale="large"/>
+                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30" scale="large" weight="regular"/>
+                    </state>
+                    <connections>
+                        <action selector="tapRouteButton:" destination="iN0-l3-epB" eventType="touchUpInside" id="LDn-ZC-AH7"/>
+                    </connections>
+                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -51,17 +67,21 @@
                 <constraint firstItem="eeT-v9-Obi" firstAttribute="leading" secondItem="P45-Ei-xJQ" secondAttribute="trailing" constant="20" id="G1V-KJ-CSI"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="1wo-u1-T60" secondAttribute="trailing" constant="20" id="KSZ-xA-rz8"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="P45-Ei-xJQ" secondAttribute="bottom" constant="20" id="Oxh-En-alz"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="iIN-1r-NgE" secondAttribute="bottom" constant="20" id="PYu-OS-fGO"/>
                 <constraint firstItem="P45-Ei-xJQ" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="Yy0-KD-U1p"/>
+                <constraint firstItem="1wo-u1-T60" firstAttribute="leading" secondItem="iIN-1r-NgE" secondAttribute="trailing" constant="8" symbolic="YES" id="vDn-RF-FbX"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="photoImageView" destination="P45-Ei-xJQ" id="p9G-we-Yes"/>
+                <outlet property="routeButton" destination="iIN-1r-NgE" id="Xfn-4C-Gl5"/>
                 <outlet property="titleLabel" destination="eeT-v9-Obi" id="hYf-ib-xWj"/>
             </connections>
             <point key="canvasLocation" x="137.68115942028987" y="75"/>
         </view>
     </objects>
     <resources>
+        <image name="car.circle" catalog="system" width="128" height="121"/>
         <image name="phone.circle" catalog="system" width="128" height="121"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

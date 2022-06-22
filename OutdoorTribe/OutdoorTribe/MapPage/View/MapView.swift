@@ -10,6 +10,7 @@ import MapKit
 
 class MapView: MKMapView {
     func layoutView(from products: [Product]) {
+        removeAnnotations(annotations)
         if !products.isEmpty {
             for product in products {
                 let mark = MKPointAnnotation()
