@@ -67,14 +67,12 @@ class SearchViewController: UIViewController {
     func layoutChooseDateUI() {
         startDatePicker.datePickerMode = .date
         startDatePicker.preferredDatePickerStyle = .compact
-//        startDatePicker.timeZone = TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
-        startDatePicker.timeZone = TimeZone(identifier: "Asia/Taipei")
-//        startDatePicker.locale = Locale(identifier: "zh_TW")
+        startDatePicker.timeZone = .current
         print(startDatePicker.timeZone)
-//        startDatePicker.timeZone = .current
-//        print(startDatePicker.timeZone)
+
         endDatePicker.datePickerMode = .date
         endDatePicker.preferredDatePickerStyle = .compact
+        endDatePicker.timeZone = .current
         
         backgroundView.backgroundColor = .white
         view.addSubview(backgroundView)
