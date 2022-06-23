@@ -40,7 +40,6 @@ class InfoTableViewCell: UITableViewCell {
     @objc func dateChangeForLast(datePicker: UIDatePicker) {
         lastDateTextField.text = formatDate(date: datePicker.date)
         lastDateTextField.resignFirstResponder()
-
     }
     
     func formatDate(date: Date) -> String {
