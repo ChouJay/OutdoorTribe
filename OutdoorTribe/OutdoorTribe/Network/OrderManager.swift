@@ -37,7 +37,7 @@ class OrderManger {
         let firstoreDb = Firestore.firestore()
         firstoreDb.collection("orders").whereField("orderState", isLessThan: 3).whereField("orderState", isNotEqualTo: 0).getDocuments(source: .server) { querySnapShot, error in
             if error == nil && querySnapShot != nil {
-                for document in querySnapShot!.documents {
+                for document in querySnapShot!.documents {                    
                     let order: Order?
                     do {
                         order = try document.data(as: Order.self, decoder: Firestore.Decoder())

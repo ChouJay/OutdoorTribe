@@ -12,7 +12,29 @@ import FirebaseStorage
 class ProductManager {
     static let shared = ProductManager()
     
-    func searchPostedProduct(keyWord: String, _ completion: @escaping ([Product]) -> ()) {
+    func classifyPostedProduct(keyWord: String, _ completion: @escaping ([Product]) -> Void) {
+        var products = [Product]()
+        let firstoreDb = Firestore.firestore()
+        firstoreDb.collection("product")
+            .whereField("classification", isEqualTo: keyWord)
+            .getDocuments(source: .server) { querySnapShot, error in
+            if error == nil && querySnapShot != nil {
+                for document in querySnapShot!.documents {
+                    let product: Product?
+                    do {
+                        product = try document.data(as: Product.self, decoder: Firestore.Decoder())
+                        guard let product = product else { return }
+                        products.append(product)
+                    } catch {
+                        print("decode failure: \(error)")
+                    }
+                }
+                completion(products)
+            }
+        }
+    }
+    
+    func searchPostedProduct(keyWord: String, _ completion: @escaping ([Product]) -> Void) {
         var products = [Product]()
         let firstoreDb = Firestore.firestore()
         firstoreDb.collection("product")
@@ -35,7 +57,7 @@ class ProductManager {
         }
     }
     
-    func retrievePostedProduct(_ completion: @escaping ([Product]) -> ()) {
+    func retrievePostedProduct(_ completion: @escaping ([Product]) -> Void) {
         var documents = [QueryDocumentSnapshot]()
         var products = [Product]()
         let firstoreDb = Firestore.firestore()

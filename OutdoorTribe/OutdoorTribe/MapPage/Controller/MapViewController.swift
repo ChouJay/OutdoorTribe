@@ -13,13 +13,13 @@ import Kingfisher
 class MapViewController: UIViewController {
 
     var products = [Product]()
-    var filterProducts = [Product]()
+    var afterFiltedProducts = [Product]()
     var myLocationManager = CLLocationManager()
     var isFilter = false {
         didSet {
             switch isFilter {
             case false:
-                filterProducts = products
+                afterFiltedProducts = products
             case true:
                 return
             }
@@ -68,8 +68,8 @@ class MapViewController: UIViewController {
         navigationController?.navigationBar.isHidden = false
         ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
             self?.products = postedProducts
-            self?.filterProducts = postedProducts
-            self?.mapView.layoutView(from: self!.filterProducts)
+            self?.afterFiltedProducts = postedProducts
+            self?.mapView.layoutView(from: self!.afterFiltedProducts)
             self?.productCollectionView.reloadData()
         }
     }
@@ -97,16 +97,16 @@ class MapViewController: UIViewController {
 // MARK: - collection view dataSource
 extension MapViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        filterProducts.count
+        afterFiltedProducts.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let item = collectionView.dequeueReusableCell(withReuseIdentifier: "MapCollectionViewCell", for: indexPath) as? MapCollectionViewCell else { fatalError() }
         item.routeDelegae = self
-        guard let urlString = filterProducts[indexPath.row].photoUrl.first,
+        guard let urlString = afterFiltedProducts[indexPath.row].photoUrl.first,
               let url = URL(string: urlString) else { return item }
         item.photoImageView.kf.setImage(with: url)
-        item.titleLabel.text = filterProducts[indexPath.row].title
+        item.titleLabel.text = afterFiltedProducts[indexPath.row].title
         return item
     }
 }
@@ -120,7 +120,7 @@ extension MapViewController: CLLocationManagerDelegate {
 extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         mapView.removeOverlays(mapView.overlays)
-        for (index, item) in filterProducts.enumerated() {
+        for (index, item) in afterFiltedProducts.enumerated() {
             print(index)
             if item.address.longitude == view.annotation?.coordinate.longitude || item.address.latitude == view.annotation?.coordinate.latitude {
                 print(index)
@@ -157,18 +157,18 @@ extension MapViewController: UISearchBarDelegate {
             case false:
                 ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
                     self?.products = postedProducts
-                    self?.filterProducts = postedProducts
+                    self?.afterFiltedProducts = postedProducts
                     print(self?.products)
-                    self?.mapView.layoutView(from: self!.filterProducts)
+                    self?.mapView.layoutView(from: self!.afterFiltedProducts)
                     self?.productCollectionView.reloadData()
                 }
             case true:
                 ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
                     self?.products = postedProducts
-                    self?.filterProducts = postedProducts
+                    self?.afterFiltedProducts = postedProducts
                     self?.tapFilterConfirmButton()
                     print(self?.products)
-                    self?.mapView.layoutView(from: self!.filterProducts)
+                    self?.mapView.layoutView(from: self!.afterFiltedProducts)
                     self?.productCollectionView.reloadData()
                 }
             }
@@ -181,19 +181,19 @@ extension MapViewController: UISearchBarDelegate {
             guard let keyWord = searchBar.text else { return }
             ProductManager.shared.searchPostedProduct(keyWord: keyWord) { [weak self] postedProducts in
                 self?.products = postedProducts
-                self?.filterProducts = postedProducts
+                self?.afterFiltedProducts = postedProducts
                 print(self?.products)
-                self?.mapView.layoutView(from: self!.filterProducts)
+                self?.mapView.layoutView(from: self!.afterFiltedProducts)
                 self?.productCollectionView.reloadData()
             }
         case true:
             guard let keyWord = searchBar.text else { return }
             ProductManager.shared.searchPostedProduct(keyWord: keyWord) { [weak self] postedProducts in
                 self?.products = postedProducts
-                self?.filterProducts = postedProducts
+                self?.afterFiltedProducts = postedProducts
                 self?.tapFilterConfirmButton()
                 print(self?.products)
-                self?.mapView.layoutView(from: self!.filterProducts)
+                self?.mapView.layoutView(from: self!.afterFiltedProducts)
                 self?.productCollectionView.reloadData()
             }
         }
@@ -231,10 +231,9 @@ extension MapViewController: UISearchBarDelegate {
         buttonForStopFilter.widthAnchor.constraint(equalToConstant: 40).isActive = true
         buttonForStopFilter.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor).isActive = true
         buttonForStopFilter.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
-
-        
-        var hStack = UIStackView()
-        var subViews = [startDatePicker, endDatePicker]
+     
+        let hStack = UIStackView()
+        let subViews = [startDatePicker, endDatePicker]
         for subView in subViews {
             hStack.addArrangedSubview(subView)
         }
@@ -250,7 +249,7 @@ extension MapViewController: UISearchBarDelegate {
     }
     
     @objc func tapFilterConfirmButton() {
-        filterProducts = []
+        afterFiltedProducts = []
         dateButton.isHidden = false
         buttonForDoingFilter.isHidden = true
         backgroundView.removeFromSuperview()
@@ -264,11 +263,11 @@ extension MapViewController: UISearchBarDelegate {
             print(availableSet)
             print(filterSet)
             if filterSet.isSubset(of: availableSet) {
-                filterProducts.append(product)
+                afterFiltedProducts.append(product)
             }
         }
         isFilter = true
-        mapView.layoutView(from: filterProducts)
+        mapView.layoutView(from: afterFiltedProducts)
         productCollectionView.reloadData()
     }
     
@@ -279,7 +278,7 @@ extension MapViewController: UISearchBarDelegate {
             subview.removeFromSuperview()
         }
         isFilter = false
-        mapView.layoutView(from: filterProducts)
+        mapView.layoutView(from: afterFiltedProducts)
         productCollectionView.reloadData()
     }
 }
@@ -290,8 +289,14 @@ extension MapViewController {
         var dayInterval = [Date]()
         var calendar = Calendar.current
         calendar.timeZone = TimeZone(identifier: "UTC")!
+        print(startDate)
+        print(endDate)
         guard startDate <= endDate else { return dayInterval }
-        guard let standardStartDate = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: startDate),
+        guard let standardStartDate = calendar.date(
+                bySettingHour: 0,
+                minute: 0,
+                second: 0,
+                of: startDate),
               let standardEndDate = calendar.date(
                 bySettingHour: 0,
                 minute: 0,
@@ -319,8 +324,8 @@ extension MapViewController: MapRouteDelegate {
         
         guard let sourceLocation = myLocationManager.location?.coordinate else { return }
         let destinationLocation = CLLocationCoordinate2D(
-            latitude: filterProducts[indexPath.row].address.latitude,
-            longitude: filterProducts[indexPath.row].address.longitude)
+            latitude: afterFiltedProducts[indexPath.row].address.latitude,
+            longitude: afterFiltedProducts[indexPath.row].address.longitude)
         
         let sourcePlaceMark = MKPlacemark(coordinate: sourceLocation)
         let destinationPlaceMark = MKPlacemark(coordinate: destinationLocation)
