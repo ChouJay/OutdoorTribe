@@ -311,8 +311,6 @@ extension SearchViewController {
 // MARK: - func to get every days between two date
 extension SearchViewController {
     func daysBetweenTwoDate(startDate: Date, endDate: Date) -> [Date] {
-        print(startDate)
-        print(endDate)
         var dayInterval = [Date]()
         var calendar = Calendar.current
         calendar.timeZone = TimeZone(identifier: "UTC")!

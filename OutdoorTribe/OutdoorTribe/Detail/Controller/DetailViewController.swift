@@ -14,6 +14,7 @@ class DetailViewController: UIViewController {
 
     var order = Order(lessor: "George", renter: "", orderID: "", requiredAmount: 0, leaseTerm: [], product: nil)
     var chooseProduct: Product?
+    var chatRoom = ChatRoom(users: nil, roomID: "", lastMessage: "Hi", lastDate: Date(), chaterOne: "Jay", chaterTwo: "George")
     @IBOutlet weak var detailTableView: UITableView!
     
     @IBAction func tapApplyButton(_ sender: Any) {
@@ -21,6 +22,12 @@ class DetailViewController: UIViewController {
         order.product = chooseProduct
         OrderManger.shared.uploadOrder(orderFromVC: &order)
         navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction func tapChatButton(_ sender: Any) {
+        let uuid = UUID().uuidString
+        chatRoom.roomID = uuid
+        ChatManager.shared.createChatRoomIfNeed(chatRoom: chatRoom)
     }
     
     override func viewDidLoad() {
@@ -32,7 +39,7 @@ class DetailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
+//        navigationController?.navigationBar.isHidden = true
         guard let tabBarVc = tabBarController as? TabBarController else { return }
         tabBarVc.plusButton.isHidden = true
     }

@@ -73,7 +73,7 @@ class PostViewController: UIViewController {
             guard let imageData = image.jpegData(compressionQuality: 0.8) else { return }
             let fileRef = storageRef.child(path + String(endPoint))
             group.enter()
-            let uploadTask = fileRef.putData(imageData, metadata: nil) { storageMetadata, error in
+            fileRef.putData(imageData, metadata: nil) { storageMetadata, error in
                 if error == nil && storageMetadata != nil {
                     fileRef.downloadURL { url, error in
                         guard let downloadUrl = url else {
@@ -109,12 +109,16 @@ extension PostViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.row {
         case 0:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ImageTableViewCell", for: indexPath) as? ImageTableViewCell else { fatalError() }
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "ImageTableViewCell",
+                for: indexPath) as? ImageTableViewCell else { fatalError() }
             cell.photoDelegate = self
             cell.uploadedPhoto = uploadedPhoto
             return cell
         case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "InfoTableViewCell", for: indexPath) as? InfoTableViewCell else { fatalError() }
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "InfoTableViewCell",
+                for: indexPath) as? InfoTableViewCell else { fatalError() }
             cell.titleTextField.delegate = self
             cell.rentTextField.delegate = self
             cell.addressTextField.delegate = self
@@ -123,7 +127,9 @@ extension PostViewController: UITableViewDataSource {
             cell.classificationTextField.delegate = self
             return cell
         default:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ImageTableViewCell", for: indexPath) as? ImageTableViewCell else { fatalError() }
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "ImageTableViewCell",
+                for: indexPath) as? ImageTableViewCell else { fatalError() }
             return cell
         }
     }
