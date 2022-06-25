@@ -315,7 +315,11 @@ extension SearchViewController {
         var calendar = Calendar.current
         calendar.timeZone = TimeZone(identifier: "UTC")!
         guard startDate <= endDate else { return dayInterval }
-        guard let standardStartDate = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: startDate),
+        guard let standardStartDate = calendar.date(
+                bySettingHour: 0,
+                minute: 0,
+                second: 0,
+                of: startDate),
               let standardEndDate = calendar.date(
                 bySettingHour: 0,
                 minute: 0,
