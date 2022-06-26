@@ -19,6 +19,8 @@ class ChatViewController: UIViewController {
     var chatRoom = ChatRoom(roomID: "9C6784B5-0B87-4904-B9FA-E93533BDDD7B", lastMessage: "hi", lastDate: Date(), chaterOne: "Jay", chaterTwo: "George")
     var chatMessage = Message(sender: "Jay", receiver: "George", message: "", productPhoto: "", date: Date())
     
+    
+    @IBOutlet weak var navigationTitle: UINavigationItem!
     @IBOutlet weak var chatTableView: UITableView!
     @IBOutlet weak var typingTextView: UITextView!
     @IBAction func tapSendButton(_ sender: UIButton) {
@@ -34,9 +36,10 @@ class ChatViewController: UIViewController {
         choosePhoto()
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.isHidden = false
+        
         imagePickerController.delegate = self
         
         chatTableView.dataSource = self
@@ -44,7 +47,7 @@ class ChatViewController: UIViewController {
         ChatManager.shared.addChatRoomListener(to: chatRoom) { [weak self] messagesFromServer in
             guard let message = self?.messages else { return }
             self?.messages = message + messagesFromServer
-            guard var indexRow = self?.messages.count else { return }
+            guard let indexRow = self?.messages.count else { return }
             self?.chatTableView.reloadData()
             if indexRow == 0 {
                 return
@@ -55,8 +58,8 @@ class ChatViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationTitle.title = "George"
     }
-    
 }
 
 // MARK: - table view dataSource
@@ -69,26 +72,32 @@ extension ChatViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if messages[indexPath.row].productPhoto == "" {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatTableViewCell", for: indexPath) as? ChatTableViewCell else { fatalError() }
+            cell.layOutTextBubble()
             if messages[indexPath.row].sender == "Jay" {
-                cell.rightTextBubble.isHidden = false
-                cell.leftTextBubble.isHidden = true
+                cell.rightBubbleView.isHidden = false
+                cell.leftBubbleView.isHidden = true
+                cell.photoView.isHidden = true
                 cell.rightTextBubble.text = messages[indexPath.row].message
             } else {
-                cell.leftTextBubble.isHidden = false
-                cell.rightTextBubble.isHidden = true
+                cell.leftBubbleView.isHidden = false
+                cell.rightBubbleView.isHidden = true
+                cell.photoView.isHidden = false
                 cell.leftTextBubble.text = messages[indexPath.row].message
             }
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatImageTableViewCell", for: indexPath) as? ChatImageTableViewCell,
                   let url = URL(string: messages[indexPath.row].productPhoto) else { fatalError() }
+            cell.layOutImageCell()
             if messages[indexPath.row].sender == "Jay" {
-                cell.rightImage.isHidden = false
-                cell.leftImage.isHidden = true
+                cell.rightView.isHidden = false
+                cell.leftView.isHidden = true
+                cell.photoView.isHidden = true
                 cell.rightImage.kf.setImage(with: url)
             } else {
-                cell.leftImage.isHidden = false
-                cell.rightImage.isHidden = true
+                cell.leftView.isHidden = false
+                cell.rightView.isHidden = true
+                cell.photoView.isHidden = false
                 cell.leftImage.kf.setImage(with: url)
             }
             return cell

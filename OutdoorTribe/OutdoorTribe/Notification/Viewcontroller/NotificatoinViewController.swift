@@ -24,10 +24,11 @@ class NotificatoinViewController: UIViewController {
         super.viewWillAppear(animated)
         OrderManger.shared.retrieveApplyingOrder { documents in
             self.orderDocumentsFromFirestore = documents
+            self.chatRoomTableView.reloadData()
         }
         ChatManager.shared.loadingChatRoom { chatRoomsFromServer in
             self.chatRooms = chatRoomsFromServer
-            self.chatRoomTableView.reloadData()
+            
         }
     }
 }
@@ -58,7 +59,9 @@ extension NotificatoinViewController: UITableViewDataSource {
             collectionViewFromCell = cell.applyCollectionView
             return cell
         case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatListTableViewCell", for: indexPath) as? ChatListTableViewCell else { fatalError() }
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "ChatListTableViewCell",
+                for: indexPath) as? ChatListTableViewCell else { fatalError() }
             if chatRooms[indexPath.row].chaterOne == "Jay" {
                 cell.chatListName.text =  chatRooms[indexPath.row].chaterTwo
             } else {
@@ -66,7 +69,9 @@ extension NotificatoinViewController: UITableViewDataSource {
             }
             return cell
         default:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ApplyTableViewCell", for: indexPath) as? ApplyTableViewCell else { fatalError() }
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "ApplyTableViewCell",
+                for: indexPath) as? ApplyTableViewCell else { fatalError() }
             return cell
         }
     }
@@ -75,7 +80,6 @@ extension NotificatoinViewController: UITableViewDataSource {
 // MARK: - segue
 extension NotificatoinViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print(sender)
         print(segue.source)
         guard let applyCollectionViewCell = sender as? ApplyCollectionViewCell,
               let bookingViewController = segue.destination as? BookingViewController,

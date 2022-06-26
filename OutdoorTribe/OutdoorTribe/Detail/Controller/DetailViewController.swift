@@ -48,6 +48,7 @@ class DetailViewController: UIViewController {
         detailTableView.dataSource = self
         detailTableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: super.view.frame.width, height: .leastNormalMagnitude))
         detailTableView.automaticallyAdjustsScrollIndicatorInsets = false
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

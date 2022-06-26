@@ -9,7 +9,9 @@ import UIKit
 
 class ChatTableViewCell: UITableViewCell {
 
-    
+    @IBOutlet weak var photoView: UIImageView!
+    @IBOutlet weak var rightBubbleView: UIView!
+    @IBOutlet weak var leftBubbleView: UIView!
     @IBOutlet weak var rightTextBubble: UILabel!
     @IBOutlet weak var leftTextBubble: UILabel!
     
@@ -25,8 +27,13 @@ class ChatTableViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-        rightTextBubble.isHidden = false
-        leftTextBubble.isHidden = false
+        rightBubbleView.isHidden = false
+        leftBubbleView.isHidden = false
+    }
+    
+    func layOutTextBubble() {
+        rightBubbleView.layer.cornerRadius = 10
+        leftBubbleView.layer.cornerRadius = 10
     }
 
 }

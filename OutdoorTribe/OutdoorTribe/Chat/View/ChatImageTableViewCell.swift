@@ -9,8 +9,13 @@ import UIKit
 
 class ChatImageTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var photoView: UIImageView!
     @IBOutlet weak var rightImage: UIImageView!
     @IBOutlet weak var leftImage: UIImageView!
+    
+    @IBOutlet weak var leftView: UIView!
+    @IBOutlet weak var rightView: UIView!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -22,5 +27,11 @@ class ChatImageTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
+    
+    func layOutImageCell() {
+        rightView.layer.cornerRadius = 10
+        rightImage.layer.cornerRadius = 10
+        leftView.layer.cornerRadius = 10
+        leftImage.layer.cornerRadius = 10
+    }
 }
