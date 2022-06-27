@@ -21,6 +21,11 @@
 		012F24792859A53D00B891C1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 012F24772859A53D00B891C1 /* Main.storyboard */; };
 		012F247B2859A53E00B891C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 012F247A2859A53E00B891C1 /* Assets.xcassets */; };
 		012F247E2859A53E00B891C1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 012F247C2859A53E00B891C1 /* LaunchScreen.storyboard */; };
+		0139FC7328696FD1003C3851 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0139FC7228696FD1003C3851 /* LoginViewController.swift */; };
+		0139FC7528698920003C3851 /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0139FC7428698920003C3851 /* LoginManager.swift */; };
+		0139FC7728699893003C3851 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0139FC7628699893003C3851 /* AccountManager.swift */; };
+		0139FC7A28699972003C3851 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0139FC7928699972003C3851 /* Account.swift */; };
+		0139FC7C2869A4D5003C3851 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0139FC7B2869A4D5003C3851 /* SignUpViewController.swift */; };
 		014C830B28632053006A4EC1 /* HeaderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C830A28632053006A4EC1 /* HeaderCollectionViewCell.swift */; };
 		014C830D28632072006A4EC1 /* HeaderCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 014C830C28632072006A4EC1 /* HeaderCollectionViewCell.xib */; };
 		014C830F28636CF5006A4EC1 /* Classification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C830E28636CF5006A4EC1 /* Classification.swift */; };
@@ -76,6 +81,12 @@
 		012F247A2859A53E00B891C1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		012F247D2859A53E00B891C1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		012F247F2859A53E00B891C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0139FC7228696FD1003C3851 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		0139FC7428698920003C3851 /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
+		0139FC7628699893003C3851 /* AccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
+		0139FC7928699972003C3851 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
+		0139FC7B2869A4D5003C3851 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		0139FC7D2869D95B003C3851 /* OutdoorTribe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OutdoorTribe.entitlements; sourceTree = "<group>"; };
 		014C830A28632053006A4EC1 /* HeaderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCollectionViewCell.swift; sourceTree = "<group>"; };
 		014C830C28632072006A4EC1 /* HeaderCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HeaderCollectionViewCell.xib; sourceTree = "<group>"; };
 		014C830E28636CF5006A4EC1 /* Classification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Classification.swift; sourceTree = "<group>"; };
@@ -187,10 +198,12 @@
 		012F24702859A53D00B891C1 /* OutdoorTribe */ = {
 			isa = PBXGroup;
 			children = (
+				0139FC7D2869D95B003C3851 /* OutdoorTribe.entitlements */,
 				012F24712859A53D00B891C1 /* AppDelegate.swift */,
 				012F24732859A53D00B891C1 /* SceneDelegate.swift */,
 				01053E81285B26620074B125 /* TabBarController.swift */,
 				01985D2B285C60E200BCD866 /* Network */,
+				0139FC6F28696E7C003C3851 /* Login */,
 				0195EB65285F17170015A12A /* Booking */,
 				0195EB58285EF3790015A12A /* Notification */,
 				0195EB53285EF2E70015A12A /* Profile */,
@@ -208,6 +221,40 @@
 				014C831928644677006A4EC1 /* UserModel.swift */,
 			);
 			path = OutdoorTribe;
+			sourceTree = "<group>";
+		};
+		0139FC6F28696E7C003C3851 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				0139FC7828699968003C3851 /* Model */,
+				0139FC7128696FB0003C3851 /* View */,
+				0139FC7028696FA1003C3851 /* Controller */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		0139FC7028696FA1003C3851 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				0139FC7228696FD1003C3851 /* LoginViewController.swift */,
+				0139FC7B2869A4D5003C3851 /* SignUpViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		0139FC7128696FB0003C3851 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		0139FC7828699968003C3851 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0139FC7928699972003C3851 /* Account.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		014C62AC2859BED800C6D75D /* PostPage */ = {
@@ -423,6 +470,8 @@
 				01053E8B285B385C0074B125 /* ProductManager.swift */,
 				0195EB51285ECE3B0015A12A /* OrderManager.swift */,
 				014C83142864365E006A4EC1 /* ChatManager.swift */,
+				0139FC7428698920003C3851 /* LoginManager.swift */,
+				0139FC7628699893003C3851 /* AccountManager.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -584,8 +633,10 @@
 				0195EB46285CD4510015A12A /* DetailViewController.swift in Sources */,
 				0195EB4B285CDCCC0015A12A /* GalleryCollectionViewCell.swift in Sources */,
 				012F24762859A53D00B891C1 /* PostViewController.swift in Sources */,
+				0139FC7728699893003C3851 /* AccountManager.swift in Sources */,
 				0195EB7F2860830C0015A12A /* MapCollectionViewCell.swift in Sources */,
 				0195EB49285CDBD50015A12A /* DetailGalleryTableViewCell.swift in Sources */,
+				0139FC7528698920003C3851 /* LoginManager.swift in Sources */,
 				01053E8E285C4EFB0074B125 /* InfoTableViewCell.swift in Sources */,
 				0195EB62285EF6300015A12A /* ApplyCollectionViewCell.swift in Sources */,
 				014C831D28646E45006A4EC1 /* ChatTableViewCell.swift in Sources */,
@@ -594,6 +645,7 @@
 				0195EB52285ECE3B0015A12A /* OrderManager.swift in Sources */,
 				0195EB64285EFB8A0015A12A /* ChatListTableViewCell.swift in Sources */,
 				014C830F28636CF5006A4EC1 /* Classification.swift in Sources */,
+				0139FC7A28699972003C3851 /* Account.swift in Sources */,
 				0195EB7A286050600015A12A /* RentOutTableViewCell.swift in Sources */,
 				0195EB74285F770D0015A12A /* RentOutViewController.swift in Sources */,
 				0195EB70285F1EF30015A12A /* BookingPhotoCollectionViewCell.swift in Sources */,
@@ -613,12 +665,14 @@
 				0195EB6C285F1EC30015A12A /* BookingPhotoTableViewCell.swift in Sources */,
 				0195EB42285CABB30015A12A /* MapViewController.swift in Sources */,
 				01053E82285B26620074B125 /* TabBarController.swift in Sources */,
+				0139FC7328696FD1003C3851 /* LoginViewController.swift in Sources */,
 				0195EB7C286073040015A12A /* MapView.swift in Sources */,
 				0195EB78286049490015A12A /* ColorExtension.swift in Sources */,
 				01053E87285B34680074B125 /* SearchTableViewCell.swift in Sources */,
 				012F24722859A53D00B891C1 /* AppDelegate.swift in Sources */,
 				0195EB6E285F1ECF0015A12A /* BookingInfoTableViewCell.swift in Sources */,
 				014C83152864365E006A4EC1 /* ChatManager.swift in Sources */,
+				0139FC7C2869A4D5003C3851 /* SignUpViewController.swift in Sources */,
 				014C83132864340B006A4EC1 /* ChatViewController.swift in Sources */,
 				0195EB67285F172D0015A12A /* BookingViewController.swift in Sources */,
 				0195EB72285F76FD0015A12A /* BookedStageViewController.swift in Sources */,
@@ -772,6 +826,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = OutdoorTribe/OutdoorTribe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L56CMAKYB6;
@@ -803,6 +858,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = OutdoorTribe/OutdoorTribe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L56CMAKYB6;

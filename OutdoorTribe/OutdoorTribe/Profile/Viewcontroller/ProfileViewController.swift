@@ -6,11 +6,21 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class ProfileViewController: UIViewController {
 
     @IBOutlet weak var bookingTableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
+    
+    @IBAction func tapLogOutBtn(_ sender: Any) {
+        let firebaseAuth = Auth.auth()
+        do {
+            try firebaseAuth.signOut()
+        } catch {
+            print(error)
+        }
+    }
     
     @IBOutlet var containViews: [UIView]!
     @IBAction func tapSegmentControl(_ sender: UISegmentedControl) {

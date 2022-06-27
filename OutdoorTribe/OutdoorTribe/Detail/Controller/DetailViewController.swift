@@ -9,6 +9,7 @@ import UIKit
 import SwiftUI
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import FirebaseAuth
 
 class DetailViewController: UIViewController {
     var leaseTerm = [Date]()
@@ -31,24 +32,38 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var detailTableView: UITableView!
     
     @IBAction func tapApplyButton(_ sender: Any) {
-        daysBetweenTwoDate()
-        order.product = chooseProduct
-        OrderManger.shared.uploadOrder(orderFromVC: &order)
-        navigationController?.popViewController(animated: true)
+        let firebaseAuth = Auth.auth()
+        if firebaseAuth.currentUser == nil {
+            presentLoginVC()
+        } else {
+            daysBetweenTwoDate()
+            order.product = chooseProduct
+            OrderManger.shared.uploadOrder(orderFromVC: &order)
+            navigationController?.popViewController(animated: true)
+        }
     }
     
     @IBAction func tapChatButton(_ sender: Any) {
-        let uuid = UUID().uuidString
-        chatRoom.roomID = uuid
-        ChatManager.shared.createChatRoomIfNeed(chatRoom: chatRoom)
+        let firebaseAuth = Auth.auth()
+        if firebaseAuth.currentUser == nil {
+            presentLoginVC()
+        } else {
+            let uuid = UUID().uuidString
+            chatRoom.roomID = uuid
+            ChatManager.shared.createChatRoomIfNeed(chatRoom: chatRoom)
+            performSegue(withIdentifier: "DetailtoChatRoomSegue", sender: nil)
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         detailTableView.dataSource = self
-        detailTableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: super.view.frame.width, height: .leastNormalMagnitude))
+        detailTableView.tableHeaderView = UIView(
+            frame: CGRect(x: 0,
+                          y: 0,
+                          width: super.view.frame.width,
+                          height: .leastNormalMagnitude))
         detailTableView.automaticallyAdjustsScrollIndicatorInsets = false
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -56,6 +71,12 @@ class DetailViewController: UIViewController {
 //        navigationController?.navigationBar.isHidden = true
         guard let tabBarVc = tabBarController as? TabBarController else { return }
         tabBarVc.plusButton.isHidden = true
+    }
+    
+    func presentLoginVC() {
+            guard let childVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController else { return }
+            childVC.modalPresentationStyle = .fullScreen
+            present(childVC, animated: true, completion: nil)
     }
 }
 
