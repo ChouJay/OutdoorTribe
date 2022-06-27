@@ -26,6 +26,7 @@ class ImageTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         imageCollectionView.dataSource = self
+        imageCollectionView.delegate = self
         // Initialization code
     }
 
@@ -35,14 +36,16 @@ class ImageTableViewCell: UITableViewCell {
     }
 }
 
-// MARK: Collection view dataSource
+// MARK: - Collection view dataSource
 extension ImageTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 1 + uploadedPhoto.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let imageItem = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionViewCell", for: indexPath) as? ImageCollectionViewCell else { fatalError() }
+        guard let imageItem = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "ImageCollectionViewCell",
+            for: indexPath) as? ImageCollectionViewCell else { fatalError() }
         imageItem.iamgeView.image = nil
         imageItem.gestureRecognizers?.removeAll()
         if indexPath.row == 0 {
@@ -53,11 +56,21 @@ extension ImageTableViewCell: UICollectionViewDataSource {
             print(uploadedPhoto[indexPath.row - 1])
             imageItem.iamgeView.image = uploadedPhoto[indexPath.row - 1]
         }
+        imageItem.iamgeView.layer.cornerRadius = 10
+        imageItem.iamgeView.clipsToBounds = true
         return imageItem
     }
 }
 
-// MARK: get photo delegate
+// MARK: - collection view delegate
+extension ImageTableViewCell: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+    }
+}
+
+// MARK: - get photo delegate
 extension ImageTableViewCell {
     @objc func choosePicture() {
         photoDelegate?.askToUploadPhoto()

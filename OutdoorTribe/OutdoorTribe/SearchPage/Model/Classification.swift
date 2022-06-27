@@ -20,3 +20,12 @@ class Classification {
         "Others"]
 }
 
+class AdvertisingWall {
+    static let shared = AdvertisingWall()
+    
+    var differentPicture = [
+    "camping",
+    "diving",
+    "skiing"
+    ]
+}

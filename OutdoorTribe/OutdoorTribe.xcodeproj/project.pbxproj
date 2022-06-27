@@ -24,6 +24,13 @@
 		014C830B28632053006A4EC1 /* HeaderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C830A28632053006A4EC1 /* HeaderCollectionViewCell.swift */; };
 		014C830D28632072006A4EC1 /* HeaderCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 014C830C28632072006A4EC1 /* HeaderCollectionViewCell.xib */; };
 		014C830F28636CF5006A4EC1 /* Classification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C830E28636CF5006A4EC1 /* Classification.swift */; };
+		014C83132864340B006A4EC1 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C83122864340B006A4EC1 /* ChatViewController.swift */; };
+		014C83152864365E006A4EC1 /* ChatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C83142864365E006A4EC1 /* ChatManager.swift */; };
+		014C83182864458B006A4EC1 /* ChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C83172864458B006A4EC1 /* ChatModel.swift */; };
+		014C831A28644677006A4EC1 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C831928644677006A4EC1 /* UserModel.swift */; };
+		014C831D28646E45006A4EC1 /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C831C28646E45006A4EC1 /* ChatTableViewCell.swift */; };
+		014C83212865BD8B006A4EC1 /* ChatImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C83202865BD8B006A4EC1 /* ChatImageTableViewCell.swift */; };
+		014C832328687AC5006A4EC1 /* MainGalleryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C832228687AC5006A4EC1 /* MainGalleryViewCell.swift */; };
 		0195EB42285CABB30015A12A /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB41285CABB30015A12A /* MapViewController.swift */; };
 		0195EB46285CD4510015A12A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB45285CD4510015A12A /* DetailViewController.swift */; };
 		0195EB49285CDBD50015A12A /* DetailGalleryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB48285CDBD50015A12A /* DetailGalleryTableViewCell.swift */; };
@@ -35,7 +42,7 @@
 		0195EB5E285EF58D0015A12A /* NotificatoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB5D285EF58D0015A12A /* NotificatoinViewController.swift */; };
 		0195EB60285EF5EC0015A12A /* ApplyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB5F285EF5EC0015A12A /* ApplyTableViewCell.swift */; };
 		0195EB62285EF6300015A12A /* ApplyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB61285EF6300015A12A /* ApplyCollectionViewCell.swift */; };
-		0195EB64285EFB8A0015A12A /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB63285EFB8A0015A12A /* ChatTableViewCell.swift */; };
+		0195EB64285EFB8A0015A12A /* ChatListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB63285EFB8A0015A12A /* ChatListTableViewCell.swift */; };
 		0195EB67285F172D0015A12A /* BookingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB66285F172D0015A12A /* BookingViewController.swift */; };
 		0195EB6C285F1EC30015A12A /* BookingPhotoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB6B285F1EC30015A12A /* BookingPhotoTableViewCell.swift */; };
 		0195EB6E285F1ECF0015A12A /* BookingInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB6D285F1ECF0015A12A /* BookingInfoTableViewCell.swift */; };
@@ -72,6 +79,13 @@
 		014C830A28632053006A4EC1 /* HeaderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCollectionViewCell.swift; sourceTree = "<group>"; };
 		014C830C28632072006A4EC1 /* HeaderCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HeaderCollectionViewCell.xib; sourceTree = "<group>"; };
 		014C830E28636CF5006A4EC1 /* Classification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Classification.swift; sourceTree = "<group>"; };
+		014C83122864340B006A4EC1 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		014C83142864365E006A4EC1 /* ChatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatManager.swift; sourceTree = "<group>"; };
+		014C83172864458B006A4EC1 /* ChatModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModel.swift; sourceTree = "<group>"; };
+		014C831928644677006A4EC1 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		014C831C28646E45006A4EC1 /* ChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableViewCell.swift; sourceTree = "<group>"; };
+		014C83202865BD8B006A4EC1 /* ChatImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatImageTableViewCell.swift; sourceTree = "<group>"; };
+		014C832228687AC5006A4EC1 /* MainGalleryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGalleryViewCell.swift; sourceTree = "<group>"; };
 		0195EB41285CABB30015A12A /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		0195EB45285CD4510015A12A /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		0195EB48285CDBD50015A12A /* DetailGalleryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGalleryTableViewCell.swift; sourceTree = "<group>"; };
@@ -83,7 +97,7 @@
 		0195EB5D285EF58D0015A12A /* NotificatoinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificatoinViewController.swift; sourceTree = "<group>"; };
 		0195EB5F285EF5EC0015A12A /* ApplyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyTableViewCell.swift; sourceTree = "<group>"; };
 		0195EB61285EF6300015A12A /* ApplyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyCollectionViewCell.swift; sourceTree = "<group>"; };
-		0195EB63285EFB8A0015A12A /* ChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableViewCell.swift; sourceTree = "<group>"; };
+		0195EB63285EFB8A0015A12A /* ChatListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewCell.swift; sourceTree = "<group>"; };
 		0195EB66285F172D0015A12A /* BookingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingViewController.swift; sourceTree = "<group>"; };
 		0195EB6B285F1EC30015A12A /* BookingPhotoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingPhotoTableViewCell.swift; sourceTree = "<group>"; };
 		0195EB6D285F1ECF0015A12A /* BookingInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingInfoTableViewCell.swift; sourceTree = "<group>"; };
@@ -128,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				01053E86285B34680074B125 /* SearchTableViewCell.swift */,
+				014C832228687AC5006A4EC1 /* MainGalleryViewCell.swift */,
 				014C830A28632053006A4EC1 /* HeaderCollectionViewCell.swift */,
 				014C830C28632072006A4EC1 /* HeaderCollectionViewCell.xib */,
 			);
@@ -180,6 +195,7 @@
 				0195EB58285EF3790015A12A /* Notification */,
 				0195EB53285EF2E70015A12A /* Profile */,
 				0195EB43285CD4300015A12A /* Detail */,
+				014C8310286433D9006A4EC1 /* Chat */,
 				0195EB3F285CAB910015A12A /* MapPage */,
 				014C62AC2859BED800C6D75D /* PostPage */,
 				01053E83285B2F1C0074B125 /* SearchPage */,
@@ -189,6 +205,7 @@
 				01053E7F285B138C0074B125 /* GoogleService-Info.plist */,
 				012F247F2859A53E00B891C1 /* Info.plist */,
 				0195EB77286049490015A12A /* ColorExtension.swift */,
+				014C831928644677006A4EC1 /* UserModel.swift */,
 			);
 			path = OutdoorTribe;
 			sourceTree = "<group>";
@@ -216,6 +233,41 @@
 				01053E7A2859EA1B0074B125 /* ImageTableViewCell.swift */,
 				01053E7C2859EC0A0074B125 /* ImageCollectionViewCell.swift */,
 				01053E8D285C4EFB0074B125 /* InfoTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		014C8310286433D9006A4EC1 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				014C831B28646E05006A4EC1 /* View */,
+				014C831628644568006A4EC1 /* Model */,
+				014C8311286433F2006A4EC1 /* Controller */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		014C8311286433F2006A4EC1 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				014C83122864340B006A4EC1 /* ChatViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		014C831628644568006A4EC1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				014C83172864458B006A4EC1 /* ChatModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		014C831B28646E05006A4EC1 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				014C831C28646E45006A4EC1 /* ChatTableViewCell.swift */,
+				014C83202865BD8B006A4EC1 /* ChatImageTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -323,7 +375,7 @@
 			children = (
 				0195EB5F285EF5EC0015A12A /* ApplyTableViewCell.swift */,
 				0195EB61285EF6300015A12A /* ApplyCollectionViewCell.swift */,
-				0195EB63285EFB8A0015A12A /* ChatTableViewCell.swift */,
+				0195EB63285EFB8A0015A12A /* ChatListTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -370,6 +422,7 @@
 			children = (
 				01053E8B285B385C0074B125 /* ProductManager.swift */,
 				0195EB51285ECE3B0015A12A /* OrderManager.swift */,
+				014C83142864365E006A4EC1 /* ChatManager.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -535,17 +588,21 @@
 				0195EB49285CDBD50015A12A /* DetailGalleryTableViewCell.swift in Sources */,
 				01053E8E285C4EFB0074B125 /* InfoTableViewCell.swift in Sources */,
 				0195EB62285EF6300015A12A /* ApplyCollectionViewCell.swift in Sources */,
+				014C831D28646E45006A4EC1 /* ChatTableViewCell.swift in Sources */,
 				01053E85285B2F4A0074B125 /* SearchViewController.swift in Sources */,
 				014C830B28632053006A4EC1 /* HeaderCollectionViewCell.swift in Sources */,
 				0195EB52285ECE3B0015A12A /* OrderManager.swift in Sources */,
-				0195EB64285EFB8A0015A12A /* ChatTableViewCell.swift in Sources */,
+				0195EB64285EFB8A0015A12A /* ChatListTableViewCell.swift in Sources */,
 				014C830F28636CF5006A4EC1 /* Classification.swift in Sources */,
 				0195EB7A286050600015A12A /* RentOutTableViewCell.swift in Sources */,
 				0195EB74285F770D0015A12A /* RentOutViewController.swift in Sources */,
 				0195EB70285F1EF30015A12A /* BookingPhotoCollectionViewCell.swift in Sources */,
 				0195EB50285ECB730015A12A /* Order.swift in Sources */,
 				01053E7D2859EC0A0074B125 /* ImageCollectionViewCell.swift in Sources */,
+				014C83182864458B006A4EC1 /* ChatModel.swift in Sources */,
+				014C831A28644677006A4EC1 /* UserModel.swift in Sources */,
 				0195EB57285EF3280015A12A /* ProfileViewController.swift in Sources */,
+				014C83212865BD8B006A4EC1 /* ChatImageTableViewCell.swift in Sources */,
 				0195EB60285EF5EC0015A12A /* ApplyTableViewCell.swift in Sources */,
 				01053E7B2859EA1B0074B125 /* ImageTableViewCell.swift in Sources */,
 				0195EB76285F81900015A12A /* BookedStageTableViewCell.swift in Sources */,
@@ -561,8 +618,11 @@
 				01053E87285B34680074B125 /* SearchTableViewCell.swift in Sources */,
 				012F24722859A53D00B891C1 /* AppDelegate.swift in Sources */,
 				0195EB6E285F1ECF0015A12A /* BookingInfoTableViewCell.swift in Sources */,
+				014C83152864365E006A4EC1 /* ChatManager.swift in Sources */,
+				014C83132864340B006A4EC1 /* ChatViewController.swift in Sources */,
 				0195EB67285F172D0015A12A /* BookingViewController.swift in Sources */,
 				0195EB72285F76FD0015A12A /* BookedStageViewController.swift in Sources */,
+				014C832328687AC5006A4EC1 /* MainGalleryViewCell.swift in Sources */,
 				012F24742859A53D00B891C1 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -640,7 +700,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -695,9 +755,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -728,7 +789,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = choujay.OutdoorTribe;
+				PRODUCT_BUNDLE_IDENTIFIER = co.choujay.OutdoorTribe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -759,7 +820,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = choujay.OutdoorTribe;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = co.choujay.OutdoorTribe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

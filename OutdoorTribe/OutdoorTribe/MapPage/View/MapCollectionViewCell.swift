@@ -22,4 +22,19 @@ class MapCollectionViewCell: UICollectionViewCell {
     @IBAction func tapRouteButton(_ sender: UIButton) {
         routeDelegae?.showRoute(sender: sender)
     }
+    
+    override class func awakeFromNib() {
+        super.awakeFromNib()
+    }
+    
+    override func layoutSubviews() {
+        layOutMapCell()
+    }
+    
+    
+    func layOutMapCell() {
+        self.layer.cornerRadius = 10
+        photoImageView.layer.cornerRadius = 10
+        photoImageView.clipsToBounds = true
+    }
 }

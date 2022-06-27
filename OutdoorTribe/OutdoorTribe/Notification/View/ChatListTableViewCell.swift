@@ -7,8 +7,11 @@
 
 import UIKit
 
-class ChatTableViewCell: UITableViewCell {
+class ChatListTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var chatListPhoto: UIImageView!
+    @IBOutlet weak var chatListName: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

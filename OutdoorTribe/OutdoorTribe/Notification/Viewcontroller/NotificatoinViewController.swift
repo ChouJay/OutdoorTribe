@@ -10,6 +10,7 @@ import FirebaseFirestore
 
 class NotificatoinViewController: UIViewController {
     var orderDocumentsFromFirestore = [QueryDocumentSnapshot]()
+    var chatRooms = [ChatRoom]()
     lazy var collectionViewFromCell = UICollectionView()
     @IBOutlet weak var chatRoomTableView: UITableView!
     
@@ -25,6 +26,10 @@ class NotificatoinViewController: UIViewController {
             self.orderDocumentsFromFirestore = documents
             self.chatRoomTableView.reloadData()
         }
+        ChatManager.shared.loadingChatRoom { chatRoomsFromServer in
+            self.chatRooms = chatRoomsFromServer
+            
+        }
     }
 }
 
@@ -35,7 +40,14 @@ extension NotificatoinViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            return chatRooms.count
+        default:
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -47,10 +59,19 @@ extension NotificatoinViewController: UITableViewDataSource {
             collectionViewFromCell = cell.applyCollectionView
             return cell
         case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatTableViewCell", for: indexPath) as? ChatTableViewCell else { fatalError() }
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "ChatListTableViewCell",
+                for: indexPath) as? ChatListTableViewCell else { fatalError() }
+            if chatRooms[indexPath.row].chaterOne == "Jay" {
+                cell.chatListName.text =  chatRooms[indexPath.row].chaterTwo
+            } else {
+                cell.chatListName.text =  chatRooms[indexPath.row].chaterOne
+            }
             return cell
         default:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ApplyTableViewCell", for: indexPath) as? ApplyTableViewCell else { fatalError() }
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "ApplyTableViewCell",
+                for: indexPath) as? ApplyTableViewCell else { fatalError() }
             return cell
         }
     }
@@ -59,7 +80,6 @@ extension NotificatoinViewController: UITableViewDataSource {
 // MARK: - segue
 extension NotificatoinViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print(sender)
         print(segue.source)
         guard let applyCollectionViewCell = sender as? ApplyCollectionViewCell,
               let bookingViewController = segue.destination as? BookingViewController,

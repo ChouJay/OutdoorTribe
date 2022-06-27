@@ -12,6 +12,7 @@ import Kingfisher
 
 class MapViewController: UIViewController {
 
+    var currentIndex: Int?
     var products = [Product]()
     var afterFiltedProducts = [Product]()
     var myLocationManager = CLLocationManager()
@@ -31,6 +32,7 @@ class MapViewController: UIViewController {
     let startDatePicker = UIDatePicker()
     let endDatePicker = UIDatePicker()
     
+    @IBOutlet weak var positionButton: UIButton!
     @IBOutlet weak var dateButton: UIButton!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var productCollectionView: UICollectionView!
@@ -47,10 +49,13 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        productCollectionView.register(UINib(nibName: "MapCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "MapCollectionViewCell")
+        positionButton.layer.cornerRadius = 25
+        
+        productCollectionView.register(UINib(nibName: "MapCollectionViewCell", bundle: nil),forCellWithReuseIdentifier: "MapCollectionViewCell")
         productCollectionView.collectionViewLayout = createCompositionalLayout()
         productCollectionView.backgroundColor = .clear
         productCollectionView.dataSource = self
+        productCollectionView.delegate = self
         
         myLocationManager.delegate = self
         myLocationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
@@ -61,17 +66,30 @@ class MapViewController: UIViewController {
         mapView.delegate = self
         
         searchBar.delegate = self
+        searchBar.layer.cornerRadius = 10
+        searchBar.clipsToBounds = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.isHidden = true
         ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
             self?.products = postedProducts
             self?.afterFiltedProducts = postedProducts
             self?.mapView.layoutView(from: self!.afterFiltedProducts)
             self?.productCollectionView.reloadData()
         }
+        productCollectionView.isHidden = true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        guard let myLocation = myLocationManager.location?.coordinate else { return }
+        print(myLocation)
+        mapView.setRegion(MKCoordinateRegion(center: myLocation,
+                                             latitudinalMeters: 700,
+                                             longitudinalMeters: 700), animated: true)
+
     }
     
     private func createCompositionalLayout() -> UICollectionViewLayout {
@@ -89,8 +107,26 @@ class MapViewController: UIViewController {
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPaging
         
+        section.visibleItemsInvalidationHandler = { [weak self] visibleItems, point, environment in
+            self?.currentIndex = visibleItems.last?.indexPath.row
+            guard let collectionViewIsHidden = self?.productCollectionView.isHidden else { return }
+            if collectionViewIsHidden {
+                return
+            }
+            print(self?.currentIndex)  //會跑很多次 看要不要改成flowlayout就可以用collectionView delegate method
+            guard let currentIndex = self?.currentIndex else { return }
+            let coordinate = CLLocationCoordinate2D(
+                latitude: self?.afterFiltedProducts[currentIndex].address.latitude ?? 0,
+                longitude: self?.afterFiltedProducts[currentIndex].address.longitude ?? 0)
+            self?.mapView.setRegion(
+                MKCoordinateRegion(center: coordinate, latitudinalMeters: 700, longitudinalMeters: 700),
+                animated: true)
+        }
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
+    }
+    
+    func layOutSearchBar() {
     }
 }
 
@@ -101,7 +137,9 @@ extension MapViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let item = collectionView.dequeueReusableCell(withReuseIdentifier: "MapCollectionViewCell", for: indexPath) as? MapCollectionViewCell else { fatalError() }
+        guard let item = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "MapCollectionViewCell",
+            for: indexPath) as? MapCollectionViewCell else { fatalError() }
         item.routeDelegae = self
         guard let urlString = afterFiltedProducts[indexPath.row].photoUrl.first,
               let url = URL(string: urlString) else { return item }
@@ -111,6 +149,10 @@ extension MapViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: - collection view delegate
+extension MapViewController: UICollectionViewDelegate {
+ 
+}
 // MARK: - my core location delegate
 extension MapViewController: CLLocationManagerDelegate {
     
@@ -119,16 +161,15 @@ extension MapViewController: CLLocationManagerDelegate {
 // MARK: - mapView delegate
 extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        productCollectionView.isHidden = false
         mapView.removeOverlays(mapView.overlays)
         for (index, item) in afterFiltedProducts.enumerated() {
-            print(index)
             if item.address.longitude == view.annotation?.coordinate.longitude || item.address.latitude == view.annotation?.coordinate.latitude {
-                print(index)
-                guard let coordinate = view.annotation?.coordinate else { return }
-                mapView.setRegion(
-                    MKCoordinateRegion(center: coordinate, latitudinalMeters: 500, longitudinalMeters: 500),
-                    animated: true)
-                productCollectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .left, animated: true)
+
+                productCollectionView.selectItem(
+                    at: IndexPath(item: index, section: 0),
+                    animated: true,
+                    scrollPosition: .centeredHorizontally)
             }
         }
     }
@@ -145,7 +186,9 @@ extension MapViewController: MKMapViewDelegate {
 extension MapViewController {
     func goToUesrLocation() {
         guard let myLocation = myLocationManager.location?.coordinate else { return }
-        mapView.setRegion(MKCoordinateRegion(center: myLocation, latitudinalMeters: 500, longitudinalMeters: 500), animated: true)
+        mapView.setRegion(MKCoordinateRegion(center: myLocation,
+                                             latitudinalMeters: 700,
+                                             longitudinalMeters: 700), animated: true)
     }
 }
 
@@ -158,7 +201,6 @@ extension MapViewController: UISearchBarDelegate {
                 ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
                     self?.products = postedProducts
                     self?.afterFiltedProducts = postedProducts
-                    print(self?.products)
                     self?.mapView.layoutView(from: self!.afterFiltedProducts)
                     self?.productCollectionView.reloadData()
                 }
@@ -167,7 +209,6 @@ extension MapViewController: UISearchBarDelegate {
                     self?.products = postedProducts
                     self?.afterFiltedProducts = postedProducts
                     self?.tapFilterConfirmButton()
-                    print(self?.products)
                     self?.mapView.layoutView(from: self!.afterFiltedProducts)
                     self?.productCollectionView.reloadData()
                 }
@@ -182,7 +223,6 @@ extension MapViewController: UISearchBarDelegate {
             ProductManager.shared.searchPostedProduct(keyWord: keyWord) { [weak self] postedProducts in
                 self?.products = postedProducts
                 self?.afterFiltedProducts = postedProducts
-                print(self?.products)
                 self?.mapView.layoutView(from: self!.afterFiltedProducts)
                 self?.productCollectionView.reloadData()
             }
@@ -192,12 +232,12 @@ extension MapViewController: UISearchBarDelegate {
                 self?.products = postedProducts
                 self?.afterFiltedProducts = postedProducts
                 self?.tapFilterConfirmButton()
-                print(self?.products)
                 self?.mapView.layoutView(from: self!.afterFiltedProducts)
                 self?.productCollectionView.reloadData()
             }
         }
         searchBar.resignFirstResponder()
+        productCollectionView.isHidden = false
     }
     
 // MARK: - date picker function

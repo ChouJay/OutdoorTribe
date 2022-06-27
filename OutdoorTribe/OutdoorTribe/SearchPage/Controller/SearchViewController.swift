@@ -34,7 +34,7 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var dateButton: UIButton!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var searchTableView: UITableView!
-
+    @IBOutlet weak var mainGalleryView: UICollectionView!
     @IBAction func tapDatePicker(_ sender: UIButton) {
         dateButton.isHidden = true
         layoutChooseDateUI()
@@ -43,32 +43,39 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchTableView.layer.cornerRadius = 15
         layOutHeaderView()
         
         searchTableView.dataSource = self
         searchTableView.delegate = self
+        searchTableView.sectionHeaderTopPadding = 0
         
         searchBar.delegate = self
+        searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
+        
+        mainGalleryView.dataSource = self
+        mainGalleryView.collectionViewLayout = createGalleryCompositionalLayout()
+        
+        tabBarController?.tabBar.clipsToBounds = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         ProductManager.shared.retrievePostedProduct { productsFromFireStore in
             self.products = productsFromFireStore
             self.afterFiltedProducts = productsFromFireStore
             self.searchTableView.reloadData()
         }
-        navigationController?.navigationBar.isHidden = false
-        guard let tabBarVc = tabBarController as? TabBarController else { return }
-        tabBarVc.plusButton.isHidden = false
+        navigationController?.navigationBar.isHidden = true
     }
     
 // MARK: - date picker function
     func layoutChooseDateUI() {
+        
         startDatePicker.datePickerMode = .date
         startDatePicker.preferredDatePickerStyle = .compact
         startDatePicker.timeZone = .current
-        print(startDatePicker.timeZone)
 
         endDatePicker.datePickerMode = .date
         endDatePicker.preferredDatePickerStyle = .compact
@@ -174,11 +181,12 @@ extension SearchViewController: UITableViewDataSource {
 // MARK: - table view delegate
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        headerView.layer.cornerRadius = 10
         return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        100
+        80
     }
 }
 
@@ -236,20 +244,25 @@ extension SearchViewController: UISearchBarDelegate {
 extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == headerView {
-            print("header view")
+            return 7
         } else {
-            print("test view")
+            return AdvertisingWall.shared.differentPicture.count
         }
-        return 7
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let item = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "HeaderCollectionViewCell",
-            for: indexPath) as? HeaderCollectionViewCell else { fatalError() }
-        item.layOutItem(by: indexPath)
-        return item
+        if collectionView == headerView {
+            guard let item = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "HeaderCollectionViewCell",
+                for: indexPath) as? HeaderCollectionViewCell else { fatalError() }
+            item.layOutItem(by: indexPath)
+            return item
+        } else {
+            guard let item = collectionView.dequeueReusableCell(withReuseIdentifier: "MainGalleryViewCell", for: indexPath) as? MainGalleryViewCell else { fatalError() }
+            item.photoView.image = UIImage(named: AdvertisingWall.shared.differentPicture[indexPath.row])
+            return item
+        }
     }
 }
 
@@ -280,12 +293,13 @@ extension SearchViewController: UICollectionViewDelegate {
 extension SearchViewController {
     func layOutHeaderView() {
         headerView.collectionViewLayout = createCompositionalLayout()
-        headerView.backgroundColor = .black
         headerView.dataSource = self
         headerView.delegate = self
         headerView.register(UINib(nibName: "HeaderCollectionViewCell", bundle: nil),
                             forCellWithReuseIdentifier: HeaderCollectionViewCell.reuseIdentifier)
         headerView.showsHorizontalScrollIndicator = false
+        headerView.layer.cornerRadius = 15
+        headerView.backgroundColor = UIColor(red: 239 / 250, green: 234 / 250, blue: 216 / 250, alpha: 1)
     }
     
     private func createCompositionalLayout() -> UICollectionViewLayout {
@@ -293,7 +307,7 @@ extension SearchViewController {
             widthDimension: .absolute(100),
             heightDimension: .absolute(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 30, trailing: 20)
         
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .absolute(100),
@@ -311,13 +325,15 @@ extension SearchViewController {
 // MARK: - func to get every days between two date
 extension SearchViewController {
     func daysBetweenTwoDate(startDate: Date, endDate: Date) -> [Date] {
-        print(startDate)
-        print(endDate)
         var dayInterval = [Date]()
         var calendar = Calendar.current
         calendar.timeZone = TimeZone(identifier: "UTC")!
         guard startDate <= endDate else { return dayInterval }
-        guard let standardStartDate = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: startDate),
+        guard let standardStartDate = calendar.date(
+                bySettingHour: 0,
+                minute: 0,
+                second: 0,
+                of: startDate),
               let standardEndDate = calendar.date(
                 bySettingHour: 0,
                 minute: 0,
@@ -333,5 +349,22 @@ extension SearchViewController {
             dayInterval.append(dateBeAdded)
         }
         return dayInterval
+    }
+}
+
+// MARk: gallery collection view layout
+extension SearchViewController {
+    private func createGalleryCompositionalLayout() -> UICollectionViewLayout {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+
+        let section = NSCollectionLayoutSection(group: group)
+
+        section.orthogonalScrollingBehavior = .groupPaging
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        return layout
     }
 }

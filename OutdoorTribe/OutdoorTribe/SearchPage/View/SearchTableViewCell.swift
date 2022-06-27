@@ -15,6 +15,7 @@ class SearchTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        photoImage.layer.cornerRadius = 10
         // Initialization code
     }
 

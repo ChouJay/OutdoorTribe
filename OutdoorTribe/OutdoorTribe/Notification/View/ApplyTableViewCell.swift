@@ -23,6 +23,7 @@ class ApplyTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         applyCollectionView.dataSource = self
+        applyCollectionView.delegate = self
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -40,21 +41,23 @@ extension ApplyTableViewCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let item = collectionView.dequeueReusableCell(withReuseIdentifier: "ApplyCollectionViewCell", for: indexPath) as? ApplyCollectionViewCell else { fatalError() }
+        guard let item = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "ApplyCollectionViewCell",
+            for: indexPath) as? ApplyCollectionViewCell else { fatalError() }
         guard let product = orderDocumentsFromFirestore[indexPath.row].data()["product"] as? [String: Any] else { return item }
         print(product)
         guard let urlStringArray = product["photoUrl"] as? [String] else { return item}
         
-//        let productInfo: Product?
-//        var urlString = ""
-//        do {
-//            productInfo = try product.data(as: Product.self, decoder: Firestore.Decoder())
-//            urlString = product?.photoUrl.first ?? ""
-//        } catch {
-//            print("decode failure: \(error)")
-//        }
         item.notifiedPhoto.kf.setImage(with: URL(string: urlStringArray.first!))
         item.setupPhotoLayout()
         return item
+    }
+}
+
+// MARK: - collection view delegate
+extension ApplyTableViewCell: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     }
 }
