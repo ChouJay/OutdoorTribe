@@ -244,10 +244,8 @@ extension SearchViewController: UISearchBarDelegate {
 extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == headerView {
-            print("header view")
             return 7
         } else {
-            print("test view")
             return AdvertisingWall.shared.differentPicture.count
         }
     }
@@ -300,6 +298,8 @@ extension SearchViewController {
         headerView.register(UINib(nibName: "HeaderCollectionViewCell", bundle: nil),
                             forCellWithReuseIdentifier: HeaderCollectionViewCell.reuseIdentifier)
         headerView.showsHorizontalScrollIndicator = false
+        headerView.layer.cornerRadius = 15
+        headerView.backgroundColor = UIColor(red: 239 / 250, green: 234 / 250, blue: 216 / 250, alpha: 1)
     }
     
     private func createCompositionalLayout() -> UICollectionViewLayout {

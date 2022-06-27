@@ -56,7 +56,8 @@ class ChatManager {
     func loadHistoryMessage(from chatRoom: ChatRoom, _ completionHandler: @escaping ([Message]) -> Void) {
         var chatMessages = [Message]()
         let firestoreDb = Firestore.firestore()
-        firestoreDb.collection("chat").document(chatRoom.roomID).collection("chatMessage").getDocuments(source: .server) { querySnapShot, error in
+        firestoreDb.collection("chat").document(chatRoom.roomID).collection("chatMessage")
+            .order(by: "date", descending: true).getDocuments(source: .server) { querySnapShot, error in
             if error == nil {
                 guard let documents = querySnapShot?.documents else { return }
                 for document in documents {
@@ -80,7 +81,10 @@ class ChatManager {
     func loadingChatRoom(_ completionHandler: @escaping ([ChatRoom]) -> Void ) {
         var chatRooms = [ChatRoom]()
         let firestoreDb = Firestore.firestore()
-        firestoreDb.collection("chatRoom").whereField("chaterOne", isEqualTo: "Jay").whereField("chaterTwo", isEqualTo: "George").getDocuments(source: .server) { querySnapShot, error in
+        firestoreDb.collection("chatRoom")
+            .whereField("chaterOne", isEqualTo: "Jay")
+            .whereField("chaterTwo", isEqualTo: "George")
+            .getDocuments(source: .server) { querySnapShot, error in
             if error == nil {
                 guard let documents = querySnapShot?.documents else { return }
                 for document in documents {
@@ -104,14 +108,14 @@ class ChatManager {
     func addChatRoomListener(to chatRoom: ChatRoom, _ completionHandler: @escaping ([Message]) -> Void) {
         var chatMessages = [Message]()
         let firestoreDb = Firestore.firestore()
-        
-        firestoreDb.collection("chat").document(chatRoom.roomID).collection("chatMessage").addSnapshotListener { querySnapShot, error in
+        firestoreDb.collection("chat").document(chatRoom.roomID).collection("chatMessage")
+            .order(by: "date", descending: false).addSnapshotListener { querySnapShot, error in
             chatMessages = []
             print("listen time")
             if error == nil {
                 guard let querySnapShot = querySnapShot else { return }
                 querySnapShot.documentChanges.forEach { diff in
-                if (diff.type == .added) {
+                if diff.type == .added {
                     let message: Message?
                     do {
                         message = try diff.document.data(as: Message.self, decoder: Firestore.Decoder())

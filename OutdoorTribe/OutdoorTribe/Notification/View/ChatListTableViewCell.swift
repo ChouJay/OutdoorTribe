@@ -9,7 +9,6 @@ import UIKit
 
 class ChatListTableViewCell: UITableViewCell {
 
-    
     @IBOutlet weak var chatListPhoto: UIImageView!
     @IBOutlet weak var chatListName: UILabel!
     
