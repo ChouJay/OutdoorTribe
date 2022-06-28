@@ -52,10 +52,10 @@ class OrderManger {
         }
     }
     
-    func retrieveApplyingOrder(_ completion: @escaping ([QueryDocumentSnapshot]) -> ()) {
+    func retrieveApplyingOrder(userName: String,_ completion: @escaping ([QueryDocumentSnapshot]) -> ()) {
         var documents = [QueryDocumentSnapshot]()
         let firstoreDb = Firestore.firestore()
-        firstoreDb.collection("orders").whereField("orderState", isEqualTo: 0).getDocuments(source: .server) { querySnapShot, error in
+        firstoreDb.collection("orders").whereField("orderState", isEqualTo: 0).whereField("renter", isEqualTo: userName).getDocuments(source: .server) { querySnapShot, error in
             if error == nil && querySnapShot != nil {
                 for document in querySnapShot!.documents {
                     documents.append(document)

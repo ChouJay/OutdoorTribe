@@ -1084,14 +1084,14 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ApplyTableViewCell" id="zXw-qO-EG8" customClass="ApplyTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="44.5" width="414" height="131.5"/>
+                                        <rect key="frame" x="0.0" y="44.5" width="414" height="131"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="zXw-qO-EG8" id="Nmj-KC-8co">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="131.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="131"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="vJb-t7-d8T">
-                                                    <rect key="frame" x="0.0" y="31.5" width="414" height="100"/>
+                                                    <rect key="frame" x="0.0" y="31" width="414" height="100"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="100" id="4Ws-1G-4f3"/>
@@ -1128,7 +1128,7 @@
                                                             </collectionViewCellContentView>
                                                             <connections>
                                                                 <outlet property="notifiedPhoto" destination="6yi-0O-1b8" id="Nzn-5y-tpz"/>
-                                                                <segue destination="R8s-SP-BTd" kind="show" id="ZIB-Lh-hLC"/>
+                                                                <segue destination="R8s-SP-BTd" kind="show" identifier="ToBookingViewController" id="ZIB-Lh-hLC"/>
                                                             </connections>
                                                         </collectionViewCell>
                                                         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="cHW-VN-qJo">
@@ -1150,7 +1150,7 @@
                                                     </cells>
                                                 </collectionView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G3M-aS-bG6">
-                                                    <rect key="frame" x="20" y="10" width="87.5" height="21.5"/>
+                                                    <rect key="frame" x="20" y="10" width="87.5" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -1170,7 +1170,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ChatListTableViewCell" id="xHE-VJ-2ZO" customClass="ChatListTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="176" width="414" height="130.5"/>
+                                        <rect key="frame" x="0.0" y="175.5" width="414" height="130.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xHE-VJ-2ZO" id="5en-EN-Brf">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="130.5"/>
@@ -1202,7 +1202,7 @@
                                         <connections>
                                             <outlet property="chatListName" destination="1J9-Xh-l2q" id="6uq-eD-lh0"/>
                                             <outlet property="chatListPhoto" destination="cKD-fy-RUD" id="VHR-ye-Qlc"/>
-                                            <segue destination="HOA-kl-29V" kind="show" id="5VR-xm-ys3"/>
+                                            <segue destination="HOA-kl-29V" kind="show" identifier="ToChatViewController" id="5VR-xm-ys3"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -1988,7 +1988,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="9fu-0O-WUc"/>
+        <segue reference="5VR-xm-ys3"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="calendar" catalog="system" width="128" height="106"/>

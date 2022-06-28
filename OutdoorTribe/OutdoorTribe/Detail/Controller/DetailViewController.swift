@@ -13,6 +13,7 @@ import FirebaseAuth
 
 class DetailViewController: UIViewController {
     let firestoreAuth = Auth.auth()
+   
     var userInfo: Account?
     var leaseTerm = [Date]()
     var startDate = Date()
@@ -41,6 +42,7 @@ class DetailViewController: UIViewController {
             daysBetweenTwoDate()
             order.lessor = userInfo?.name ?? ""
             order.product = chooseProduct
+            order.renter = chooseProduct?.renter ?? ""
             OrderManger.shared.uploadOrder(orderFromVC: &order)
             navigationController?.popViewController(animated: true)
         }

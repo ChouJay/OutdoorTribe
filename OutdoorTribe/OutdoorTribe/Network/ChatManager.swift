@@ -95,14 +95,14 @@ class ChatManager {
         }
     }
     
-    func loadingChatRoom(_ completionHandler: @escaping ([ChatRoom]) -> Void ) {
+    func loadingChatRoom( userName: String,_ completionHandler: @escaping ([ChatRoom]) -> Void ) {
         var chatRooms = [ChatRoom]()
         let firestoreDb = Firestore.firestore()
         firestoreDb.collection("chatRoom")
-            .whereField("chaterOne", isEqualTo: "Jay")
-            .whereField("chaterTwo", isEqualTo: "George")
+            .whereField("users", arrayContains: userName)
             .getDocuments(source: .server) { querySnapShot, error in
             if error == nil {
+                print(querySnapShot?.count)
                 guard let documents = querySnapShot?.documents else { return }
                 for document in documents {
                     let chatRoom: ChatRoom?

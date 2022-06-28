@@ -50,7 +50,6 @@ class PostViewController: UIViewController {
         guard let uid = firestoreAuth.currentUser?.uid else { return }
         AccountManager.shared.getUserInfo(by: uid) { [weak self] account in
             self?.userInfo = account
-            print(self?.userInfo)
         }
         // Do any additional setup after loading the view.
     }
