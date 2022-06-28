@@ -23,4 +23,21 @@ class AccountManager {
             }
         }
     }
+    
+    func getUserInfo(by uid: String, completion: @escaping (Account) -> Void) {
+        var userInfo: Account?
+        let firestoreDB = Firestore.firestore()
+        firestoreDB.collection("users").document(uid).getDocument(source: .server) { snapShot, error in
+            if error == nil && snapShot != nil {
+                do {
+                    guard let snapShot = snapShot else { return }
+                    userInfo = try snapShot.data(as: Account.self, decoder: Firestore.Decoder())
+                    guard let userInfo = userInfo else { return }
+                    completion(userInfo)
+                } catch {
+                    print("decode failure: \(error)")
+                }
+            }
+        }
+    }
 }

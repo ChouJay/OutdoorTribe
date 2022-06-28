@@ -10,9 +10,12 @@ import AVKit
 import MapKit
 import FirebaseStorage
 import FirebaseFirestore
+import FirebaseAuth
 
 class PostViewController: UIViewController {
   
+    var userInfo: Account?
+    let firestoreAuth = Auth.auth()
     var targetCell: ImageTableViewCell?
     var uploadedPhoto = [UIImage]()
     let imagePickerController = UIImagePickerController()
@@ -32,6 +35,7 @@ class PostViewController: UIViewController {
     
     @IBOutlet weak var postTableView: UITableView!
     @IBAction func tapPost(_ sender: Any) {
+        product.renter = userInfo?.name ?? ""
         uploadPhoto()
         uploadedPhoto = []
         dismiss(animated: true)
@@ -43,6 +47,11 @@ class PostViewController: UIViewController {
         postTableView.dataSource = self
         postTableView.delegate = self
         imagePickerController.delegate = self
+        guard let uid = firestoreAuth.currentUser?.uid else { return }
+        AccountManager.shared.getUserInfo(by: uid) { [weak self] account in
+            self?.userInfo = account
+            print(self?.userInfo)
+        }
         // Do any additional setup after loading the view.
     }
     
@@ -63,7 +72,6 @@ class PostViewController: UIViewController {
     
     func uploadPhoto() {
         let group: DispatchGroup = DispatchGroup()
-        let firstoreDb = Firestore.firestore()
         let storage = Storage.storage()
         let storageRef = storage.reference()
         let path = "images/\(UUID().uuidString).jpg"
@@ -90,12 +98,15 @@ class PostViewController: UIViewController {
             endPoint += 1
         }
         
-        group.notify(queue: DispatchQueue.main) {
+        group.notify(queue: DispatchQueue.main) { [weak self] in
             guard paths.isEmpty == false else { return }
-            self.product.photoUrl = paths
-            print(self.product.photoUrl)
-            firstoreDb.collection("product").document().setData(self.product.toDict)
-
+            self?.product.photoUrl = paths
+            print(self?.product.photoUrl)
+            let firebaseAuth = Auth.auth()
+            guard let product = self?.product,
+                  let currentUser = firebaseAuth.currentUser else { return }
+            ProductManager.shared.postProduct(withProduct: product)
+            ProductManager.shared.postProductByUser(withProduct: product, user: currentUser)
         }
     }
 }
@@ -143,7 +154,10 @@ extension PostViewController: UITableViewDelegate {
 extension PostViewController: UploadPhotoDelegate {
     func askToUploadPhoto() {
         let controller = UIAlertController(title: "請上傳照片", message: nil, preferredStyle: .actionSheet)
-        let titleAttributes = [NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Bold", size: 20)!, NSAttributedString.Key.foregroundColor: UIColor.black]
+        let titleAttributes = [
+            NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Bold", size: 20)!,
+            NSAttributedString.Key.foregroundColor: UIColor.black
+        ]
         let titleString = NSAttributedString(string: "Please upload some photo or video", attributes: titleAttributes)
         controller.setValue(titleString, forKey: "attributedTitle")
         controller.view.tintColor = UIColor.gray
@@ -210,7 +224,7 @@ extension PostViewController: UITextFieldDelegate {
         switch textField.placeholder {
         case "title":
             product.title = textField.text ?? ""
-        case "rent":
+        case "rent / day":
             guard let rentString = textField.text else { return }
             product.rent = Int(rentString) ?? 0
         case "address":

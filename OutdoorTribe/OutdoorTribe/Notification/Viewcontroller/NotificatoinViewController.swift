@@ -17,6 +17,7 @@ class NotificatoinViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         chatRoomTableView.dataSource = self
+        
         // Do any additional setup after loading the view.
     }
     

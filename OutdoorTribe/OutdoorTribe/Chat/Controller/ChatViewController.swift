@@ -11,14 +11,13 @@ import FirebaseFirestore
 import Kingfisher
 
 class ChatViewController: UIViewController {
+    var userInfo: Account?
     let imagePickerController = UIImagePickerController()
-    var chatRoomInfo: ChatRoom?
     var messages = [Message]()
     var sendedPhoto: UIImage?
 
-    var chatRoom = ChatRoom(roomID: "9C6784B5-0B87-4904-B9FA-E93533BDDD7B", lastMessage: "hi", lastDate: Date(), chaterOne: "Jay", chaterTwo: "George")
-    var chatMessage = Message(sender: "Jay", receiver: "George", message: "", productPhoto: "", date: Date())
-    
+    var chatRoom = ChatRoom(roomID: "", lastMessage: "hi", lastDate: Date(), chaterOne: "Fake name 1", chaterTwo: "Fake name 2")
+    var chatMessage = Message(sender: "Fake name", receiver: "Fake name", message: "", productPhoto: "", date: Date())
     
     @IBOutlet weak var navigationTitle: UINavigationItem!
     @IBOutlet weak var chatTableView: UITableView!
@@ -26,6 +25,7 @@ class ChatViewController: UIViewController {
     @IBAction func tapSendButton(_ sender: UIButton) {
         guard let messageText = typingTextView.text,
               messageText != "" else { return }
+        
         chatMessage.message = messageText
         ChatManager.shared.createChat(in: chatRoom, put: chatMessage)
         typingTextView.text = ""
@@ -44,6 +44,7 @@ class ChatViewController: UIViewController {
         
         chatTableView.dataSource = self
         chatTableView.delegate = self
+        
         ChatManager.shared.addChatRoomListener(to: chatRoom) { [weak self] messagesFromServer in
             guard let message = self?.messages else { return }
             self?.messages = message + messagesFromServer
@@ -58,7 +59,15 @@ class ChatViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationTitle.title = "George"
+        guard let usersInChatRoom = chatRoom.users else { return }
+        for name in usersInChatRoom {
+            if name != userInfo?.name {
+                navigationTitle.title = name
+                chatMessage.receiver = name
+            }
+        }
+        guard let userInfo = userInfo else { return }
+        chatMessage.sender = userInfo.name
     }
 }
 
@@ -72,8 +81,9 @@ extension ChatViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if messages[indexPath.row].productPhoto == "" {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatTableViewCell", for: indexPath) as? ChatTableViewCell else { fatalError() }
+            guard let userInfo = userInfo else { return cell}
             cell.layOutTextBubble()
-            if messages[indexPath.row].sender == "Jay" {
+            if messages[indexPath.row].sender == userInfo.name {
                 cell.rightBubbleView.isHidden = false
                 cell.leftBubbleView.isHidden = true
                 cell.photoView.isHidden = true
@@ -88,8 +98,9 @@ extension ChatViewController: UITableViewDataSource {
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatImageTableViewCell", for: indexPath) as? ChatImageTableViewCell,
                   let url = URL(string: messages[indexPath.row].productPhoto) else { fatalError() }
+            guard let userInfo = userInfo else { return cell}
             cell.layOutImageCell()
-            if messages[indexPath.row].sender == "Jay" {
+            if messages[indexPath.row].sender == userInfo.name {
                 cell.rightView.isHidden = false
                 cell.leftView.isHidden = true
                 cell.photoView.isHidden = true

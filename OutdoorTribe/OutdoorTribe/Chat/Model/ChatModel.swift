@@ -8,7 +8,7 @@
 import Foundation
 
 struct ChatRoom: Codable {
-    var users: [User]?
+    var users: [String]?
     var roomID: String
     var lastMessage: String
     var lastDate: Date

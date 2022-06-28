@@ -12,22 +12,24 @@ import FirebaseFirestoreSwift
 import FirebaseAuth
 
 class DetailViewController: UIViewController {
+    let firestoreAuth = Auth.auth()
+    var userInfo: Account?
     var leaseTerm = [Date]()
     var startDate = Date()
     var endDate = Date()
-    var order = Order(lessor: "George",
+    var order = Order(lessor: "Fake name",
                       renter: "",
                       orderID: "",
                       requiredAmount: 0,
                       leaseTerm: [],
                       product: nil)
-    var chooseProduct: Product?
-    var chatRoom = ChatRoom(users: nil,
+    lazy var chatRoom = ChatRoom(users: nil,
                             roomID: "",
                             lastMessage: "Hi",
                             lastDate: Date(),
-                            chaterOne: "Jay",
-                            chaterTwo: "George")
+                            chaterOne: "Fake name 1",
+                            chaterTwo: "Fake name 2")
+    var chooseProduct: Product?
     
     @IBOutlet weak var detailTableView: UITableView!
     
@@ -37,6 +39,7 @@ class DetailViewController: UIViewController {
             presentLoginVC()
         } else {
             daysBetweenTwoDate()
+            order.lessor = userInfo?.name ?? ""
             order.product = chooseProduct
             OrderManger.shared.uploadOrder(orderFromVC: &order)
             navigationController?.popViewController(animated: true)
@@ -49,9 +52,19 @@ class DetailViewController: UIViewController {
             presentLoginVC()
         } else {
             let uuid = UUID().uuidString
+            let chaterOneName = userInfo?.name ?? ""
+            let chaterTwoName = chooseProduct?.renter ?? ""
+            chatRoom.chaterOne = chaterOneName
+            chatRoom.chaterTwo = chaterTwoName
             chatRoom.roomID = uuid
-            ChatManager.shared.createChatRoomIfNeed(chatRoom: chatRoom)
-            performSegue(withIdentifier: "DetailtoChatRoomSegue", sender: nil)
+            chatRoom.users = [chaterOneName, chaterTwoName]
+            ChatManager.shared.createChatRoomIfNeed(
+                chatRoom: chatRoom,
+                chaterOne: chaterOneName,
+                chaterTwo: chaterTwoName) { [weak self] existChatRoom in
+                    self?.chatRoom = existChatRoom
+                    self?.performSegue(withIdentifier: "DetailtoChatRoomSegue", sender: nil)
+            }
         }
     }
     
@@ -64,6 +77,11 @@ class DetailViewController: UIViewController {
                           width: super.view.frame.width,
                           height: .leastNormalMagnitude))
         detailTableView.automaticallyAdjustsScrollIndicatorInsets = false
+        
+        guard let uid = firestoreAuth.currentUser?.uid else { return }
+        AccountManager.shared.getUserInfo(by: uid) { [weak self] account in
+            self?.userInfo = account
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,6 +95,12 @@ class DetailViewController: UIViewController {
             guard let childVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController else { return }
             childVC.modalPresentationStyle = .fullScreen
             present(childVC, animated: true, completion: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let destinationVC = segue.destination as? ChatViewController else { return }
+        destinationVC.chatRoom = chatRoom
+        destinationVC.userInfo = userInfo
     }
 }
 

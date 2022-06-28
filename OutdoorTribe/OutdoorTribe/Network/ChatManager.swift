@@ -12,19 +12,36 @@ import FirebaseStorage
 class ChatManager {
     static let shared = ChatManager()
     
-    func createChatRoomIfNeed(chatRoom: ChatRoom) {
+    func createChatRoomIfNeed(chatRoom: ChatRoom, chaterOne: String, chaterTwo: String, completion: @escaping (ChatRoom) -> Void) {
         let firestoreDb = Firestore.firestore()
         firestoreDb.collection("chatRoom")
-            .whereField("chaterOne", isEqualTo: "Jay")
-            .whereField("chaterTwo", isEqualTo: "George")
+            .whereField("users", arrayContainsAny: [chaterOne, chaterTwo])
             .getDocuments(source: .server) { querySnapShot, error in
             if error == nil {
                 if querySnapShot?.documents.count == 0 {
                     print("set chat collection!")
                     self.createChatRoom(create: chatRoom)
+                } else {
+                    print("chat zoom exist")
+                    guard let querySnapShot = querySnapShot else { return }
+                    for document in querySnapShot.documents {
+                        let set: Set<String> = [chaterOne, chaterTwo]
+                        guard let array = document.data()["users"] as? [String] else { return }
+                        print(array)
+                        let set2 = Set(array)
+                        if set == set2 {
+                            print(document.documentID)
+                            var existChatRoom: ChatRoom?
+                            do {
+                                existChatRoom = try document.data(as: ChatRoom.self, decoder: Firestore.Decoder())
+                                guard let existChatRoom = existChatRoom else { return }
+                                completion(existChatRoom)
+                            } catch {
+                                print("decode failure: \(error)")
+                            }
+                        }
+                    }
                 }
-                // do nothing if chat room already exist!
-                // => push chat room VC!!
             } else {
                 print(error)
             }
