@@ -10,6 +10,8 @@ import FirebaseAuth
 
 class ProfileViewController: UIViewController {
 
+    var userInfo: Account?
+    
     @IBOutlet weak var bookingTableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
     
@@ -34,7 +36,12 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        print("test")
+        let firestoreAuth = Auth.auth()
+        guard let uid = firestoreAuth.currentUser?.uid else { return }
+        AccountManager.shared.getUserInfo(by: uid) { [weak self] account in
+            self?.userInfo = account
+        }
         // Do any additional setup after loading the view.
     }
 }

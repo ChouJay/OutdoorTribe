@@ -91,7 +91,6 @@ extension NotificatoinViewController: UITableViewDataSource {
 // MARK: - segue
 extension NotificatoinViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print(segue.destination)
         switch segue.identifier {
         case "ToBookingViewController":
             guard let applyCollectionViewCell = sender as? ApplyCollectionViewCell,

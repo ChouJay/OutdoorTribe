@@ -32,10 +32,14 @@ class OrderManger {
     }
 
     
-    func retrieveBookedOrder(_ completion: @escaping ([Order]) -> ()) {
+    func retrieveBookedOrder(userName: String,_ completion: @escaping ([Order]) -> ()) {
         var orders = [Order]()
         let firstoreDb = Firestore.firestore()
-        firstoreDb.collection("orders").whereField("orderState", isLessThan: 3).whereField("orderState", isNotEqualTo: 0).getDocuments(source: .server) { querySnapShot, error in
+        firstoreDb.collection("orders")
+            .whereField("orderState", isLessThan: 3)
+            .whereField("orderState", isNotEqualTo: 0)
+            .whereField("renter", isEqualTo: userName)
+            .getDocuments(source: .server) { querySnapShot, error in
             if error == nil && querySnapShot != nil {
                 for document in querySnapShot!.documents {                    
                     let order: Order?
