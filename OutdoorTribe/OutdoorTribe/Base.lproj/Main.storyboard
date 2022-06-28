@@ -1831,7 +1831,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pb8-Ph-8tz">
-                                <rect key="frame" x="20" y="64" width="98.5" height="24"/>
+                                <rect key="frame" x="20" y="54" width="98.5" height="24"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -1851,7 +1851,7 @@
                             <constraint firstItem="LtJ-l9-3ut" firstAttribute="trailing" secondItem="jNB-3w-7m8" secondAttribute="trailing" constant="40" id="B0I-wx-tsb"/>
                             <constraint firstItem="wEX-av-vwP" firstAttribute="leading" secondItem="LtJ-l9-3ut" secondAttribute="leading" constant="40" id="DKt-uX-PTr"/>
                             <constraint firstItem="LEY-wN-ebk" firstAttribute="top" secondItem="jNB-3w-7m8" secondAttribute="bottom" constant="20" id="Fs5-tE-sUX"/>
-                            <constraint firstItem="pb8-Ph-8tz" firstAttribute="top" secondItem="LtJ-l9-3ut" secondAttribute="top" constant="20" id="HE5-tE-xmX"/>
+                            <constraint firstItem="pb8-Ph-8tz" firstAttribute="top" secondItem="LtJ-l9-3ut" secondAttribute="top" constant="10" id="HE5-tE-xmX"/>
                             <constraint firstItem="wEX-av-vwP" firstAttribute="top" secondItem="LEY-wN-ebk" secondAttribute="bottom" constant="70" id="ROY-o6-ZJw"/>
                             <constraint firstItem="LtJ-l9-3ut" firstAttribute="trailing" secondItem="LEY-wN-ebk" secondAttribute="trailing" constant="40" id="Rwn-cs-Ih0"/>
                             <constraint firstItem="lNl-9Q-PrS" firstAttribute="centerX" secondItem="LjW-gL-b4o" secondAttribute="centerX" id="cTx-4a-ngJ"/>
