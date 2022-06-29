@@ -29,6 +29,7 @@
 		0139FC7F286B2330003C3851 /* BookedForRenterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0139FC7E286B2330003C3851 /* BookedForRenterTableViewCell.swift */; };
 		0139FC81286BE610003C3851 /* LeaseInTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0139FC80286BE610003C3851 /* LeaseInTableViewCell.swift */; };
 		0139FC83286BE633003C3851 /* LeaseInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0139FC82286BE633003C3851 /* LeaseInViewController.swift */; };
+		0139FC87286BF6A2003C3851 /* ScoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0139FC86286BF6A2003C3851 /* ScoreViewController.swift */; };
 		014C830B28632053006A4EC1 /* HeaderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C830A28632053006A4EC1 /* HeaderCollectionViewCell.swift */; };
 		014C830D28632072006A4EC1 /* HeaderCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 014C830C28632072006A4EC1 /* HeaderCollectionViewCell.xib */; };
 		014C830F28636CF5006A4EC1 /* Classification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C830E28636CF5006A4EC1 /* Classification.swift */; };
@@ -93,6 +94,7 @@
 		0139FC7E286B2330003C3851 /* BookedForRenterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookedForRenterTableViewCell.swift; sourceTree = "<group>"; };
 		0139FC80286BE610003C3851 /* LeaseInTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaseInTableViewCell.swift; sourceTree = "<group>"; };
 		0139FC82286BE633003C3851 /* LeaseInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaseInViewController.swift; sourceTree = "<group>"; };
+		0139FC86286BF6A2003C3851 /* ScoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreViewController.swift; sourceTree = "<group>"; };
 		014C830A28632053006A4EC1 /* HeaderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCollectionViewCell.swift; sourceTree = "<group>"; };
 		014C830C28632072006A4EC1 /* HeaderCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HeaderCollectionViewCell.xib; sourceTree = "<group>"; };
 		014C830E28636CF5006A4EC1 /* Classification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Classification.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 		012F24702859A53D00B891C1 /* OutdoorTribe */ = {
 			isa = PBXGroup;
 			children = (
+				0139FC84286BF687003C3851 /* ScorePage */,
 				0139FC7D2869D95B003C3851 /* OutdoorTribe.entitlements */,
 				012F24712859A53D00B891C1 /* AppDelegate.swift */,
 				012F24732859A53D00B891C1 /* SceneDelegate.swift */,
@@ -261,6 +264,22 @@
 				0139FC7928699972003C3851 /* Account.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		0139FC84286BF687003C3851 /* ScorePage */ = {
+			isa = PBXGroup;
+			children = (
+				0139FC85286BF692003C3851 /* Controller */,
+			);
+			path = ScorePage;
+			sourceTree = "<group>";
+		};
+		0139FC85286BF692003C3851 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				0139FC86286BF6A2003C3851 /* ScoreViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		014C62AC2859BED800C6D75D /* PostPage */ = {
@@ -670,6 +689,7 @@
 				0195EB60285EF5EC0015A12A /* ApplyTableViewCell.swift in Sources */,
 				01053E7B2859EA1B0074B125 /* ImageTableViewCell.swift in Sources */,
 				0195EB76285F81900015A12A /* BookedForLessorTableViewCell.swift in Sources */,
+				0139FC87286BF6A2003C3851 /* ScoreViewController.swift in Sources */,
 				01985D2D285C60FF00BCD866 /* Product.swift in Sources */,
 				01053E8C285B385C0074B125 /* ProductManager.swift in Sources */,
 				0195EB4D285DDCDA0015A12A /* DetailInfoTableViewCell.swift in Sources */,
