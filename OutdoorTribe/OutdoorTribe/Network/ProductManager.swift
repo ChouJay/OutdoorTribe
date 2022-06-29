@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseStorage
+import FirebaseAuth
 
 class ProductManager {
     static let shared = ProductManager()
@@ -79,6 +80,17 @@ class ProductManager {
         }
 //        return retrieveImages
     }
+    
+    func postProduct(withProduct: Product) {
+        let fireStoreDb = Firestore.firestore()
+        fireStoreDb.collection("product").document().setData(withProduct.toDict)
+    }
+    
+    func postProductByUser(withProduct: Product, user: FirebaseAuth.User) {
+        let fireStoreDb = Firestore.firestore()
+        fireStoreDb.collection("userPosts").document(user.uid).collection("products").document().setData(withProduct.toDict)
+    }
+    
     func upload() {
         let firstoreDb = Firestore.firestore()
         let storage = Storage.storage()

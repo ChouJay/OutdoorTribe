@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class TabBarController: UITabBarController {
 
@@ -21,9 +22,7 @@ class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tabBar.layer.cornerRadius = 10
-//        childVc = storyboard?.instantiateViewController(withIdentifier: "PostViewController") as? PostViewController
-//        setUpPlusButtonUI()
-//        self.delegate = self
+        self.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,12 +49,19 @@ class TabBarController: UITabBarController {
 }
 
 extension TabBarController: UITabBarControllerDelegate {
-//    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-//        print(item.tag)
-//        if item.tag == 1 {
-//            plusButton.isHidden = true
-//        } else {
-//            plusButton.isHidden = false
-//        }
-//    }
+    func tabBarController(_ tabBarController: UITabBarController,
+                          shouldSelect viewController: UIViewController) -> Bool {
+        if viewController.tabBarItem.tag >= 2 {
+            let firebaseAuth = Auth.auth()
+            if firebaseAuth.currentUser == nil {
+                guard let childVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController else { return false }
+                childVC.modalPresentationStyle = .fullScreen
+                present(childVC, animated: true, completion: nil)
+                return false
+            }
+            return true
+        } else {
+            return true
+        }
+    }
 }

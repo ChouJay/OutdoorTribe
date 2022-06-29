@@ -7,8 +7,11 @@
 
 import UIKit
 import FirebaseFirestore
+import FirebaseAuth
 
 class NotificatoinViewController: UIViewController {
+    let firestoreAuth = Auth.auth()
+    var userInfo: Account?
     var orderDocumentsFromFirestore = [QueryDocumentSnapshot]()
     var chatRooms = [ChatRoom]()
     lazy var collectionViewFromCell = UICollectionView()
@@ -17,18 +20,24 @@ class NotificatoinViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         chatRoomTableView.dataSource = self
+        
         // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        OrderManger.shared.retrieveApplyingOrder { documents in
-            self.orderDocumentsFromFirestore = documents
-            self.chatRoomTableView.reloadData()
-        }
-        ChatManager.shared.loadingChatRoom { chatRoomsFromServer in
-            self.chatRooms = chatRoomsFromServer
-            
+        guard let uid = firestoreAuth.currentUser?.uid else { return }
+        AccountManager.shared.getUserInfo(by: uid) { [weak self] account in
+            self?.userInfo = account
+            guard let userInfo = self?.userInfo else { return }
+            ChatManager.shared.loadingChatRoom(userName: userInfo.name) { [weak self] chatRoomsFromServer in
+                self?.chatRooms = chatRoomsFromServer
+                self?.chatRoomTableView.reloadSections(IndexSet(integer: 1), with: .none)
+            }
+            OrderManger.shared.retrieveApplyingOrder(userName: userInfo.name) { documents in
+                self?.orderDocumentsFromFirestore = documents
+                self?.chatRoomTableView.reloadSections(IndexSet(integer: 0), with: .none)
+            }
         }
     }
 }
@@ -62,10 +71,12 @@ extension NotificatoinViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "ChatListTableViewCell",
                 for: indexPath) as? ChatListTableViewCell else { fatalError() }
-            if chatRooms[indexPath.row].chaterOne == "Jay" {
-                cell.chatListName.text =  chatRooms[indexPath.row].chaterTwo
-            } else {
-                cell.chatListName.text =  chatRooms[indexPath.row].chaterOne
+            guard let usersInChatRoom = chatRooms[indexPath.row].users,
+                  let userInfo = userInfo else { return cell }
+            for name in usersInChatRoom {
+                if name != userInfo.name {
+                    cell.chatListName.text =  name
+                }
             }
             return cell
         default:
@@ -80,13 +91,23 @@ extension NotificatoinViewController: UITableViewDataSource {
 // MARK: - segue
 extension NotificatoinViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print(segue.source)
-        guard let applyCollectionViewCell = sender as? ApplyCollectionViewCell,
-              let bookingViewController = segue.destination as? BookingViewController,
-              let indexPath = collectionViewFromCell.indexPath(for: applyCollectionViewCell)
-        else { return }
-        print(indexPath)
-        bookingViewController.choosedOrderDocument = orderDocumentsFromFirestore[indexPath.row]
-
+        switch segue.identifier {
+        case "ToBookingViewController":
+            guard let applyCollectionViewCell = sender as? ApplyCollectionViewCell,
+                  let bookingViewController = segue.destination as? BookingViewController,
+                  let indexPath = collectionViewFromCell.indexPath(for: applyCollectionViewCell)
+            else { return }
+            print(indexPath)
+            bookingViewController.choosedOrderDocument = orderDocumentsFromFirestore[indexPath.row]
+        case "ToChatViewController":
+            guard let chatVC = segue.destination as? ChatViewController,
+                  let chatListTableViewCell = sender as? ChatListTableViewCell,
+                  let indexPath = chatRoomTableView.indexPath(for: chatListTableViewCell) else { return }
+            chatVC.userInfo = userInfo
+            chatVC.chatRoom = chatRooms[indexPath.row]
+            
+        default:
+            return
+        }
     }
 }

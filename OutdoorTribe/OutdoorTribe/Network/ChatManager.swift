@@ -12,19 +12,36 @@ import FirebaseStorage
 class ChatManager {
     static let shared = ChatManager()
     
-    func createChatRoomIfNeed(chatRoom: ChatRoom) {
+    func createChatRoomIfNeed(chatRoom: ChatRoom, chaterOne: String, chaterTwo: String, completion: @escaping (ChatRoom) -> Void) {
         let firestoreDb = Firestore.firestore()
         firestoreDb.collection("chatRoom")
-            .whereField("chaterOne", isEqualTo: "Jay")
-            .whereField("chaterTwo", isEqualTo: "George")
+            .whereField("users", arrayContainsAny: [chaterOne, chaterTwo])
             .getDocuments(source: .server) { querySnapShot, error in
             if error == nil {
                 if querySnapShot?.documents.count == 0 {
                     print("set chat collection!")
                     self.createChatRoom(create: chatRoom)
+                } else {
+                    print("chat zoom exist")
+                    guard let querySnapShot = querySnapShot else { return }
+                    for document in querySnapShot.documents {
+                        let set: Set<String> = [chaterOne, chaterTwo]
+                        guard let array = document.data()["users"] as? [String] else { return }
+                        print(array)
+                        let set2 = Set(array)
+                        if set == set2 {
+                            print(document.documentID)
+                            var existChatRoom: ChatRoom?
+                            do {
+                                existChatRoom = try document.data(as: ChatRoom.self, decoder: Firestore.Decoder())
+                                guard let existChatRoom = existChatRoom else { return }
+                                completion(existChatRoom)
+                            } catch {
+                                print("decode failure: \(error)")
+                            }
+                        }
+                    }
                 }
-                // do nothing if chat room already exist!
-                // => push chat room VC!!
             } else {
                 print(error)
             }
@@ -78,14 +95,14 @@ class ChatManager {
         }
     }
     
-    func loadingChatRoom(_ completionHandler: @escaping ([ChatRoom]) -> Void ) {
+    func loadingChatRoom( userName: String,_ completionHandler: @escaping ([ChatRoom]) -> Void ) {
         var chatRooms = [ChatRoom]()
         let firestoreDb = Firestore.firestore()
         firestoreDb.collection("chatRoom")
-            .whereField("chaterOne", isEqualTo: "Jay")
-            .whereField("chaterTwo", isEqualTo: "George")
+            .whereField("users", arrayContains: userName)
             .getDocuments(source: .server) { querySnapShot, error in
             if error == nil {
+                print(querySnapShot?.count)
                 guard let documents = querySnapShot?.documents else { return }
                 for document in documents {
                     let chatRoom: ChatRoom?

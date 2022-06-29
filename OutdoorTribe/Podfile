@@ -13,5 +13,6 @@ pod 'FirebaseStorage'
 pod 'SwiftLint'
 pod 'Kingfisher', '~> 7.0'
 pod 'FirebaseFirestoreSwift'
+pod 'Cosmos', '~> 23.0'
 
 end

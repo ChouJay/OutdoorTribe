@@ -11,17 +11,22 @@ import FirebaseFirestore
 class OrderManger {
     static let shared = OrderManger()
     
-    func retrieveRentedOrder(_ completion: @escaping ([Order]) -> ()) {
-        var orders = [Order]()
+    func retrieveLeasingOrder(userName: String, _ completion: @escaping ([Order]) -> Void) {
         let firstoreDb = Firestore.firestore()
-        firstoreDb.collection("orders").whereField("orderState", isEqualTo: 3).getDocuments(source: .server) { querySnapShot, error in
+        firstoreDb.collection("orders")
+            .whereField("orderState", isGreaterThan: 2)
+            .whereField("orderState", isLessThan: 5)
+            .addSnapshotListener { querySnapShot, error in
+            var orders = [Order]() // 不能放在retrieveRentOrder function內，要放在閉包一開始宣告，不然陣列不會被重置!
             if error == nil && querySnapShot != nil {
                 for document in querySnapShot!.documents {
                     let order: Order?
                     do {
                         order = try document.data(as: Order.self, decoder: Firestore.Decoder())
                         guard let order = order else { return }
-                        orders.append(order)
+                        if order.lessor == userName {
+                            orders.append(order)
+                        }
                     } catch {
                         print("decode failure: \(error)")
                     }
@@ -31,18 +36,51 @@ class OrderManger {
         }
     }
 
-    
-    func retrieveBookedOrder(_ completion: @escaping ([Order]) -> ()) {
-        var orders = [Order]()
+    func retrieveRentedOrder(userName: String, _ completion: @escaping ([Order]) -> Void) {
         let firstoreDb = Firestore.firestore()
-        firstoreDb.collection("orders").whereField("orderState", isLessThan: 3).whereField("orderState", isNotEqualTo: 0).getDocuments(source: .server) { querySnapShot, error in
+        firstoreDb.collection("orders")
+            .whereField("orderState", isGreaterThan: 2)
+            .whereField("orderState", isLessThan: 5)
+            .addSnapshotListener { querySnapShot, error in
+            var orders = [Order]() // 不能放在retrieveRentOrder function內，要放在閉包一開始宣告，不然陣列不會被重置!
             if error == nil && querySnapShot != nil {
-                for document in querySnapShot!.documents {                    
+                for document in querySnapShot!.documents {
                     let order: Order?
                     do {
                         order = try document.data(as: Order.self, decoder: Firestore.Decoder())
                         guard let order = order else { return }
-                        orders.append(order)
+                        if order.renter == userName {
+                            orders.append(order)
+                        }
+                    } catch {
+                        print("decode failure: \(error)")
+                    }
+                }
+                completion(orders)
+            }
+        }
+    }
+
+    func retrieveBookedOrder(userName: String, _ completion: @escaping ([Order]) -> Void) {
+       
+        let firstoreDb = Firestore.firestore()
+        // 還沒進行時間排序！！
+        firstoreDb.collection("orders")
+            .whereField("orderState", isLessThan: 3)
+            .whereField("orderState", isGreaterThan: 0)
+            .addSnapshotListener { querySnapShot, error in
+            var orders = [Order]()
+                print(querySnapShot?.documents.count)
+            if error == nil && querySnapShot != nil {
+                for document in querySnapShot!.documents {
+                    let order: Order?
+                    do {
+                        order = try document.data(as: Order.self, decoder: Firestore.Decoder())
+                        guard let order = order else { return }
+                        print(order)
+                        if order.renter == userName || order.lessor == userName {
+                            orders.append(order)
+                        }
                     } catch {
                         print("decode failure: \(error)")
                     }
@@ -52,10 +90,10 @@ class OrderManger {
         }
     }
     
-    func retrieveApplyingOrder(_ completion: @escaping ([QueryDocumentSnapshot]) -> ()) {
+    func retrieveApplyingOrder(userName: String,_ completion: @escaping ([QueryDocumentSnapshot]) -> ()) {
         var documents = [QueryDocumentSnapshot]()
         let firstoreDb = Firestore.firestore()
-        firstoreDb.collection("orders").whereField("orderState", isEqualTo: 0).getDocuments(source: .server) { querySnapShot, error in
+        firstoreDb.collection("orders").whereField("orderState", isEqualTo: 0).whereField("renter", isEqualTo: userName).getDocuments(source: .server) { querySnapShot, error in
             if error == nil && querySnapShot != nil {
                 for document in querySnapShot!.documents {
                     documents.append(document)
