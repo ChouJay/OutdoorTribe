@@ -1569,23 +1569,76 @@
             </objects>
             <point key="canvasLocation" x="-901" y="1675"/>
         </scene>
-        <!--View Controller-->
+        <!--Lease In View Controller-->
         <scene sceneID="Ie6-kS-XuJ">
             <objects>
-                <viewController id="UgC-Po-KdG" sceneMemberID="viewController">
+                <viewController id="UgC-Po-KdG" customClass="LeaseInViewController" customModule="OutdoorTribe" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vvD-jX-6nU">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="425"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k8A-ZM-GwZ">
-                                <rect key="frame" x="87" y="54" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.97254908080000002" green="0.87058818339999999" blue="0.44313728810000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                            </imageView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" contentInsetAdjustmentBehavior="never" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="BVR-hd-8Xu">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="425"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="LeaseInTableViewCell" id="eXK-zn-Vhu" customClass="LeaseInTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="44.5" width="414" height="140.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="eXK-zn-Vhu" id="OYl-BE-OPj">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="140.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="axU-ed-aXk">
+                                                    <rect key="frame" x="20" y="20" width="100" height="100.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="100" id="NZT-aa-1NN"/>
+                                                        <constraint firstAttribute="height" constant="100" id="PSO-Kc-YIq"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z32-wA-Ng6">
+                                                    <rect key="frame" x="274" y="80.5" width="120" height="40"/>
+                                                    <color key="backgroundColor" red="0.57192960319999997" green="0.71176770889999996" blue="0.53663966659999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="60s-WN-aqn"/>
+                                                        <constraint firstAttribute="width" constant="120" id="amS-eq-fT2"/>
+                                                    </constraints>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal" title="Return">
+                                                        <color key="titleColor" systemColor="systemGroupedBackgroundColor"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="tapReturnBtn:" destination="eXK-zn-Vhu" eventType="touchUpInside" id="HIe-yU-Sgb"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="z32-wA-Ng6" secondAttribute="bottom" constant="20" id="BeG-uv-AdO"/>
+                                                <constraint firstAttribute="bottom" secondItem="axU-ed-aXk" secondAttribute="bottom" constant="20" id="Bxe-Cx-KC3"/>
+                                                <constraint firstAttribute="trailing" secondItem="z32-wA-Ng6" secondAttribute="trailing" constant="20" id="Fic-3u-63a"/>
+                                                <constraint firstItem="axU-ed-aXk" firstAttribute="top" secondItem="OYl-BE-OPj" secondAttribute="top" constant="20" id="Zv4-3g-bd4"/>
+                                                <constraint firstItem="axU-ed-aXk" firstAttribute="leading" secondItem="OYl-BE-OPj" secondAttribute="leading" constant="20" id="rC1-pC-8Rk"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="productPhoto" destination="axU-ed-aXk" id="2sW-Mm-jlu"/>
+                                            <outlet property="returnBtn" destination="z32-wA-Ng6" id="FmX-mH-REe"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="DaQ-iJ-dbr"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="DaQ-iJ-dbr" firstAttribute="bottom" secondItem="BVR-hd-8Xu" secondAttribute="bottom" id="KGk-1j-tKX"/>
+                            <constraint firstItem="DaQ-iJ-dbr" firstAttribute="trailing" secondItem="BVR-hd-8Xu" secondAttribute="trailing" id="Rxg-WE-kF9"/>
+                            <constraint firstItem="BVR-hd-8Xu" firstAttribute="top" secondItem="vvD-jX-6nU" secondAttribute="top" id="U8u-EU-v8r"/>
+                            <constraint firstItem="BVR-hd-8Xu" firstAttribute="leading" secondItem="DaQ-iJ-dbr" secondAttribute="leading" id="X09-Ic-PyJ"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="leaseInTableView" destination="BVR-hd-8Xu" id="v9h-JW-3KG"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YPz-pV-qCy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1603,7 +1656,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="425"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="RentOutTableViewCell" id="QWd-PB-W3E" customClass="RentOutTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="RentOutTableViewCell" id="QWd-PB-W3E" customClass="RentOutTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="44.5" width="414" height="140.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="QWd-PB-W3E" id="sAC-W6-Qpg">
@@ -1617,14 +1670,32 @@
                                                         <constraint firstAttribute="width" constant="100" id="TEZ-ea-noZ"/>
                                                     </constraints>
                                                 </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eNy-4O-U13">
+                                                    <rect key="frame" x="274" y="80.5" width="120" height="40"/>
+                                                    <color key="backgroundColor" red="0.57192960319999997" green="0.71176770889999996" blue="0.53663966659999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="120" id="H1U-dW-YIe"/>
+                                                        <constraint firstAttribute="height" constant="40" id="jL5-fW-k4y"/>
+                                                    </constraints>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal" title="Finish">
+                                                        <color key="titleColor" systemColor="systemGroupedBackgroundColor"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="tapFinishBtn:" destination="QWd-PB-W3E" eventType="touchUpInside" id="TtM-Xl-mf3"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="yBO-Hq-pAp" firstAttribute="top" secondItem="sAC-W6-Qpg" secondAttribute="top" constant="20" id="JVf-8A-sO0"/>
+                                                <constraint firstAttribute="trailing" secondItem="eNy-4O-U13" secondAttribute="trailing" constant="20" id="Vfm-3M-dG6"/>
                                                 <constraint firstItem="yBO-Hq-pAp" firstAttribute="leading" secondItem="sAC-W6-Qpg" secondAttribute="leading" constant="20" id="YPc-DB-T8G"/>
+                                                <constraint firstAttribute="bottom" secondItem="eNy-4O-U13" secondAttribute="bottom" constant="20" id="c3F-pF-elt"/>
                                                 <constraint firstAttribute="bottom" secondItem="yBO-Hq-pAp" secondAttribute="bottom" constant="20" id="tee-r2-w6D"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="finishBtn" destination="eNy-4O-U13" id="jrj-ru-Wjh"/>
                                             <outlet property="productPhoto" destination="yBO-Hq-pAp" id="bqd-yY-cv7"/>
                                         </connections>
                                     </tableViewCell>
@@ -1660,7 +1731,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="425"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BookedStageTableViewCell" id="cMy-Q6-DTY" customClass="BookedStageTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BookedForLessorTableViewCell" id="cMy-Q6-DTY" customClass="BookedForLessorTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="44.5" width="414" height="140.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cMy-Q6-DTY" id="tBm-gc-ebr">
@@ -1676,17 +1747,17 @@
                                                 </imageView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q59-DC-6uU">
                                                     <rect key="frame" x="274" y="80.5" width="120" height="40"/>
-                                                    <color key="backgroundColor" red="0.57192960319999997" green="0.71176770889999996" blue="0.53663966659999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                    <color key="backgroundColor" red="0.69642857140000003" green="0.15617059320000001" blue="0.1735934999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="Rbg-FC-bTB"/>
                                                         <constraint firstAttribute="width" constant="120" id="eyb-J9-I7L"/>
                                                     </constraints>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                    <state key="normal" title="Deliver">
+                                                    <state key="normal" title="Cancel">
                                                         <color key="titleColor" systemColor="systemGroupedBackgroundColor"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="tapDeliverButton:" destination="cMy-Q6-DTY" eventType="touchUpInside" id="77U-d9-mTP"/>
+                                                        <action selector="tapLessorCancelBtn:" destination="cMy-Q6-DTY" eventType="touchUpInside" id="gll-F5-ljJ"/>
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RfW-eV-8Ni">
@@ -1717,8 +1788,66 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="bookedPhoto" destination="kNh-tD-dAt" id="3Xa-b8-JnE"/>
-                                            <outlet property="deliverButton" destination="q59-DC-6uU" id="h3t-I9-mob"/>
+                                            <outlet property="lessorCancelBtn" destination="q59-DC-6uU" id="h3t-I9-mob"/>
                                             <outlet property="pickUpButton" destination="RfW-eV-8Ni" id="PA3-Dq-t1B"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BookedForRenterTableViewCell" id="bFB-vW-JQc" customClass="BookedForRenterTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="185" width="414" height="140.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bFB-vW-JQc" id="Ihp-rS-cr4">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="140.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vGs-JS-K0a">
+                                                    <rect key="frame" x="20" y="20" width="100" height="100.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="100" id="BcD-Qx-Jou"/>
+                                                        <constraint firstAttribute="height" constant="100" id="lz7-6h-ljv"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g97-65-HSt">
+                                                    <rect key="frame" x="274" y="80.5" width="120" height="40"/>
+                                                    <color key="backgroundColor" red="0.6964285714285714" green="0.15617059323729493" blue="0.17359349989995998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="120" id="2Pr-Wr-7k0"/>
+                                                        <constraint firstAttribute="height" constant="40" id="tML-hc-5li"/>
+                                                    </constraints>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal" title="Cancel">
+                                                        <color key="titleColor" systemColor="systemGroupedBackgroundColor"/>
+                                                    </state>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bEV-Om-CdE">
+                                                    <rect key="frame" x="146" y="80.5" width="120" height="40"/>
+                                                    <color key="backgroundColor" red="0.57192960319999997" green="0.71176770889999996" blue="0.53663966659999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="c0K-9a-rQz"/>
+                                                        <constraint firstAttribute="width" constant="120" id="rvE-ef-pa8"/>
+                                                    </constraints>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal" title="Deliver!">
+                                                        <color key="titleColor" systemColor="systemGroupedBackgroundColor"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="tapDeliverBtn:" destination="bFB-vW-JQc" eventType="touchUpInside" id="pAy-kh-7JB"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="vGs-JS-K0a" firstAttribute="leading" secondItem="Ihp-rS-cr4" secondAttribute="leading" constant="20" id="36y-IR-qFS"/>
+                                                <constraint firstAttribute="bottom" secondItem="bEV-Om-CdE" secondAttribute="bottom" constant="20" id="80J-CC-nkC"/>
+                                                <constraint firstItem="g97-65-HSt" firstAttribute="leading" secondItem="bEV-Om-CdE" secondAttribute="trailing" constant="8" symbolic="YES" id="LqQ-R4-jhQ"/>
+                                                <constraint firstAttribute="bottom" secondItem="g97-65-HSt" secondAttribute="bottom" constant="20" id="Siq-wY-Duv"/>
+                                                <constraint firstItem="vGs-JS-K0a" firstAttribute="top" secondItem="Ihp-rS-cr4" secondAttribute="top" constant="20" id="pCW-iW-gch"/>
+                                                <constraint firstAttribute="trailing" secondItem="g97-65-HSt" secondAttribute="trailing" constant="20" id="rh5-4N-U6R"/>
+                                                <constraint firstAttribute="bottom" secondItem="vGs-JS-K0a" secondAttribute="bottom" constant="20" id="wRx-sa-TGP"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="cancelBtn" destination="g97-65-HSt" id="vTe-eX-YVJ"/>
+                                            <outlet property="deliverBtn" destination="bEV-Om-CdE" id="Fyk-Yj-zHG"/>
+                                            <outlet property="photoImage" destination="vGs-JS-K0a" id="Rug-0R-xmy"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

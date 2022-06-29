@@ -15,6 +15,7 @@ struct Order: Codable {
     var leaseTerm: [Date]
     var product: Product?
     var orderState: Int = 0
+    var createDate: Date
     
     var toDict: [String: Any] {
         return [
@@ -24,7 +25,8 @@ struct Order: Codable {
             "requiredAmount": requiredAmount as Any,
             "leaseTerm": leaseTerm as Any,
             "product": product?.toDict as Any,
-            "orderState": orderState as Any
+            "orderState": orderState as Any,
+            "createDate": createDate as Any
         ]
     }
 

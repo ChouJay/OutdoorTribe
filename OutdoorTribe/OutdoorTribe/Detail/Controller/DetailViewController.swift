@@ -23,7 +23,8 @@ class DetailViewController: UIViewController {
                       orderID: "",
                       requiredAmount: 0,
                       leaseTerm: [],
-                      product: nil)
+                      product: nil,
+                      createDate: Date())
     lazy var chatRoom = ChatRoom(users: nil,
                             roomID: "",
                             lastMessage: "Hi",

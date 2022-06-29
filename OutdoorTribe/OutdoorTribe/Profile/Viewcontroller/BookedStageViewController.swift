@@ -11,6 +11,7 @@ import FirebaseAuth
 import Kingfisher
 
 class BookedStageViewController: UIViewController {
+    let firestoreAuth = Auth.auth()
     var userInfo: Account?
     var bookedStateOrders = [Order]()
     @IBOutlet weak var bookedTableView: UITableView!
@@ -25,7 +26,6 @@ class BookedStageViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let firestoreAuth = Auth.auth()
         guard let uid = firestoreAuth.currentUser?.uid else { return }
         AccountManager.shared.getUserInfo(by: uid) { [weak self] account in
             self?.userInfo = account
@@ -45,25 +45,55 @@ extension BookedStageViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "BookedStageTableViewCell", for: indexPath) as? BookedStageTableViewCell else { fatalError() }
-        cell.changeStateDelegate = self
-        guard let urlString = bookedStateOrders[indexPath.row].product?.photoUrl.first,
-              let url = URL(string: urlString) else { return cell }
-        cell.bookedPhoto.kf.setImage(with: url)
-        return cell
+        if bookedStateOrders[indexPath.row].renter == userInfo?.name {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "BookedForRenterTableViewCell",
+                for: indexPath) as? BookedForRenterTableViewCell else { fatalError() }
+            cell.changeStateDelegate = self
+            guard let urlString = bookedStateOrders[indexPath.row].product?.photoUrl.first,
+                  let url = URL(string: urlString) else { return cell }
+            if bookedStateOrders[indexPath.row].orderState == 1 {
+                cell.disableDeliverBtn()
+            }
+            cell.photoImage.kf.setImage(with: url)
+            return cell
+        } else {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "BookedForLessorTableViewCell",
+                for: indexPath) as? BookedForLessorTableViewCell else { fatalError() }
+            cell.changeStateDelegate = self
+            guard let urlString = bookedStateOrders[indexPath.row].product?.photoUrl.first,
+                  let url = URL(string: urlString) else { return cell }
+            
+            if bookedStateOrders[indexPath.row].orderState == 2 {
+                cell.disablePickUpBtn()
+            }
+            cell.bookedPhoto.kf.setImage(with: url)
+            return cell
+        }
     }
 }
 
 // MARK: - change state delegate
-extension BookedStageViewController: ChangeStateDelegate {
+extension BookedStageViewController: LessorChangeStateDelegate {
+    func askVcToCancelLessorOrder(_ sender: UIButton) {
+        print("cancel btn test")
+    }
+    
     func askVcChangeToPickUpState(_ sender: UIButton) {
         let buttonPosition = sender.convert(sender.bounds.origin, to: bookedTableView)
         guard let indexPath = bookedTableView.indexPathForRow(at: buttonPosition) else { return }
         let documentId = bookedStateOrders[indexPath.row].orderID
         OrderManger.shared.updateStateToPickUp(documentId: documentId)
     }
+}
+
+extension BookedStageViewController: RenterChangeStateDelegate {
+    func askVcToCancelRenterOrder(_ sender: UIButton) {
+        print("cancel btn renter test")
+    }
     
-    func askVcChangeToDeliverState(_ sender: UIButton) {
+    func askVcChangeToDeliveredState(_ sender: UIButton) {
         let buttonPosition = sender.convert(sender.bounds.origin, to: bookedTableView)
         guard let indexPath = bookedTableView.indexPathForRow(at: buttonPosition) else { return }
         let documentId = bookedStateOrders[indexPath.row].orderID

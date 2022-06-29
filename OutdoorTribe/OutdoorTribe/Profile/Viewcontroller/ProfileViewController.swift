@@ -26,17 +26,14 @@ class ProfileViewController: UIViewController {
     
     @IBOutlet var containViews: [UIView]!
     @IBAction func tapSegmentControl(_ sender: UISegmentedControl) {
-        print(sender.selectedSegmentIndex)
-        print(containViews)
         for containerView in containViews {
-              containerView.isHidden = true
+            containerView.isHidden = true
         }
-           containViews[sender.selectedSegmentIndex].isHidden = false
+        containViews[sender.selectedSegmentIndex].isHidden = false
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("test")
         let firestoreAuth = Auth.auth()
         guard let uid = firestoreAuth.currentUser?.uid else { return }
         AccountManager.shared.getUserInfo(by: uid) { [weak self] account in
