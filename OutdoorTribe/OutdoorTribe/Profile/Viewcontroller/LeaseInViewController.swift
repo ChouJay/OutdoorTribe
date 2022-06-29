@@ -52,3 +52,16 @@ extension LeaseInViewController: UITableViewDataSource {
         return cell
     }
 }
+
+// MARK: - prepare for segue
+extension LeaseInViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print(sender)
+        guard let destinationVC = segue.destination as? ScoreViewController,
+              let senderButton = sender as? UIButton else { return }
+        let buttonPosition = senderButton.convert(senderButton.bounds.origin, to: leaseInTableView)
+        if let indexPath = leaseInTableView.indexPathForRow(at: buttonPosition) {
+            destinationVC.finishedOrder = leaseOrders[indexPath.row]
+        }
+    }
+}

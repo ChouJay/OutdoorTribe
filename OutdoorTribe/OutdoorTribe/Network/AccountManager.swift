@@ -11,6 +11,12 @@ import FirebaseFirestore
 class AccountManager {
     static let shared = AccountManager()
     
+    func ratingUser(userID: String, score: Double) {
+        let firestoreDB = Firestore.firestore()
+        firestoreDB.collection("users").document(userID).updateData(["totalScore": FieldValue.increment(score)])
+        firestoreDB.collection("users").document(userID).updateData(["ratingCount": FieldValue.increment(Int64(1))])
+    }
+    
     func storeRegistedAccount(account: Account, completion: @escaping (Result<String, Error>) -> Void) {
         let firstoreDB = Firestore.firestore()
         let document = firstoreDB.collection("users").document(account.userID)

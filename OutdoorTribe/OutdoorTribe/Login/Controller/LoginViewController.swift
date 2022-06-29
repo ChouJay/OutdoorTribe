@@ -162,7 +162,8 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                                           providerID: user.providerID,
                                           name: userName,
                                           photo: "",
-                                          score: [],
+                                          totalScore: 0,
+                                          ratingCount: 0,
                                           point: 3500)
                     AccountManager.shared.storeRegistedAccount(account: account) { result in
                         switch result {

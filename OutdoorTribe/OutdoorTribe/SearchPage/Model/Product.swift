@@ -10,7 +10,7 @@ import FirebaseFirestore
 
 struct Product: Codable {
     var renter: String
-//    var lessor: String
+    var renterUid: String
     var title: String
     var rent: Int
     var address: GeoPoint
@@ -24,7 +24,7 @@ struct Product: Codable {
     var toDict: [String: Any] {
         return [
             "renter": renter as Any,
-//            "lessor": lessor as Any,
+            "renterUid": renterUid as Any,
             "title": title as Any,
             "rent": rent as Any,
             "address": address as Any,

@@ -19,7 +19,9 @@ class DetailViewController: UIViewController {
     var startDate = Date()
     var endDate = Date()
     var order = Order(lessor: "Fake name",
+                      lessorUid: "",
                       renter: "",
+                      renterUid: "",
                       orderID: "",
                       requiredAmount: 0,
                       leaseTerm: [],
@@ -42,8 +44,10 @@ class DetailViewController: UIViewController {
         } else {
             daysBetweenTwoDate()
             order.lessor = userInfo?.name ?? ""
+            order.lessorUid = userInfo?.userID ?? ""
             order.product = chooseProduct
             order.renter = chooseProduct?.renter ?? ""
+            order.renterUid = chooseProduct?.renterUid ?? ""
             OrderManger.shared.uploadOrder(orderFromVC: &order)
             navigationController?.popViewController(animated: true)
         }

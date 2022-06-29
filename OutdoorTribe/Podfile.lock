@@ -602,6 +602,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.24):
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
+  - Cosmos (23.0.0)
   - FirebaseAppCheckInterop (9.2.0)
   - FirebaseAuth (9.2.0):
     - FirebaseCore (~> 9.0)
@@ -735,6 +736,7 @@ PODS:
   - SwiftLint (0.47.1)
 
 DEPENDENCIES:
+  - Cosmos (~> 23.0)
   - FirebaseAuth
   - FirebaseFirestore
   - FirebaseFirestoreSwift
@@ -746,6 +748,7 @@ SPEC REPOS:
   trunk:
     - abseil
     - BoringSSL-GRPC
+    - Cosmos
     - FirebaseAppCheckInterop
     - FirebaseAuth
     - FirebaseAuthInterop
@@ -772,6 +775,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
+  Cosmos: b5c6a9a637e28a061b54c8f8b1d8529d7d4db73f
   FirebaseAppCheckInterop: 003b4882460c2827d1e2a1a81b65e88440eb01fa
   FirebaseAuth: 1c574ab64a051dd86dbe7fd5a3f86b58155b3482
   FirebaseAuthInterop: aa9cf4d66b00e9f1e48a1aaa2aefa821fc741127
@@ -795,6 +799,6 @@ SPEC CHECKSUMS:
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   SwiftLint: f80f1be7fa96d30e0aa68e58d45d4ea1ccaac519
 
-PODFILE CHECKSUM: 2e943ba8af1c96f3c3040b7f44ee54e23a1bf222
+PODFILE CHECKSUM: 0dae44b6bcf86b2179540fe1b88a4deab591ec88
 
 COCOAPODS: 1.11.3

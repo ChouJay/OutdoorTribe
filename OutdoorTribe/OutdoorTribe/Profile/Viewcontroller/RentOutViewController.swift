@@ -59,3 +59,16 @@ extension RentOutViewController: UITableViewDataSource {
         return cell
     }
 }
+
+// MARK: - prepare for segue
+extension RentOutViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print(sender)
+        guard let destinationVC = segue.destination as? ScoreViewController,
+              let senderButton = sender as? UIButton else { return }
+        let buttonPosition = senderButton.convert(senderButton.bounds.origin, to: rentOutTableView)
+        if let indexPath = rentOutTableView.indexPathForRow(at: buttonPosition) {
+            destinationVC.finishedOrder = rentOrders[indexPath.row]
+        }
+    }
+}

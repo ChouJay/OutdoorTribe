@@ -20,6 +20,7 @@ class PostViewController: UIViewController {
     var uploadedPhoto = [UIImage]()
     let imagePickerController = UIImagePickerController()
     var product = Product(renter: "Choujay",
+                          renterUid: "",
                           title: "",
                           rent: 0,
                           address: GeoPoint(latitude: 0, longitude: 0),
@@ -36,6 +37,7 @@ class PostViewController: UIViewController {
     @IBOutlet weak var postTableView: UITableView!
     @IBAction func tapPost(_ sender: Any) {
         product.renter = userInfo?.name ?? ""
+        product.renter = userInfo?.userID ?? ""
         uploadPhoto()
         uploadedPhoto = []
         dismiss(animated: true)
