@@ -14,6 +14,7 @@ import FirebaseAuth
 class DetailViewController: UIViewController {
     let firestoreAuth = Auth.auth()
    
+    var renterAccount: Account?
     var userInfo: Account?
     var leaseTerm = [Date]()
     var startDate = Date()
@@ -96,6 +97,12 @@ class DetailViewController: UIViewController {
         navigationController?.navigationBar.isHidden = false
         guard let tabBarVc = tabBarController as? TabBarController else { return }
         tabBarVc.plusButton.isHidden = true
+        
+        guard let chooseProduct = chooseProduct else { return }
+        AccountManager.shared.getUserInfo(by: chooseProduct.renterUid) { [weak self] accountFromServer in
+            self?.renterAccount = accountFromServer
+            self?.detailTableView.reloadData()
+        }
     }
     
     func presentLoginVC() {
@@ -112,6 +119,7 @@ class DetailViewController: UIViewController {
         } else {
             guard let destinationVC = segue.destination as? UserViewController,
                   let posterUid =  chooseProduct?.renterUid else { return }
+            destinationVC.othersAccount = renterAccount
             destinationVC.posterUid = posterUid
         }
     }
@@ -136,6 +144,16 @@ extension DetailViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "RenterTableViewCell",
                 for: indexPath) as? RenterTableViewCell else { fatalError() }
+            guard let renterAccount = renterAccount else { return cell }
+            cell.photoLayOut()
+            cell.nameLabel.text = renterAccount.name
+            let totalScore = renterAccount.totalScore
+            var score = 0.0
+            if renterAccount.ratingCount != 0 {
+                score = totalScore / renterAccount.ratingCount
+            }
+            cell.scoreLabel.text = String(score)+"(\(String(Int(renterAccount.ratingCount))))"
+            
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(

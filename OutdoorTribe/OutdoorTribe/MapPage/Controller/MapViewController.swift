@@ -11,7 +11,9 @@ import CoreLocation
 import Kingfisher
 
 class MapViewController: UIViewController {
-
+    
+    var allCell = [MapCollectionViewCell]()
+    var allUserInfo = [Account]()
     var currentIndex: Int?
     var products = [Product]()
     var afterFiltedProducts = [Product]()
@@ -49,9 +51,14 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        AccountManager.shared.getAllUserInfo { [weak self] userInfosFromServer in
+            self?.allUserInfo = userInfosFromServer
+        }
+        
         positionButton.layer.cornerRadius = 25
         
-        productCollectionView.register(UINib(nibName: "MapCollectionViewCell", bundle: nil),forCellWithReuseIdentifier: "MapCollectionViewCell")
+        productCollectionView.register(UINib(nibName: "MapCollectionViewCell", bundle: nil),
+                                       forCellWithReuseIdentifier: "MapCollectionViewCell")
         productCollectionView.collectionViewLayout = createCompositionalLayout()
         productCollectionView.backgroundColor = .clear
         productCollectionView.dataSource = self
@@ -107,7 +114,7 @@ class MapViewController: UIViewController {
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPaging
         
-        section.visibleItemsInvalidationHandler = { [weak self] visibleItems, point, environment in
+        section.visibleItemsInvalidationHandler = { [weak self] visibleItems, _, _ in
             self?.currentIndex = visibleItems.last?.indexPath.row
             guard let collectionViewIsHidden = self?.productCollectionView.isHidden else { return }
             if collectionViewIsHidden {
@@ -136,15 +143,28 @@ extension MapViewController: UICollectionViewDataSource {
         afterFiltedProducts.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let item = collectionView.dequeueReusableCell(
             withReuseIdentifier: "MapCollectionViewCell",
             for: indexPath) as? MapCollectionViewCell else { fatalError() }
+        item.hideEstimateTimeLabel()
         item.routeDelegae = self
         guard let urlString = afterFiltedProducts[indexPath.row].photoUrl.first,
               let url = URL(string: urlString) else { return item }
         item.photoImageView.kf.setImage(with: url)
         item.titleLabel.text = afterFiltedProducts[indexPath.row].title
+        item.renterNameLabel.text = afterFiltedProducts[indexPath.row].renter
+        for userInfo in allUserInfo where afterFiltedProducts[indexPath.row].renter == userInfo.name {
+            let totalScore = userInfo.totalScore
+            let ratingCount = userInfo.ratingCount
+            if ratingCount != 0 {
+                let score = totalScore / ratingCount
+                item.scoreLabel.text = String(score) + "(\(String(Int(ratingCount))))"
+            } else {
+                item.scoreLabel.text = "no rating"
+            }
+        }
         return item
     }
 }
@@ -164,7 +184,8 @@ extension MapViewController: MKMapViewDelegate {
         productCollectionView.isHidden = false
         mapView.removeOverlays(mapView.overlays)
         for (index, item) in afterFiltedProducts.enumerated() {
-            if item.address.longitude == view.annotation?.coordinate.longitude || item.address.latitude == view.annotation?.coordinate.latitude {
+            if item.address.longitude == view.annotation?.coordinate.longitude ||
+                item.address.latitude == view.annotation?.coordinate.latitude {
 
                 productCollectionView.selectItem(
                     at: IndexPath(item: index, section: 0),
@@ -300,8 +321,6 @@ extension MapViewController: UISearchBarDelegate {
         for product in products {
             let availableSet = Set(product.availableDate)
             let filterSet = Set(daysBetweenTwoDate(startDate: startDatePicker.date, endDate: endDatePicker.date))
-            print(availableSet)
-            print(filterSet)
             if filterSet.isSubset(of: availableSet) {
                 afterFiltedProducts.append(product)
             }
@@ -357,7 +376,7 @@ extension MapViewController {
 
 // MARK: - route function delegate
 extension MapViewController: MapRouteDelegate {
-    func showRoute(sender: UIButton) {
+    func showRoute(sender: MapCollectionViewCell) {
         mapView.removeOverlays(mapView.overlays)
         let buttonPosition = sender.convert(sender.bounds.origin, to: productCollectionView)
         guard let indexPath = productCollectionView.indexPathForItem(at: buttonPosition) else { return }
@@ -376,12 +395,19 @@ extension MapViewController: MapRouteDelegate {
         directionRequest.transportType = .automobile
         
         let directions = MKDirections(request: directionRequest)
-        directions.calculate { response, error in
+        directions.calculate { [weak self] response, error in
+            guard let self = self else { return }
             if error == nil {
                 guard let directionResponse = response else { return }
                 
                 let route = directionResponse.routes[0]
                 print("estimate: \(route.expectedTravelTime)")
+                let estimateTime = route.expectedTravelTime
+                let routeTime = Int(round(estimateTime / 60))
+                
+                sender.timeStackView.isHidden = false
+                sender.estimatedTimeLabel.text = String(routeTime) + " min"
+                
                 self.mapView.addOverlay(route.polyline, level: .aboveRoads)
                 let rect = route.polyline.boundingMapRect
                 self.mapView.setRegion(MKCoordinateRegion(rect.insetBy(dx: -800, dy: -2200)), animated: true)

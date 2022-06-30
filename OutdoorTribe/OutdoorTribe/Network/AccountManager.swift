@@ -70,4 +70,26 @@ class AccountManager {
             }
         }
     }
+    
+    func getAllUserInfo(completion: @escaping ([Account]) -> Void) {
+        var allUserInfo = [Account]()
+        let firestoreDB = Firestore.firestore()
+        firestoreDB.collection("users").getDocuments(source: .server) { querySnapShot, error in
+            if error == nil && querySnapShot != nil {
+                guard let querySnapShot = querySnapShot else { return }
+                for document in querySnapShot.documents {
+                    do {
+                        let userInfo: Account?
+                        userInfo = try document.data(as: Account.self, decoder: Firestore.Decoder())
+                        guard let userInfo = userInfo else { return }
+                        allUserInfo.append(userInfo)
+                    } catch {
+                        print("decode failure: \(error)")
+                    }
+                }
+                completion(allUserInfo)
+            }
+        }
+    }
+
 }

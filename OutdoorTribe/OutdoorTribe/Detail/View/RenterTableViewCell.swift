@@ -9,6 +9,10 @@ import UIKit
 
 class RenterTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var renterPhoroImage: UIImageView!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var scoreLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -20,4 +24,7 @@ class RenterTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+    func photoLayOut() {
+        renterPhoroImage.layer.cornerRadius = 30
+    }
 }
