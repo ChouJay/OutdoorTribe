@@ -1547,7 +1547,7 @@
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Edit post"/>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.crop.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="QUY-kN-03t">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.crop.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="QUY-kN-03t">
                                 <rect key="frame" x="137" y="88.5" width="140" height="139"/>
                                 <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -1562,13 +1562,30 @@
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jhB-dH-amc">
+                                <rect key="frame" x="242" y="193" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="89f-Sm-6Y3"/>
+                                    <constraint firstAttribute="width" constant="40" id="NdE-93-25I"/>
+                                </constraints>
+                                <color key="tintColor" red="0.42745098040000001" green="0.5450980392" blue="0.4549019608" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="plus.circle.fill" catalog="system">
+                                    <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="30" scale="medium" weight="medium"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="tapEditPhotoBtn:" destination="Way-sg-Fux" eventType="touchUpInside" id="oqa-Aw-CXf"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ySR-kU-5L4"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="A0U-bi-WPn" firstAttribute="leading" secondItem="ySR-kU-5L4" secondAttribute="leading" id="3ra-Jf-fHd"/>
+                            <constraint firstItem="jhB-dH-amc" firstAttribute="centerY" secondItem="QUY-kN-03t" secondAttribute="centerY" constant="55" id="4Wn-nd-V96"/>
                             <constraint firstItem="Ei6-vz-aIP" firstAttribute="bottom" secondItem="ySR-kU-5L4" secondAttribute="bottom" id="70J-hg-vNV"/>
                             <constraint firstItem="Ei6-vz-aIP" firstAttribute="trailing" secondItem="ySR-kU-5L4" secondAttribute="trailing" id="7mp-Wl-jdq"/>
+                            <constraint firstItem="jhB-dH-amc" firstAttribute="centerX" secondItem="QUY-kN-03t" secondAttribute="centerX" constant="55" id="BSP-6S-ZXK"/>
                             <constraint firstItem="QUY-kN-03t" firstAttribute="centerX" secondItem="ySR-kU-5L4" secondAttribute="centerX" id="C5O-bc-K9A"/>
                             <constraint firstItem="vEp-gK-VCG" firstAttribute="bottom" secondItem="ySR-kU-5L4" secondAttribute="bottom" id="Jdg-OH-eK1"/>
                             <constraint firstItem="vEp-gK-VCG" firstAttribute="trailing" secondItem="ySR-kU-5L4" secondAttribute="trailing" id="Vaw-Yl-ZFh"/>
@@ -1595,7 +1612,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="photoEditBtn" destination="jhB-dH-amc" id="aBF-4b-Av4"/>
                         <outlet property="segmentControl" destination="A0U-bi-WPn" id="MUw-Vs-Eeu"/>
+                        <outlet property="userPhotoImage" destination="QUY-kN-03t" id="RJV-g4-tP8"/>
                         <outletCollection property="containViews" destination="vEp-gK-VCG" collectionClass="NSMutableArray" id="jFn-Yr-GeH"/>
                         <outletCollection property="containViews" destination="Ei6-vz-aIP" collectionClass="NSMutableArray" id="yec-ce-Vde"/>
                         <outletCollection property="containViews" destination="7jc-O3-syH" collectionClass="NSMutableArray" id="Ydd-fM-oZo"/>
@@ -2620,6 +2639,7 @@
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="photo" catalog="system" width="128" height="93"/>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <image name="plus.circle.fill" catalog="system" width="128" height="121"/>
         <image name="rectangle.portrait.and.arrow.right" catalog="system" width="128" height="108"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
         <systemColor name="labelColor">

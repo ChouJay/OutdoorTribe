@@ -486,12 +486,12 @@
 			isa = PBXGroup;
 			children = (
 				0195EB55285EF30E0015A12A /* View */,
-				0195EB54285EF3010015A12A /* Viewcontroller */,
+				0195EB54285EF3010015A12A /* Controller */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
 		};
-		0195EB54285EF3010015A12A /* Viewcontroller */ = {
+		0195EB54285EF3010015A12A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				0195EB56285EF3280015A12A /* ProfileViewController.swift */,
@@ -499,7 +499,7 @@
 				0195EB73285F770D0015A12A /* RentOutViewController.swift */,
 				0139FC82286BE633003C3851 /* LeaseInViewController.swift */,
 			);
-			path = Viewcontroller;
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		0195EB55285EF30E0015A12A /* View */ = {

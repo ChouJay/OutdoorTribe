@@ -7,9 +7,39 @@
 
 import Foundation
 import FirebaseFirestore
+import FirebaseStorage
 
 class AccountManager {
     static let shared = AccountManager()
+    
+    func uploadUserPhoto(uploadedImage: UIImage, userID: String) {
+        let group: DispatchGroup = DispatchGroup()
+        let firestoreDB = Firestore.firestore()
+        let storage = Storage.storage()
+        let storageRef = storage.reference()
+        let path = "userPhoto/\(UUID().uuidString).jpg"
+        var urlString = ""
+        guard let imageData = uploadedImage.jpegData(compressionQuality: 0.7) else { return }
+        let fileRef = storageRef.child(path)
+        group.enter()
+        fileRef.putData(imageData, metadata: nil) { storageMetadata, error in
+            if error == nil && storageMetadata != nil {
+                fileRef.downloadURL { url, error in
+                    guard let downloadUrl = url else {
+                        print(error)
+                        return
+                    }
+                    urlString = downloadUrl.absoluteString
+                    group.leave()
+                }
+            }
+        }
+        
+        group.notify(queue: DispatchQueue.main) {
+            guard urlString != "" else { return }
+            firestoreDB.collection("users").document(userID).updateData(["photo": urlString])
+        }
+    }
     
     func getUserPost(byUserID: String, completion: @escaping ([Product]) -> Void) {
         var products = [Product]()
