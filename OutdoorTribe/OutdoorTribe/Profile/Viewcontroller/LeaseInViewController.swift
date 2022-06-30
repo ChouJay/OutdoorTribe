@@ -39,7 +39,9 @@ extension LeaseInViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "LeaseInTableViewCell", for: indexPath) as? LeaseInTableViewCell else { fatalError() }
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "LeaseInTableViewCell",
+            for: indexPath) as? LeaseInTableViewCell else { fatalError() }
         guard let urlString = leaseOrders[indexPath.row].product?.photoUrl.first,
               let url = URL(string: urlString) else { return cell }
         cell.productPhoto.kf.setImage(with: url)
@@ -56,7 +58,6 @@ extension LeaseInViewController: UITableViewDataSource {
 // MARK: - prepare for segue
 extension LeaseInViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print(sender)
         guard let destinationVC = segue.destination as? ScoreViewController,
               let senderButton = sender as? UIButton else { return }
         let buttonPosition = senderButton.convert(senderButton.bounds.origin, to: leaseInTableView)

@@ -11,6 +11,30 @@ import FirebaseFirestore
 class AccountManager {
     static let shared = AccountManager()
     
+    func getUserPost(byUserID: String, completion: @escaping ([Product]) -> Void) {
+        var products = [Product]()
+        let firestoreDB = Firestore.firestore()
+        firestoreDB.collection("userPosts")
+            .document(byUserID)
+            .collection("products")
+            .getDocuments(source: .server) { querySnapShot, error in
+            if error == nil && querySnapShot != nil {
+                guard let querySnapShot = querySnapShot else { return }
+                for document in querySnapShot.documents {
+                    do {
+                        var product: Product?
+                        product = try document.data(as: Product.self, decoder: Firestore.Decoder())
+                        guard let product = product else { return }
+                        products.append(product)
+                    } catch {
+                        print(error)
+                    }
+                }
+                completion(products)
+            }
+        }
+    }
+    
     func ratingUser(userID: String, score: Double) {
         let firestoreDB = Firestore.firestore()
         firestoreDB.collection("users").document(userID).updateData(["totalScore": FieldValue.increment(score)])

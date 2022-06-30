@@ -93,39 +93,51 @@ class DetailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.isHidden = false
         guard let tabBarVc = tabBarController as? TabBarController else { return }
         tabBarVc.plusButton.isHidden = true
     }
     
     func presentLoginVC() {
-            guard let childVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController else { return }
+            guard let childVC = storyboard?.instantiateViewController(
+                withIdentifier: "LoginViewController") as? LoginViewController else { return }
             childVC.modalPresentationStyle = .fullScreen
             present(childVC, animated: true, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationVC = segue.destination as? ChatViewController else { return }
-        destinationVC.chatRoom = chatRoom
-        destinationVC.userInfo = userInfo
+        if let destinationVC = segue.destination as? ChatViewController {
+            destinationVC.chatRoom = chatRoom
+            destinationVC.userInfo = userInfo
+        } else {
+            guard let destinationVC = segue.destination as? UserViewController,
+                  let posterUid =  chooseProduct?.renterUid else { return }
+            destinationVC.posterUid = posterUid
+        }
     }
 }
 
 // MARK: - tableView dataSource
 extension DetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        2
+        3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
+        switch indexPath.row {
+        case 0:
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "DetailGalleryTableViewCell",
                 for: indexPath) as? DetailGalleryTableViewCell else { fatalError() }
             guard let urlStrings = chooseProduct?.photoUrl else { return cell}
             cell.imageUrlStings = urlStrings
             return cell
-        } else {
+        case 1:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "RenterTableViewCell",
+                for: indexPath) as? RenterTableViewCell else { fatalError() }
+            return cell
+        case 2:
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "DetailInfoTableViewCell",
                 for: indexPath) as? DetailInfoTableViewCell else { fatalError() }
@@ -140,6 +152,12 @@ extension DetailViewController: UITableViewDataSource {
                   let endDate = chooseProduct?.availableDate.last else { return cell }
             cell.setRentLimitedPeriod(head: startDate,
                                       tail: endDate)
+            return cell
+
+        default:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "RenterTableViewCell",
+                for: indexPath) as? RenterTableViewCell else { fatalError() }
             return cell
         }
     }

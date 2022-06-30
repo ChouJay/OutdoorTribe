@@ -45,7 +45,9 @@ extension RentOutViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "RentOutTableViewCell", for: indexPath) as? RentOutTableViewCell else { fatalError() }
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "RentOutTableViewCell",
+            for: indexPath) as? RentOutTableViewCell else { fatalError() }
         guard let urlString = rentOrders[indexPath.row].product?.photoUrl.first,
               let url = URL(string: urlString) else { return cell }
         
@@ -63,7 +65,6 @@ extension RentOutViewController: UITableViewDataSource {
 // MARK: - prepare for segue
 extension RentOutViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print(sender)
         guard let destinationVC = segue.destination as? ScoreViewController,
               let senderButton = sender as? UIButton else { return }
         let buttonPosition = senderButton.convert(senderButton.bounds.origin, to: rentOutTableView)

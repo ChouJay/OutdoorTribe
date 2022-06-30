@@ -15,6 +15,12 @@
 		01053E87285B34680074B125 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01053E86285B34680074B125 /* SearchTableViewCell.swift */; };
 		01053E8C285B385C0074B125 /* ProductManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01053E8B285B385C0074B125 /* ProductManager.swift */; };
 		01053E8E285C4EFB0074B125 /* InfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01053E8D285C4EFB0074B125 /* InfoTableViewCell.swift */; };
+		012CCEF1286C4BB600BFFE1A /* SubscribeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012CCEF0286C4BB600BFFE1A /* SubscribeViewController.swift */; };
+		012CCEF3286C4C7D00BFFE1A /* SubscribeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012CCEF2286C4C7D00BFFE1A /* SubscribeTableViewCell.swift */; };
+		012CCEF5286C566900BFFE1A /* RenterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012CCEF4286C566900BFFE1A /* RenterTableViewCell.swift */; };
+		012CCEF9286C764900BFFE1A /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012CCEF8286C764900BFFE1A /* UserViewController.swift */; };
+		012CCEFB286C87A000BFFE1A /* SubscibeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012CCEFA286C87A000BFFE1A /* SubscibeManager.swift */; };
+		012CCEFE286D2DA700BFFE1A /* UserPostCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012CCEFD286D2DA700BFFE1A /* UserPostCollectionCell.swift */; };
 		012F24722859A53D00B891C1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012F24712859A53D00B891C1 /* AppDelegate.swift */; };
 		012F24742859A53D00B891C1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012F24732859A53D00B891C1 /* SceneDelegate.swift */; };
 		012F24762859A53D00B891C1 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012F24752859A53D00B891C1 /* PostViewController.swift */; };
@@ -77,6 +83,12 @@
 		01053E86285B34680074B125 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		01053E8B285B385C0074B125 /* ProductManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductManager.swift; sourceTree = "<group>"; };
 		01053E8D285C4EFB0074B125 /* InfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoTableViewCell.swift; sourceTree = "<group>"; };
+		012CCEF0286C4BB600BFFE1A /* SubscribeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeViewController.swift; sourceTree = "<group>"; };
+		012CCEF2286C4C7D00BFFE1A /* SubscribeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeTableViewCell.swift; sourceTree = "<group>"; };
+		012CCEF4286C566900BFFE1A /* RenterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenterTableViewCell.swift; sourceTree = "<group>"; };
+		012CCEF8286C764900BFFE1A /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
+		012CCEFA286C87A000BFFE1A /* SubscibeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscibeManager.swift; sourceTree = "<group>"; };
+		012CCEFD286D2DA700BFFE1A /* UserPostCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostCollectionCell.swift; sourceTree = "<group>"; };
 		012F246E2859A53D00B891C1 /* OutdoorTribe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OutdoorTribe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		012F24712859A53D00B891C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		012F24732859A53D00B891C1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -185,6 +197,56 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		012CCEED286C4B7900BFFE1A /* SubscribePage */ = {
+			isa = PBXGroup;
+			children = (
+				012CCEEF286C4BA800BFFE1A /* View */,
+				012CCEEE286C4BA100BFFE1A /* Controller */,
+			);
+			path = SubscribePage;
+			sourceTree = "<group>";
+		};
+		012CCEEE286C4BA100BFFE1A /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				012CCEF0286C4BB600BFFE1A /* SubscribeViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		012CCEEF286C4BA800BFFE1A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				012CCEF2286C4C7D00BFFE1A /* SubscribeTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		012CCEF6286C75F900BFFE1A /* UserPage */ = {
+			isa = PBXGroup;
+			children = (
+				012CCEFC286D2D7400BFFE1A /* View */,
+				012CCEF7286C761600BFFE1A /* Controller */,
+			);
+			path = UserPage;
+			sourceTree = "<group>";
+		};
+		012CCEF7286C761600BFFE1A /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				012CCEF8286C764900BFFE1A /* UserViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		012CCEFC286D2D7400BFFE1A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				012CCEFD286D2DA700BFFE1A /* UserPostCollectionCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		012F24652859A53D00B891C1 = {
 			isa = PBXGroup;
 			children = (
@@ -206,11 +268,13 @@
 		012F24702859A53D00B891C1 /* OutdoorTribe */ = {
 			isa = PBXGroup;
 			children = (
-				0139FC84286BF687003C3851 /* ScorePage */,
+				012CCEF6286C75F900BFFE1A /* UserPage */,
+				012CCEED286C4B7900BFFE1A /* SubscribePage */,
 				0139FC7D2869D95B003C3851 /* OutdoorTribe.entitlements */,
 				012F24712859A53D00B891C1 /* AppDelegate.swift */,
 				012F24732859A53D00B891C1 /* SceneDelegate.swift */,
 				01053E81285B26620074B125 /* TabBarController.swift */,
+				0139FC84286BF687003C3851 /* ScorePage */,
 				01985D2B285C60E200BCD866 /* Network */,
 				0139FC6F28696E7C003C3851 /* Login */,
 				0195EB65285F17170015A12A /* Booking */,
@@ -385,6 +449,7 @@
 				0195EB48285CDBD50015A12A /* DetailGalleryTableViewCell.swift */,
 				0195EB4A285CDCCC0015A12A /* GalleryCollectionViewCell.swift */,
 				0195EB4C285DDCDA0015A12A /* DetailInfoTableViewCell.swift */,
+				012CCEF4286C566900BFFE1A /* RenterTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -499,6 +564,7 @@
 				0195EB51285ECE3B0015A12A /* OrderManager.swift */,
 				014C83142864365E006A4EC1 /* ChatManager.swift */,
 				0139FC7428698920003C3851 /* LoginManager.swift */,
+				012CCEFA286C87A000BFFE1A /* SubscibeManager.swift */,
 				0139FC7628699893003C3851 /* AccountManager.swift */,
 			);
 			path = Network;
@@ -664,8 +730,10 @@
 				0139FC7728699893003C3851 /* AccountManager.swift in Sources */,
 				0139FC7F286B2330003C3851 /* BookedForRenterTableViewCell.swift in Sources */,
 				0195EB7F2860830C0015A12A /* MapCollectionViewCell.swift in Sources */,
+				012CCEF3286C4C7D00BFFE1A /* SubscribeTableViewCell.swift in Sources */,
 				0195EB49285CDBD50015A12A /* DetailGalleryTableViewCell.swift in Sources */,
 				0139FC7528698920003C3851 /* LoginManager.swift in Sources */,
+				012CCEFB286C87A000BFFE1A /* SubscibeManager.swift in Sources */,
 				01053E8E285C4EFB0074B125 /* InfoTableViewCell.swift in Sources */,
 				0195EB62285EF6300015A12A /* ApplyCollectionViewCell.swift in Sources */,
 				014C831D28646E45006A4EC1 /* ChatTableViewCell.swift in Sources */,
@@ -678,6 +746,7 @@
 				014C830F28636CF5006A4EC1 /* Classification.swift in Sources */,
 				0139FC7A28699972003C3851 /* Account.swift in Sources */,
 				0195EB7A286050600015A12A /* RentOutTableViewCell.swift in Sources */,
+				012CCEFE286D2DA700BFFE1A /* UserPostCollectionCell.swift in Sources */,
 				0195EB74285F770D0015A12A /* RentOutViewController.swift in Sources */,
 				0195EB70285F1EF30015A12A /* BookingPhotoCollectionViewCell.swift in Sources */,
 				0195EB50285ECB730015A12A /* Order.swift in Sources */,
@@ -686,8 +755,10 @@
 				014C831A28644677006A4EC1 /* UserModel.swift in Sources */,
 				0195EB57285EF3280015A12A /* ProfileViewController.swift in Sources */,
 				014C83212865BD8B006A4EC1 /* ChatImageTableViewCell.swift in Sources */,
+				012CCEF5286C566900BFFE1A /* RenterTableViewCell.swift in Sources */,
 				0195EB60285EF5EC0015A12A /* ApplyTableViewCell.swift in Sources */,
 				01053E7B2859EA1B0074B125 /* ImageTableViewCell.swift in Sources */,
+				012CCEF1286C4BB600BFFE1A /* SubscribeViewController.swift in Sources */,
 				0195EB76285F81900015A12A /* BookedForLessorTableViewCell.swift in Sources */,
 				0139FC87286BF6A2003C3851 /* ScoreViewController.swift in Sources */,
 				01985D2D285C60FF00BCD866 /* Product.swift in Sources */,
@@ -704,6 +775,7 @@
 				012F24722859A53D00B891C1 /* AppDelegate.swift in Sources */,
 				0195EB6E285F1ECF0015A12A /* BookingInfoTableViewCell.swift in Sources */,
 				014C83152864365E006A4EC1 /* ChatManager.swift in Sources */,
+				012CCEF9286C764900BFFE1A /* UserViewController.swift in Sources */,
 				0139FC7C2869A4D5003C3851 /* SignUpViewController.swift in Sources */,
 				014C83132864340B006A4EC1 /* ChatViewController.swift in Sources */,
 				0195EB67285F172D0015A12A /* BookingViewController.swift in Sources */,

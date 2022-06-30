@@ -164,7 +164,8 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                                           photo: "",
                                           totalScore: 0,
                                           ratingCount: 0,
-                                          point: 3500)
+                                          point: 3500,
+                                          followerCount: 0)
                     AccountManager.shared.storeRegistedAccount(account: account) { result in
                         switch result {
                         case let .success(string):
