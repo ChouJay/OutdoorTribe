@@ -153,7 +153,12 @@ extension DetailViewController: UITableViewDataSource {
                 score = totalScore / renterAccount.ratingCount
             }
             cell.scoreLabel.text = String(score)+"(\(String(Int(renterAccount.ratingCount))))"
-            
+        
+            if renterAccount.photo != "" {
+                guard let url = URL(string: renterAccount.photo) else { return cell }
+                cell.renterPhotoImage.kf.setImage(with: url)
+            }
+
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(

@@ -11,6 +11,7 @@ import FirebaseAuth
 import Kingfisher
 
 class NotificatoinViewController: UIViewController {
+    
     let firestoreAuth = Auth.auth()
     var allUserInfo = [Account]()
     var userInfo: Account?
@@ -100,6 +101,7 @@ extension NotificatoinViewController: UITableViewDataSource {
                 for user in allUserInfo where user.name == name {
                     guard user.photo != "" else { break }
                     if let url = URL(string: user.photo) {
+                        cell.otherUserPhotoUrlString = user.photo
                         cell.chatListPhoto.kf.setImage(with: url)
                     }
                 }
@@ -118,10 +120,12 @@ extension NotificatoinViewController: UITableViewDataSource {
 extension NotificatoinViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1 {
-            guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: MessageHeaderView.reuseIdentifier) as? MessageHeaderView else { return nil }
+            guard let headerView = tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: MessageHeaderView.reuseIdentifier) as? MessageHeaderView else { return nil }
             return headerView
         } else {
-            guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ApplicationHeaderView.reuseIdentifier) as? ApplicationHeaderView else { return nil }
+            guard let headerView = tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: ApplicationHeaderView.reuseIdentifier) as? ApplicationHeaderView else { return nil }
             return headerView
         }
     }
@@ -145,9 +149,13 @@ extension NotificatoinViewController {
         case "ToChatViewController":
             guard let chatVC = segue.destination as? ChatViewController,
                   let chatListTableViewCell = sender as? ChatListTableViewCell,
-                  let indexPath = chatRoomTableView.indexPath(for: chatListTableViewCell) else { return }
+                  let indexPath = chatRoomTableView.indexPath(for: chatListTableViewCell),
+                  let cell = chatRoomTableView.cellForRow(at: indexPath) as? ChatListTableViewCell else { return }
+                    
             chatVC.userInfo = userInfo
             chatVC.chatRoom = chatRooms[indexPath.row]
+            chatVC.allUserInfo = allUserInfo
+            chatVC.otherUserPhotoUrlString = cell.otherUserPhotoUrlString
             
         default:
             return

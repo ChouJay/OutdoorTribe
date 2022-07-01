@@ -14,7 +14,8 @@ class ChatTableViewCell: UITableViewCell {
     @IBOutlet weak var leftBubbleView: UIView!
     @IBOutlet weak var rightTextBubble: UILabel!
     @IBOutlet weak var leftTextBubble: UILabel!
-    
+    @IBOutlet weak var rightTimeLabel: UILabel!
+    @IBOutlet weak var leftTimeLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -33,6 +34,7 @@ class ChatTableViewCell: UITableViewCell {
     }
     
     func layOutTextBubble() {
+        photoView.layer.cornerRadius = photoView.frame.width / 2
         rightBubbleView.layer.cornerRadius = 10
         leftBubbleView.layer.cornerRadius = 10
     }

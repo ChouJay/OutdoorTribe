@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import Kingfisher
 
 class SubscribeViewController: UIViewController {
     let firebaseAuth = Auth.auth()
@@ -40,6 +41,10 @@ extension SubscribeViewController: UITableViewDataSource {
             for: indexPath) as? SubscribeTableViewCell else { fatalError() }
         cell.removeSubscriptionDelegate = self
         cell.nameLabel.text = subscribers[indexPath.row].name
+        if subscribers[indexPath.row].photo != "" {
+            guard let url = URL(string: subscribers[indexPath.row].photo) else { return cell }
+            cell.photoImage.kf.setImage(with: url)
+        }
         return cell
     }
 }

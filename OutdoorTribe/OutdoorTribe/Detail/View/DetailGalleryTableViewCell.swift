@@ -16,7 +16,6 @@ class DetailGalleryTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-//        galleryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createCompositionalLayout())
         galleryCollectionView.collectionViewLayout = createCompositionalLayout()
         galleryCollectionView.dataSource = self
     }

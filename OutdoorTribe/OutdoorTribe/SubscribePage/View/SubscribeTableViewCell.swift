@@ -25,6 +25,7 @@ class SubscribeTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        layOutPhoto()
         // Initialization code
     }
 
@@ -32,6 +33,11 @@ class SubscribeTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func layOutPhoto() {
+        photoImage.layer.cornerRadius = photoImage.frame.width / 2
+        removeButton.layer.cornerRadius = 5
     }
 
 }

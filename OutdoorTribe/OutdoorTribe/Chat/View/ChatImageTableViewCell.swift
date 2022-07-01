@@ -12,10 +12,10 @@ class ChatImageTableViewCell: UITableViewCell {
     @IBOutlet weak var photoView: UIImageView!
     @IBOutlet weak var rightImage: UIImageView!
     @IBOutlet weak var leftImage: UIImageView!
-    
     @IBOutlet weak var leftView: UIView!
     @IBOutlet weak var rightView: UIView!
-    
+    @IBOutlet weak var rightTimeLabel: UILabel!
+    @IBOutlet weak var leftTimeLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -29,6 +29,7 @@ class ChatImageTableViewCell: UITableViewCell {
     }
     
     func layOutImageCell() {
+        photoView.layer.cornerRadius = photoView.frame.width / 2
         rightView.layer.cornerRadius = 10
         rightImage.layer.cornerRadius = 10
         leftView.layer.cornerRadius = 10

@@ -9,7 +9,7 @@ import UIKit
 
 class RenterTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var renterPhoroImage: UIImageView!
+    @IBOutlet weak var renterPhotoImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     
@@ -25,6 +25,6 @@ class RenterTableViewCell: UITableViewCell {
     }
 
     func photoLayOut() {
-        renterPhoroImage.layer.cornerRadius = 30
+        renterPhotoImage.layer.cornerRadius = 30
     }
 }

@@ -8,6 +8,8 @@
 import UIKit
 
 class ChatListTableViewCell: UITableViewCell {
+    
+    var otherUserPhotoUrlString = ""
 
     @IBOutlet weak var chatListPhoto: UIImageView!
     @IBOutlet weak var chatListName: UILabel!

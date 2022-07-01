@@ -15,7 +15,6 @@ class UserViewController: UIViewController {
     var othersAccount: Account?
     var allUserProducts = [Product]()
     
-
     @IBOutlet weak var productCollectionView: UICollectionView!
     
     override func viewDidLoad() {
@@ -139,6 +138,12 @@ extension UserViewController: UICollectionViewDataSource {
             item.followerCountLabel.text = String(othersAccount.followerCount)
             item.postCountLabel.text = String(allUserProducts.count)
             item.ratingCountLabel.text = "(\(String(Int(othersAccount.ratingCount))))"
+            item.layoutPhotoImage()
+            if othersAccount.photo != "" {
+                guard let url = URL(string: othersAccount.photo) else { return item }
+                item.photoImage.kf.setImage(with: url)
+            }
+            
             return item
         } else {
             guard let item = collectionView.dequeueReusableCell(

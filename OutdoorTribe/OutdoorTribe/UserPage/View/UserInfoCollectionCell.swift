@@ -14,4 +14,12 @@ class UserInfoCollectionCell: UICollectionViewCell {
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var ratingCountLabel: UILabel!
     @IBOutlet weak var followerCountLabel: UILabel!
+    
+    override class func awakeFromNib() {
+        super.awakeFromNib()
+    }
+    
+    func layoutPhotoImage() {
+        photoImage.layer.cornerRadius = photoImage.frame.width / 2
+    }
 }

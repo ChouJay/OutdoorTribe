@@ -12,6 +12,8 @@ import Kingfisher
 
 class ChatViewController: UIViewController {
     var userInfo: Account?
+    var allUserInfo = [Account]()
+    var otherUserPhotoUrlString = ""
     let imagePickerController = UIImagePickerController()
     var messages = [Message]()
     var sendedPhoto: UIImage?
@@ -71,7 +73,7 @@ class ChatViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         guard let usersInChatRoom = chatRoom.users else { return }
-        for name in usersInChatRoom where  name != userInfo?.name {
+        for name in usersInChatRoom where name != userInfo?.name {
             navigationTitle.title = name
             chatMessage.receiver = name
         }
@@ -95,14 +97,39 @@ extension ChatViewController: UITableViewDataSource {
             cell.layOutTextBubble()
             if messages[indexPath.row].sender == userInfo.name {
                 cell.rightBubbleView.isHidden = false
+                cell.rightTimeLabel.isHidden = false
                 cell.leftBubbleView.isHidden = true
+                cell.leftTimeLabel.isHidden = true
                 cell.photoView.isHidden = true
                 cell.rightTextBubble.text = messages[indexPath.row].message
+                
+                let date = messages[indexPath.row].date
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "HH:mm"
+                let dateString = dateFormatter.string(from: date)
+                cell.rightTimeLabel.text = dateString
+                
             } else {
                 cell.leftBubbleView.isHidden = false
-                cell.rightBubbleView.isHidden = true
+                cell.leftTimeLabel.isHidden = false
                 cell.photoView.isHidden = false
+                cell.rightBubbleView.isHidden = true
+                cell.rightTimeLabel.isHidden = true
                 cell.leftTextBubble.text = messages[indexPath.row].message
+                // load otherUser photo
+                
+                
+                
+                let date = messages[indexPath.row].date
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "HH:mm"
+                let dateString = dateFormatter.string(from: date)
+                cell.leftTimeLabel.text = dateString
+
+                if otherUserPhotoUrlString != "" {
+                    guard let url = URL(string: otherUserPhotoUrlString) else { return cell }
+                    cell.photoView.kf.setImage(with: url)
+                }
             }
             return cell
         } else {
@@ -113,14 +140,35 @@ extension ChatViewController: UITableViewDataSource {
             cell.layOutImageCell()
             if messages[indexPath.row].sender == userInfo.name {
                 cell.rightView.isHidden = false
+                cell.rightTimeLabel.isHidden = false
                 cell.leftView.isHidden = true
+                cell.leftTimeLabel.isHidden = true
                 cell.photoView.isHidden = true
                 cell.rightImage.kf.setImage(with: url)
+                
+                let date = messages[indexPath.row].date
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "HH:mm"
+                let dateString = dateFormatter.string(from: date)
+                cell.rightTimeLabel.text = dateString
+
             } else {
                 cell.leftView.isHidden = false
+                cell.leftTimeLabel.isHidden = false
                 cell.rightView.isHidden = true
+                cell.rightTimeLabel.isHidden = true
                 cell.photoView.isHidden = false
-                cell.leftImage.kf.setImage(with: url)
+                if otherUserPhotoUrlString != "" {
+                    guard let url = URL(string: otherUserPhotoUrlString) else { return cell }
+                    cell.photoView.kf.setImage(with: url)
+                }
+                
+                let date = messages[indexPath.row].date
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "HH:mm"
+                let dateString = dateFormatter.string(from: date)
+                cell.leftTimeLabel.text = dateString
+
             }
             return cell
         }
