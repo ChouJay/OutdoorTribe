@@ -15,6 +15,7 @@ class ChatTableViewCell: UITableViewCell {
     @IBOutlet weak var rightTextBubble: UILabel!
     @IBOutlet weak var leftTextBubble: UILabel!
     
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

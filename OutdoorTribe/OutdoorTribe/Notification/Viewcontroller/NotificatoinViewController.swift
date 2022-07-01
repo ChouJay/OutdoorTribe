@@ -8,20 +8,34 @@
 import UIKit
 import FirebaseFirestore
 import FirebaseAuth
+import Kingfisher
 
 class NotificatoinViewController: UIViewController {
     let firestoreAuth = Auth.auth()
+    var allUserInfo = [Account]()
     var userInfo: Account?
     var orderDocumentsFromFirestore = [QueryDocumentSnapshot]()
     var chatRooms = [ChatRoom]()
     lazy var collectionViewFromCell = UICollectionView()
+    
     @IBOutlet weak var chatRoomTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        chatRoomTableView.dataSource = self
         
-        // Do any additional setup after loading the view.
+        AccountManager.shared.getAllUserInfo { [weak self] allUserInfoFromServer in
+            self?.allUserInfo = allUserInfoFromServer
+        }
+        
+        chatRoomTableView.dataSource = self
+        chatRoomTableView.delegate = self
+        chatRoomTableView.register(
+            UINib(nibName: "MessageHeaderView", bundle: nil),
+            forHeaderFooterViewReuseIdentifier: MessageHeaderView.reuseIdentifier)
+        chatRoomTableView.register(
+            UINib(nibName: "ApplicationHeaderView", bundle: nil),
+            forHeaderFooterViewReuseIdentifier: ApplicationHeaderView.reuseIdentifier)
+        chatRoomTableView.sectionHeaderTopPadding = 0
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,7 +76,9 @@ extension NotificatoinViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ApplyTableViewCell", for: indexPath) as? ApplyTableViewCell else { fatalError() }
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "ApplyTableViewCell",
+                for: indexPath) as? ApplyTableViewCell else { fatalError() }
         
             cell.orderDocumentsFromFirestore = orderDocumentsFromFirestore
             collectionViewFromCell = cell.applyCollectionView
@@ -73,9 +89,19 @@ extension NotificatoinViewController: UITableViewDataSource {
                 for: indexPath) as? ChatListTableViewCell else { fatalError() }
             guard let usersInChatRoom = chatRooms[indexPath.row].users,
                   let userInfo = userInfo else { return cell }
-            for name in usersInChatRoom {
-                if name != userInfo.name {
-                    cell.chatListName.text =  name
+            for name in usersInChatRoom where name != userInfo.name {
+                cell.chatListName.text =  name
+                cell.lastMessageLabel.text = chatRooms[indexPath.row].lastMessage
+                let lastDate = chatRooms[indexPath.row].lastDate
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy/MM/dd HH:mm"
+                let lastDateString = dateFormatter.string(from: lastDate)
+                cell.lastSendTimeLabel.text = lastDateString
+                for user in allUserInfo where user.name == name {
+                    guard user.photo != "" else { break }
+                    if let url = URL(string: user.photo) {
+                        cell.chatListPhoto.kf.setImage(with: url)
+                    }
                 }
             }
             return cell
@@ -85,6 +111,23 @@ extension NotificatoinViewController: UITableViewDataSource {
                 for: indexPath) as? ApplyTableViewCell else { fatalError() }
             return cell
         }
+    }
+}
+
+// MARK: - table view delegate
+extension NotificatoinViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 1 {
+            guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: MessageHeaderView.reuseIdentifier) as? MessageHeaderView else { return nil }
+            return headerView
+        } else {
+            guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ApplicationHeaderView.reuseIdentifier) as? ApplicationHeaderView else { return nil }
+            return headerView
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        44
     }
 }
 

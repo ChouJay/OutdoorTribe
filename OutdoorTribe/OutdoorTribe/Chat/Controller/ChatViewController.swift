@@ -16,24 +16,35 @@ class ChatViewController: UIViewController {
     var messages = [Message]()
     var sendedPhoto: UIImage?
 
-    var chatRoom = ChatRoom(roomID: "", lastMessage: "hi", lastDate: Date(), chaterOne: "Fake name 1", chaterTwo: "Fake name 2")
-    var chatMessage = Message(sender: "Fake name", receiver: "Fake name", message: "", productPhoto: "", date: Date())
+    var chatRoom = ChatRoom(roomID: "",
+                            lastMessage: "hi",
+                            lastDate: Date(),
+                            chaterOne: "Fake name 1",
+                            chaterTwo: "Fake name 2")
     
+    var chatMessage = Message(sender: "Fake name",
+                              receiver: "Fake name",
+                              message: "",
+                              productPhoto: "",
+                              date: Date())
+
     @IBOutlet weak var navigationTitle: UINavigationItem!
     @IBOutlet weak var chatTableView: UITableView!
     @IBOutlet weak var typingTextView: UITextView!
+    
     @IBAction func tapSendButton(_ sender: UIButton) {
         guard let messageText = typingTextView.text,
               messageText != "" else { return }
-        
         chatMessage.message = messageText
         ChatManager.shared.createChat(in: chatRoom, put: chatMessage)
         typingTextView.text = ""
         sendedPhoto = nil
+        ChatManager.shared.updateChatRoomLastMessage(in: chatRoom.roomID, by: messageText)
     }
     
     @IBAction func tapPhotoButton(_ sender: UIButton) {
         choosePhoto()
+        ChatManager.shared.updateChatRoomLastMessageIfSendPhoto(in: chatRoom.roomID)
     }
     
     override func viewDidLoad() {
@@ -60,11 +71,9 @@ class ChatViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         guard let usersInChatRoom = chatRoom.users else { return }
-        for name in usersInChatRoom {
-            if name != userInfo?.name {
-                navigationTitle.title = name
-                chatMessage.receiver = name
-            }
+        for name in usersInChatRoom where  name != userInfo?.name {
+            navigationTitle.title = name
+            chatMessage.receiver = name
         }
         guard let userInfo = userInfo else { return }
         chatMessage.sender = userInfo.name
@@ -80,7 +89,8 @@ extension ChatViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if messages[indexPath.row].productPhoto == "" {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatTableViewCell", for: indexPath) as? ChatTableViewCell else { fatalError() }
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "ChatTableViewCell", for: indexPath) as? ChatTableViewCell else { fatalError() }
             guard let userInfo = userInfo else { return cell}
             cell.layOutTextBubble()
             if messages[indexPath.row].sender == userInfo.name {
@@ -96,7 +106,8 @@ extension ChatViewController: UITableViewDataSource {
             }
             return cell
         } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatImageTableViewCell", for: indexPath) as? ChatImageTableViewCell,
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "ChatImageTableViewCell", for: indexPath) as? ChatImageTableViewCell,
                   let url = URL(string: messages[indexPath.row].productPhoto) else { fatalError() }
             guard let userInfo = userInfo else { return cell}
             cell.layOutImageCell()
@@ -124,7 +135,9 @@ extension ChatViewController: UITableViewDelegate {
 extension ChatViewController {
     func choosePhoto() {
         let controller = UIAlertController(title: "請上傳照片", message: nil, preferredStyle: .actionSheet)
-        let titleAttributes = [NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Bold", size: 20)!, NSAttributedString.Key.foregroundColor: UIColor.black]
+        let titleAttributes = [
+            NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Bold", size: 20)!,
+            NSAttributedString.Key.foregroundColor: UIColor.black]
         let titleString = NSAttributedString(string: "Please upload some photo or video", attributes: titleAttributes)
         controller.setValue(titleString, forKey: "attributedTitle")
         controller.view.tintColor = UIColor.gray
@@ -157,10 +170,8 @@ extension ChatViewController {
         self.present(imagePickerController, animated: true)
     }
     
-    
     func uploadPhoto() {
         let group: DispatchGroup = DispatchGroup()
-        let firstoreDb = Firestore.firestore()
         let storage = Storage.storage()
         let storageRef = storage.reference()
         let path = "chatImages/\(UUID().uuidString).jpg"
@@ -192,7 +203,9 @@ extension ChatViewController {
 
 // MARK: - imagePicker delegate
 extension ChatViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let image = info[.originalImage] as? UIImage {
             typingTextView.text = ""
             sendedPhoto = image

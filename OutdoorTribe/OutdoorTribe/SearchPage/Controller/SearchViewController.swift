@@ -168,8 +168,9 @@ extension SearchViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchTableViewCell",
-                                                       for: indexPath) as? SearchTableViewCell else { fatalError() }
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "SearchTableViewCell",
+            for: indexPath) as? SearchTableViewCell else { fatalError() }
         print(afterFiltedProducts.count)
         guard let urlString = afterFiltedProducts[indexPath.row].photoUrl.first else { return cell }
         cell.photoImage.kf.setImage(with: URL(string: urlString))

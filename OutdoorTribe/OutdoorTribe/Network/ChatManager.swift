@@ -12,7 +12,22 @@ import FirebaseStorage
 class ChatManager {
     static let shared = ChatManager()
     
-    func createChatRoomIfNeed(chatRoom: ChatRoom, chaterOne: String, chaterTwo: String, completion: @escaping (ChatRoom) -> Void) {
+    func updateChatRoomLastMessageIfSendPhoto(in roomID: String) {
+        let firestoreDB = Firestore.firestore()
+        firestoreDB.collection("chatRoom").document(roomID).updateData(["lastMessage": "send a photo"])
+        firestoreDB.collection("chatRoom").document(roomID).updateData(["lastDate": Date()])
+    }
+    
+    func updateChatRoomLastMessage(in roomID: String, by lastMessage: String) {
+        let firestoreDB = Firestore.firestore()
+        firestoreDB.collection("chatRoom").document(roomID).updateData(["lastMessage": lastMessage])
+        firestoreDB.collection("chatRoom").document(roomID).updateData(["lastDate": Date()])
+    }
+    
+    func createChatRoomIfNeed(chatRoom: ChatRoom,
+                              chaterOne: String,
+                              chaterTwo: String,
+                              completion: @escaping (ChatRoom) -> Void) {
         let firestoreDb = Firestore.firestore()
         firestoreDb.collection("chatRoom")
             .whereField("users", arrayContainsAny: [chaterOne, chaterTwo])

@@ -29,7 +29,7 @@ class BookingViewController: UIViewController {
 // MARK: - table view dataSource
 extension BookingViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1
+        2
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -40,7 +40,8 @@ extension ApplyTableViewCell: UICollectionViewDataSource {
         orderDocumentsFromFirestore.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let item = collectionView.dequeueReusableCell(
             withReuseIdentifier: "ApplyCollectionViewCell",
             for: indexPath) as? ApplyCollectionViewCell else { fatalError() }

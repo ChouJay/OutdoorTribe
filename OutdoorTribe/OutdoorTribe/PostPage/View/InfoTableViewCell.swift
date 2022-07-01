@@ -7,20 +7,28 @@
 
 import UIKit
 
+protocol PassDateToPostVCDelegate {
+    func passEndDateToVC(chooseDate: Date)
+    func passStartDateToVC(chooseDate: Date)
+}
+
 class InfoTableViewCell: UITableViewCell {
 
+    var passDateDelegate: PassDateToPostVCDelegate?
+    
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var rentTextField: UITextField!
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
-    @IBOutlet weak var beginDateTextField: UITextField!
-    @IBOutlet weak var lastDateTextField: UITextField!
     @IBOutlet weak var classificationTextField: UITextField!
+    @IBOutlet weak var startDatePicker: UIDatePicker!
+    @IBOutlet weak var endDatePicker: UIDatePicker!
+    @IBOutlet weak var pullDownBtn: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setDatePicker(dateTextField: beginDateTextField)
-        setDatePicker(dateTextField: lastDateTextField)
+        setDatePickerValueChange()
+        setUpPullDownBtn()
         // Initialization code
     }
 
@@ -31,15 +39,13 @@ class InfoTableViewCell: UITableViewCell {
     }
     
     @objc func dateChange(datePicker: UIDatePicker) {
-        beginDateTextField.text = formatDate(date: datePicker.date)
-        beginDateTextField.resignFirstResponder()
-        
+        passDateDelegate?.passStartDateToVC(chooseDate: datePicker.date)
         // Replace the hour (time) of both dates with 00:00
     }
     
     @objc func dateChangeForLast(datePicker: UIDatePicker) {
-        lastDateTextField.text = formatDate(date: datePicker.date)
-        lastDateTextField.resignFirstResponder()
+        // call delegate func to pass date to VC
+        passDateDelegate?.passEndDateToVC(chooseDate: datePicker.date)
     }
     
     func formatDate(date: Date) -> String {
@@ -48,21 +54,34 @@ class InfoTableViewCell: UITableViewCell {
         return formatter.string(from: date)
     }
     
-    func setDatePicker(dateTextField: UITextField) {
-        if dateTextField == beginDateTextField {
-            let datePicker = UIDatePicker()
-            datePicker.datePickerMode = .date
-            datePicker.addTarget(self, action: #selector(dateChange(datePicker:)), for: .valueChanged)
-            datePicker.frame.size = CGSize(width: 0, height: 500)
-            datePicker.preferredDatePickerStyle = .inline
-            beginDateTextField.inputView = datePicker
-        } else {
-            let datePicker = UIDatePicker()
-            datePicker.datePickerMode = .date
-            datePicker.addTarget(self, action: #selector(dateChangeForLast(datePicker:)), for: .valueChanged)
-            datePicker.frame.size = CGSize(width: 0, height: 500)
-            datePicker.preferredDatePickerStyle = .inline
-            lastDateTextField.inputView = datePicker
-        }
+    func setDatePickerValueChange() {
+        startDatePicker.addTarget(self, action: #selector(dateChange(datePicker:)), for: .valueChanged)
+        endDatePicker.addTarget(self, action: #selector(dateChangeForLast(datePicker:)), for: .valueChanged)
+    }
+    
+    func setUpPullDownBtn() {
+        pullDownBtn.showsMenuAsPrimaryAction = true
+        pullDownBtn.menu = UIMenu(children: [
+            UIAction(title: "Camping", handler: { [weak self] action in
+                self?.classificationTextField.text = action.title
+        }),
+            UIAction(title: "Hiking", handler: { [weak self] action in
+                self?.classificationTextField.text = action.title
+        }),
+            UIAction(title: "Climbing", handler: { [weak self] action in
+                self?.classificationTextField.text = action.title
+        }),
+            UIAction(title: "Skiing", handler: { [weak self] action in
+                self?.classificationTextField.text = action.title
+        }),
+            UIAction(title: "Diving", handler: { [weak self] action in
+                self?.classificationTextField.text = action.title
+        }),
+            UIAction(title: "Surfing", handler: { [weak self] action in
+                self?.classificationTextField.text = action.title
+        }),
+            UIAction(title: "Others", handler: { [weak self] action in
+                self?.classificationTextField.text = action.title
+        })])
     }
 }

@@ -32,12 +32,13 @@ class PostViewController: UIViewController {
                           classification: "")
     var startDate = Date()
     var endDate = Date()
-    var leaseTerm = [Date]()
+    var avaliableTerm = [Date]()
+    var pullDownButton = UIButton()
     
     @IBOutlet weak var postTableView: UITableView!
     @IBAction func tapPost(_ sender: Any) {
         product.renter = userInfo?.name ?? ""
-        product.renter = userInfo?.userID ?? ""
+        product.renterUid = userInfo?.userID ?? ""
         uploadPhoto()
         uploadedPhoto = []
         dismiss(animated: true)
@@ -45,7 +46,7 @@ class PostViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        super.viewDidLoad()
+        super.viewDidLoad()                
         postTableView.dataSource = self
         postTableView.delegate = self
         imagePickerController.delegate = self
@@ -134,8 +135,7 @@ extension PostViewController: UITableViewDataSource {
             cell.titleTextField.delegate = self
             cell.rentTextField.delegate = self
             cell.addressTextField.delegate = self
-            cell.beginDateTextField.delegate = self
-            cell.lastDateTextField.delegate = self
+            cell.passDateDelegate = self
             cell.classificationTextField.delegate = self
             return cell
         default:
@@ -236,14 +236,6 @@ extension PostViewController: UITextFieldDelegate {
         case "amount":
             guard let amountString = textField.text else { return }
             product.totalAmount = Int(amountString) ?? 1
-        case "begin date":
-            guard let dateString = textField.text else { return }
-            startDate = convertDateStringToDate(textFieldText: dateString)
-            daysBetweenTwoDate()
-        case "last date":
-            guard let dateString = textField.text else { return }
-            endDate = convertDateStringToDate(textFieldText: dateString)
-            daysBetweenTwoDate()
         case "classification":
             product.classification = textField.text ?? ""
             
@@ -253,17 +245,27 @@ extension PostViewController: UITextFieldDelegate {
     }
 // MARK: - Date related function
     func daysBetweenTwoDate() {
-        leaseTerm = []
+        avaliableTerm = []
         let calendar = Calendar.current
         guard startDate < endDate else { return }
-        let components = calendar.dateComponents([.day], from: startDate, to: endDate)
+        guard let standardStartDate = calendar.date(
+                bySettingHour: 0,
+                minute: 0,
+                second: 0,
+                of: startDate)?.addingTimeInterval(28800),
+              let standardEndDate = calendar.date(
+                bySettingHour: 0,
+                minute: 0,
+                second: 0,
+                of: endDate)?.addingTimeInterval(28800) else { return }
+        let components = calendar.dateComponents([.day], from: standardStartDate, to: standardEndDate)
         guard let days = components.day else { return }
         for round in 0...days {
-            guard let dateBeAdded = calendar.date(byAdding: .day, value: round, to: startDate) else { return}
-            leaseTerm.append(dateBeAdded)
+            guard let dateBeAdded = calendar.date(byAdding: .day, value: round, to: standardStartDate) else { return}
+            avaliableTerm.append(dateBeAdded)
         }
-        product.availableDate = leaseTerm
-        print(leaseTerm)
+        product.availableDate = avaliableTerm
+        print(avaliableTerm)
     }
     
     func convertDateStringToDate(textFieldText: String) -> Date {
@@ -278,5 +280,20 @@ extension PostViewController: UITextFieldDelegate {
         component.year = 2022
         guard let correctDate = calendar.date(from: component) else { fatalError() }
         return correctDate
+    }
+}
+
+// MARK: - pass date from cell delegate
+extension PostViewController: PassDateToPostVCDelegate {
+    func passStartDateToVC(chooseDate: Date) {
+        startDate = chooseDate
+        print(startDate)
+        daysBetweenTwoDate()
+    }
+    
+    func passEndDateToVC(chooseDate: Date) {
+        endDate = chooseDate
+        print(endDate)
+        daysBetweenTwoDate()
     }
 }
