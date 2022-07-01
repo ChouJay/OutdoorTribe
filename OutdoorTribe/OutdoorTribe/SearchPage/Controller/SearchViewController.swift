@@ -30,6 +30,7 @@ class SearchViewController: UIViewController {
     var headerView = UICollectionView(
         frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 200),
         collectionViewLayout: UICollectionViewLayout())
+    var pageController = UIPageControl()
     
     @IBOutlet weak var dateButton: UIButton!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -43,6 +44,9 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        layoutPageController()
+        
         searchTableView.layer.cornerRadius = 15
         layOutHeaderView()
         
@@ -53,6 +57,7 @@ class SearchViewController: UIViewController {
         searchBar.delegate = self
         searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         
+        mainGalleryView.delegate = self
         mainGalleryView.dataSource = self
         mainGalleryView.collectionViewLayout = createGalleryCompositionalLayout()
         
@@ -68,6 +73,24 @@ class SearchViewController: UIViewController {
             self.searchTableView.reloadData()
         }
         navigationController?.navigationBar.isHidden = true
+    }
+    
+// MARK: - page control related
+    func layoutPageController() {
+        
+        pageController.addTarget(self, action: #selector(controlGallery(pageControl:)), for: .valueChanged)
+        pageController.numberOfPages = 3
+        pageController.currentPage = 0
+        pageController.backgroundStyle = .automatic
+        view.addSubview(pageController)
+        pageController.translatesAutoresizingMaskIntoConstraints = false
+        pageController.centerXAnchor.constraint(equalTo: mainGalleryView.centerXAnchor).isActive = true
+        pageController.bottomAnchor.constraint(equalTo: searchTableView.topAnchor, constant: 0).isActive = true
+    }
+    
+    @objc func controlGallery(pageControl: UIPageControl) {
+        let page = pageControl.currentPage
+        mainGalleryView.scrollToItem(at: IndexPath(item: page, section: 0), at: .centeredHorizontally, animated: true)
     }
     
 // MARK: - date picker function
@@ -270,23 +293,32 @@ extension SearchViewController: UICollectionViewDataSource {
 // MARK: - collection view delegate
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath)
-        searchBar.text = ""
-        let keyWord = Classification.shared.differentOutdoorType[indexPath.row]
-        switch isFilter {
-        case false:
-            ProductManager.shared.classifyPostedProduct(keyWord: keyWord) { [weak self ] classifyProducts in
-                self?.products = classifyProducts
-                self?.afterFiltedProducts = classifyProducts
-                self?.searchTableView.reloadData()
-            }
-        case true:
-            ProductManager.shared.classifyPostedProduct(keyWord: keyWord) { [weak self ] classifyProducts in
-                self?.products = classifyProducts
-                self?.tapFilterConfirmButton()
-                self?.searchTableView.reloadData()
+        if collectionView != mainGalleryView {
+            searchBar.text = ""
+            let keyWord = Classification.shared.differentOutdoorType[indexPath.row]
+            switch isFilter {
+            case false:
+                ProductManager.shared.classifyPostedProduct(keyWord: keyWord) { [weak self ] classifyProducts in
+                    self?.products = classifyProducts
+                    self?.afterFiltedProducts = classifyProducts
+                    self?.searchTableView.reloadData()
+                }
+            case true:
+                ProductManager.shared.classifyPostedProduct(keyWord: keyWord) { [weak self ] classifyProducts in
+                    self?.products = classifyProducts
+                    self?.tapFilterConfirmButton()
+                    self?.searchTableView.reloadData()
+                }
             }
         }
+    }
+    // page control move when gallery scroll
+    func collectionView(_ collectionView: UICollectionView,
+                        willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+        print(indexPath)
+        pageController.currentPage = indexPath.row
+
     }
 }
 
@@ -356,9 +388,13 @@ extension SearchViewController {
 // MARk: gallery collection view layout
 extension SearchViewController {
     private func createGalleryCompositionalLayout() -> UICollectionViewLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1))
         item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
