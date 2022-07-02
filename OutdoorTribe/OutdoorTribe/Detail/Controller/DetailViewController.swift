@@ -13,7 +13,7 @@ import FirebaseAuth
 
 class DetailViewController: UIViewController {
     let firestoreAuth = Auth.auth()
-   
+    var pageController = UIPageControl()
     var renterAccount: Account?
     var userInfo: Account?
     var leaseTerm = [Date]()
@@ -139,6 +139,8 @@ extension DetailViewController: UITableViewDataSource {
                 for: indexPath) as? DetailGalleryTableViewCell else { fatalError() }
             guard let urlStrings = chooseProduct?.photoUrl else { return cell}
             cell.imageUrlStings = urlStrings
+            guard let chooseProduct = chooseProduct else { return cell}
+            cell.layoutPageController(chooseProduct: chooseProduct)
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(

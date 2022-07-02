@@ -76,6 +76,3 @@ extension ImageTableViewCell {
         photoDelegate?.askToUploadPhoto()
     }
 }
-
-
-

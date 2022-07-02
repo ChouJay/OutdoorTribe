@@ -48,7 +48,11 @@ class ProfileViewController: UIViewController {
         userPhotoImage.layer.borderWidth = 5
         userPhotoImage.layer.borderColor = UIColor.gray.cgColor
         
-        
+        // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         guard let uid = firestoreAuth.currentUser?.uid else { return }
         AccountManager.shared.getUserInfo(by: uid) { [weak self] account in
             self?.userInfo = account
@@ -56,7 +60,6 @@ class ProfileViewController: UIViewController {
                 self?.userPhotoImage.kf.setImage(with: url)
             }
         }
-        // Do any additional setup after loading the view.
     }
 }
 

@@ -10,6 +10,7 @@ import UIKit
 protocol PassDateToPostVCDelegate {
     func passEndDateToVC(chooseDate: Date)
     func passStartDateToVC(chooseDate: Date)
+    func passClassificationToVC(text: String)
 }
 
 class InfoTableViewCell: UITableViewCell {
@@ -64,24 +65,31 @@ class InfoTableViewCell: UITableViewCell {
         pullDownBtn.menu = UIMenu(children: [
             UIAction(title: "Camping", handler: { [weak self] action in
                 self?.classificationTextField.text = action.title
+                self?.passDateDelegate?.passClassificationToVC(text: action.title)
         }),
             UIAction(title: "Hiking", handler: { [weak self] action in
                 self?.classificationTextField.text = action.title
+                self?.passDateDelegate?.passClassificationToVC(text: action.title)
         }),
             UIAction(title: "Climbing", handler: { [weak self] action in
                 self?.classificationTextField.text = action.title
+                self?.passDateDelegate?.passClassificationToVC(text: action.title)
         }),
             UIAction(title: "Skiing", handler: { [weak self] action in
                 self?.classificationTextField.text = action.title
+                self?.passDateDelegate?.passClassificationToVC(text: action.title)
         }),
             UIAction(title: "Diving", handler: { [weak self] action in
                 self?.classificationTextField.text = action.title
+                self?.passDateDelegate?.passClassificationToVC(text: action.title)
         }),
             UIAction(title: "Surfing", handler: { [weak self] action in
                 self?.classificationTextField.text = action.title
+                self?.passDateDelegate?.passClassificationToVC(text: action.title)
         }),
             UIAction(title: "Others", handler: { [weak self] action in
                 self?.classificationTextField.text = action.title
+                self?.passDateDelegate?.passClassificationToVC(text: action.title)
         })])
     }
 }

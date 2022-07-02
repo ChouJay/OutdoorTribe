@@ -11,5 +11,4 @@ class MainGalleryViewCell: UICollectionViewCell {
     
     @IBOutlet weak var photoView: UIImageView!
     
-    
 }

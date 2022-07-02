@@ -205,7 +205,6 @@ extension SearchViewController: UITableViewDataSource {
 // MARK: - table view delegate
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        headerView.layer.cornerRadius = 10
         return headerView
     }
     

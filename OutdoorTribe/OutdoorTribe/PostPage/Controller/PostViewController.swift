@@ -238,7 +238,7 @@ extension PostViewController: UITextFieldDelegate {
             product.totalAmount = Int(amountString) ?? 1
         case "classification":
             product.classification = textField.text ?? ""
-            
+
         default:
             print("error")
         }
@@ -285,6 +285,10 @@ extension PostViewController: UITextFieldDelegate {
 
 // MARK: - pass date from cell delegate
 extension PostViewController: PassDateToPostVCDelegate {
+    func passClassificationToVC(text: String) {
+        product.classification = text
+    }
+    
     func passStartDateToVC(chooseDate: Date) {
         startDate = chooseDate
         print(startDate)
