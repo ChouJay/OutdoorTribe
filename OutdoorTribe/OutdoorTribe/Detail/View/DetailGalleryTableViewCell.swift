@@ -16,7 +16,6 @@ class DetailGalleryTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
         galleryCollectionView.collectionViewLayout = createCompositionalLayout()
         galleryCollectionView.dataSource = self
         galleryCollectionView.delegate = self
@@ -29,10 +28,17 @@ class DetailGalleryTableViewCell: UITableViewCell {
     }
     
     private func createCompositionalLayout() -> UICollectionViewLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1))
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                     leading: 0,
+                                                     bottom: 0,
+                                                     trailing: 0)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
@@ -69,7 +75,8 @@ extension DetailGalleryTableViewCell: UICollectionViewDataSource {
         imageUrlStings.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let item = collectionView.dequeueReusableCell(
             withReuseIdentifier: "GalleryCollectionViewCell",
             for: indexPath) as? GalleryCollectionViewCell else { fatalError() }

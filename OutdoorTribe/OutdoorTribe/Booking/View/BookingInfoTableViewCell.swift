@@ -9,7 +9,6 @@ import UIKit
 
 class BookingInfoTableViewCell: UITableViewCell {
     
-    
     @IBOutlet weak var lessorNameLabel: UILabel!
     @IBOutlet weak var leaseDate: UILabel!
     @IBOutlet weak var productName: UILabel!

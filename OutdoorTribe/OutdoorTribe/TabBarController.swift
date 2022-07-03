@@ -23,6 +23,13 @@ class TabBarController: UITabBarController {
         super.viewDidLoad()
         tabBar.layer.cornerRadius = 10
         self.delegate = self
+        
+        tabBar.layer.shadowColor = UIColor.yellow.cgColor
+        tabBar.layer.shadowOffset = CGSize(width: 0.0, height: -3.0)
+        tabBar.layer.shadowRadius = 15
+        tabBar.layer.shadowOpacity = 1
+        tabBar.layer.masksToBounds = false
+
     }
     
     override func viewWillAppear(_ animated: Bool) {

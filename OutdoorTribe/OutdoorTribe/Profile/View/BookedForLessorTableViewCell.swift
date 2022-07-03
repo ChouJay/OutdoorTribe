@@ -33,6 +33,7 @@ class BookedForLessorTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        layoutStuff()
         // Initialization code
     }
 
@@ -40,6 +41,13 @@ class BookedForLessorTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func layoutStuff() {
+        bookedPhoto.layer.cornerRadius = 10
+        pickUpButton.layer.cornerRadius = 10
+        lessorCancelBtn.layer.cornerRadius = 10
+
     }
     
     func disablePickUpBtn() {

@@ -42,7 +42,8 @@ extension ImageTableViewCell: UICollectionViewDataSource {
         return 1 + uploadedPhoto.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let imageItem = collectionView.dequeueReusableCell(
             withReuseIdentifier: "ImageCollectionViewCell",
             for: indexPath) as? ImageCollectionViewCell else { fatalError() }
@@ -50,6 +51,8 @@ extension ImageTableViewCell: UICollectionViewDataSource {
         imageItem.gestureRecognizers?.removeAll()
         if indexPath.row == 0 {
             imageItem.iamgeView.backgroundColor = .lightGray
+            imageItem.iamgeView.image = UIImage(systemName: "photo")
+            imageItem.tintColor = .darkGray
             let tap = UITapGestureRecognizer(target: self, action: #selector(choosePicture))
             imageItem.addGestureRecognizer(tap)
         } else {
@@ -64,7 +67,9 @@ extension ImageTableViewCell: UICollectionViewDataSource {
 
 // MARK: - collection view delegate
 extension ImageTableViewCell: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
         
         return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
     }

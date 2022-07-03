@@ -40,6 +40,11 @@ class MapCollectionViewCell: UICollectionViewCell {
       
     func layOutMapCell() {
         self.layer.cornerRadius = 10
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOffset = CGSize(width: 0.0, height: -3.0)
+        self.layer.shadowRadius = 5
+        self.layer.shadowOpacity = 0.3
+        
         photoImageView.layer.cornerRadius = 10
         photoImageView.clipsToBounds = true
     }

@@ -15,6 +15,7 @@ class PhotoWallHeaderReusableView: UICollectionReusableView {
     
     var delegate: FollowUserDelegate?
     
+    @IBOutlet weak var followBtn: UIButton!
     @IBAction func tapFollowButton(_ sender: Any) {
         print("tset")
         delegate?.askVcFollowUser()

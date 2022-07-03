@@ -23,6 +23,7 @@ class RentOutTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        layoutStuff()
         // Initialization code
     }
 
@@ -30,6 +31,11 @@ class RentOutTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func layoutStuff() {
+        productPhoto.layer.cornerRadius = 10
+        finishBtn.layer.cornerRadius = 10
     }
 
     func enableFinishBtn() {

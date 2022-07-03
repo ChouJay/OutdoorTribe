@@ -47,8 +47,9 @@ extension ApplyTableViewCell: UICollectionViewDataSource {
             for: indexPath) as? ApplyCollectionViewCell else { fatalError() }
         guard let product = orderDocumentsFromFirestore[indexPath.row].data()["product"] as? [String: Any] else { return item }
         print(product)
-        guard let urlStringArray = product["photoUrl"] as? [String] else { return item}
-        
+        guard let urlStringArray = product["photoUrl"] as? [String],
+              let titleString = product["title"] as? String else { return item}
+        item.applicationNameLabel.text = titleString
         item.notifiedPhoto.kf.setImage(with: URL(string: urlStringArray.first!))
         item.setupPhotoLayout()
         return item
@@ -57,7 +58,9 @@ extension ApplyTableViewCell: UICollectionViewDataSource {
 
 // MARK: - collection view delegate
 extension ApplyTableViewCell: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
         
         return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     }

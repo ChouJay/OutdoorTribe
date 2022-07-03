@@ -73,7 +73,7 @@ class UserViewController: UIViewController {
                 section.orthogonalScrollingBehavior = .none
                 let headerSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
-                    heightDimension: .absolute(50))
+                    heightDimension: .absolute(60))
                 let header = NSCollectionLayoutBoundarySupplementaryItem(
                     layoutSize: headerSize,
                     elementKind: UICollectionView.elementKindSectionHeader,
@@ -165,8 +165,13 @@ extension UserViewController: UICollectionViewDataSource {
             withReuseIdentifier: "photoWall",
             for: indexPath) as? PhotoWallHeaderReusableView else { fatalError() }
         headerView.delegate = self
+        headerView.followBtn.layer.cornerRadius = 10
         return headerView
     }
+}
+
+// MAKR: - collection view delegate
+extension UserViewController: UICollectionViewDelegate {
 }
 
 // MARK: - follow user delegate

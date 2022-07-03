@@ -41,6 +41,12 @@ class BookedForRenterTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+    func layoutStuff() {
+        photoImage.layer.cornerRadius = 10
+        deliverBtn.layer.cornerRadius = 10
+        cancelBtn.layer.cornerRadius = 10
+    }
+    
     func disableDeliverBtn() {
         deliverBtn.isEnabled = false
         deliverBtn.backgroundColor = .gray

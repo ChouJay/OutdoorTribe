@@ -41,7 +41,7 @@ class MapViewController: UIViewController {
     @IBOutlet weak var mapView: MapView!
     
     @IBAction func tapDatePicker(_ sender: Any) {
-        dateButton.isHidden = true
+        dateButton.isEnabled = false
         layoutChooseDateUI()
         buttonForDoingFilter.isHidden = false
     }
@@ -58,7 +58,7 @@ class MapViewController: UIViewController {
         positionButton.layer.cornerRadius = 25
         
         productCollectionView.register(UINib(nibName: "MapCollectionViewCell", bundle: nil),
-                                       forCellWithReuseIdentifier: "MapCollectionViewCell")
+            forCellWithReuseIdentifier: "MapCollectionViewCell")
         productCollectionView.collectionViewLayout = createCompositionalLayout()
         productCollectionView.backgroundColor = .clear
         productCollectionView.dataSource = self
@@ -72,9 +72,15 @@ class MapViewController: UIViewController {
         mapView.showsUserLocation = true
         mapView.delegate = self
         
+        dateButton.layer.cornerRadius = 18
+        
         searchBar.delegate = self
         searchBar.layer.cornerRadius = 10
         searchBar.clipsToBounds = true
+        searchBar.searchTextField.layer.cornerRadius = 18
+        searchBar.searchTextField.backgroundColor = .white
+        searchBar.searchTextField.clipsToBounds = true
+        searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -86,7 +92,6 @@ class MapViewController: UIViewController {
             self?.mapView.layoutView(from: self!.afterFiltedProducts)
             self?.productCollectionView.reloadData()
         }
-        productCollectionView.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -171,6 +176,10 @@ extension MapViewController: UICollectionViewDataSource {
 
 // MARK: - collection view delegate
 extension MapViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        performSegue(withIdentifier: "mapToDetailSegue", sender: indexPath)
+    }
  
 }
 // MARK: - my core location delegate
@@ -197,7 +206,7 @@ extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKPolylineRenderer(overlay: overlay)
-        renderer.strokeColor = UIColor.brown
+        renderer.strokeColor = UIColor(red: 44 / 250, green: 54 / 250, blue: 57 / 250, alpha: 1)
         renderer.lineWidth = 5.0
         return renderer
     }
@@ -263,43 +272,63 @@ extension MapViewController: UISearchBarDelegate {
     
 // MARK: - date picker function
     func layoutChooseDateUI() {
+        
         startDatePicker.datePickerMode = .date
         startDatePicker.preferredDatePickerStyle = .compact
-        
+        startDatePicker.timeZone = .current
+
         endDatePicker.datePickerMode = .date
         endDatePicker.preferredDatePickerStyle = .compact
+        endDatePicker.timeZone = .current
         
         backgroundView.backgroundColor = .white
-        mapView.addSubview(backgroundView)
-        backgroundView.translatesAutoresizingMaskIntoConstraints = false
-        backgroundView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
-        backgroundView.leadingAnchor.constraint(equalTo: mapView.leadingAnchor, constant: 20).isActive = true
-        backgroundView.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -20).isActive = true
-        backgroundView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        backgroundView.layer.cornerRadius = 10
+        print(dateButton.frame)
+        view.addSubview(backgroundView)
+        backgroundView.frame = CGRect(
+            x: dateButton.frame.origin.x + dateButton.frame.width,
+            y: dateButton.frame.origin.y + dateButton.frame.height + 10,
+            width: 0,
+            height: 40)
+        print(backgroundView.frame)
+        backgroundView.alpha = 0
+//        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+//        backgroundView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
+//        backgroundView.widthAnchor.constraint(equalToConstant: 230).isActive = true
+//        backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+//        backgroundView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        buttonForDoingFilter.addTarget(self, action: #selector(tapFilterConfirmButton), for: .touchUpInside)
         backgroundView.addSubview(buttonForDoingFilter)
+        buttonForDoingFilter.addTarget(self, action: #selector(tapFilterConfirmButton), for: .touchUpInside)
+        buttonForDoingFilter.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+        buttonForDoingFilter.tintColor = .darkGray
         buttonForDoingFilter.translatesAutoresizingMaskIntoConstraints = false
         buttonForDoingFilter.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
         buttonForDoingFilter.widthAnchor.constraint(equalToConstant: 40).isActive = true
         buttonForDoingFilter.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor).isActive = true
         buttonForDoingFilter.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
         
-        buttonForStopFilter.addTarget(self, action: #selector(tapFilterStopButton), for: .touchUpInside)
         backgroundView.addSubview(buttonForStopFilter)
+        buttonForStopFilter.addTarget(self, action: #selector(tapFilterStopButton), for: .touchUpInside)
+        buttonForStopFilter.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+        buttonForStopFilter.tintColor = .darkGray
         buttonForStopFilter.translatesAutoresizingMaskIntoConstraints = false
         buttonForStopFilter.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
         buttonForStopFilter.widthAnchor.constraint(equalToConstant: 40).isActive = true
         buttonForStopFilter.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor).isActive = true
         buttonForStopFilter.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
-     
+        
+        let dashLabel = UILabel()
+        dashLabel.text = "-"
+        dashLabel.textAlignment = .center
+        
         let hStack = UIStackView()
-        let subViews = [startDatePicker, endDatePicker]
+        let subViews = [startDatePicker, dashLabel, endDatePicker]
         for subView in subViews {
             hStack.addArrangedSubview(subView)
         }
         hStack.axis = .horizontal
-        hStack.distribution = .fillEqually
+        hStack.distribution = .fill
         backgroundView.addSubview(hStack)
         
         hStack.translatesAutoresizingMaskIntoConstraints = false
@@ -307,11 +336,20 @@ extension MapViewController: UISearchBarDelegate {
         hStack.leadingAnchor.constraint(equalTo: buttonForStopFilter.trailingAnchor).isActive = true
         hStack.trailingAnchor.constraint(equalTo: buttonForDoingFilter.leadingAnchor).isActive = true
         hStack.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
+        
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+            self.backgroundView.frame = CGRect(
+                x: self.dateButton.frame.origin.x + self.dateButton.frame.width - 230,
+                y: self.dateButton.frame.origin.y + self.dateButton.frame.height + 10,
+                width: 230,
+                height: 40)
+            self.backgroundView.alpha = 1
+        }, completion: nil)
     }
     
     @objc func tapFilterConfirmButton() {
         afterFiltedProducts = []
-        dateButton.isHidden = false
+        dateButton.isEnabled = true
         buttonForDoingFilter.isHidden = true
         backgroundView.removeFromSuperview()
         for subview in backgroundView.subviews {
@@ -331,7 +369,7 @@ extension MapViewController: UISearchBarDelegate {
     }
     
     @objc func tapFilterStopButton() {
-        dateButton.isHidden = false
+        dateButton.isEnabled = true
         backgroundView.removeFromSuperview()
         for subview in backgroundView.subviews {
             subview.removeFromSuperview()
@@ -416,5 +454,15 @@ extension MapViewController: MapRouteDelegate {
                 print("get error: \(error)")
             }
         }
+    }
+}
+
+// MARK: prepare for segue
+extension MapViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let indexPath = sender as? IndexPath,
+              let detailViewController = segue.destination as? DetailViewController else { return }
+        
+        detailViewController.chooseProduct = products[indexPath.row]
     }
 }
