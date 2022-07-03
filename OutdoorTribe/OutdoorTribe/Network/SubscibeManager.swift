@@ -56,6 +56,8 @@ class SubscribeManager {
             .document(otherUser.userID)
             .setData(otherUser.toDict)
         // user count add 1
-        firestoreDB.collection("users").document(otherUser.userID).updateData(["followerCount": FieldValue.increment(Int64(1))])
+        firestoreDB.collection("users")
+            .document(otherUser.userID)
+            .updateData(["followerCount": FieldValue.increment(Int64(1))])
     }
 }

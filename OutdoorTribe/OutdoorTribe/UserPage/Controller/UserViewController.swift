@@ -179,7 +179,8 @@ extension UserViewController: FollowUserDelegate {
     func askVcFollowUser() {
         let firebaseAuth = Auth.auth()
         guard let currentUser = firebaseAuth.currentUser,
-              let orthersAccount = othersAccount else { return }
-        SubscribeManager.shared.followUser(currentUserID: currentUser.uid, otherUser: orthersAccount)
+              var othersAccount = othersAccount else { return }
+        othersAccount.followerCount += 1
+        SubscribeManager.shared.followUser(currentUserID: currentUser.uid, otherUser: othersAccount)
     }
 }

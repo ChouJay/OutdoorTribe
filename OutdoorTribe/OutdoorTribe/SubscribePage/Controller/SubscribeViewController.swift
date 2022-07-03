@@ -55,10 +55,26 @@ extension SubscribeViewController: RemoveSubscriptionDelegate {
         let buttonPosition = sender.convert(sender.bounds.origin, to: subscribeTableView)
         if let indexPath = subscribeTableView.indexPathForRow(at: buttonPosition) {
             guard let currentUser = firebaseAuth.currentUser else { return }
-            SubscribeManager.shared.recallFollow(currentUserID: currentUser.uid, otherUser: subscribers[indexPath.row]) { [weak self] in
+            SubscribeManager.shared.recallFollow(
+                currentUserID: currentUser.uid,
+                otherUser: subscribers[indexPath.row]) { [weak self] in
                 self?.subscribers.remove(at: indexPath.row)
                 self?.subscribeTableView.deleteRows(at: [indexPath], with: .left)
             }
         }
+    }
+}
+
+// MARK: - prepare for segue
+extension SubscribeViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let destinationVC = segue.destination as? UserViewController,
+              let cell = sender as? SubscribeTableViewCell,
+              let indexPath = subscribeTableView.indexPath(for: cell) else { return }
+        
+//        guard let posterUid =  chooseProduct?.renterUid else { return }
+        destinationVC.othersAccount = subscribers[indexPath.row]
+        destinationVC.posterUid = subscribers[indexPath.row].userID
+        
     }
 }

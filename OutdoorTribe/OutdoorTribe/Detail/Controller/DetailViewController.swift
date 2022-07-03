@@ -62,6 +62,8 @@ class DetailViewController: UIViewController {
             let uuid = UUID().uuidString
             let chaterOneName = userInfo?.name ?? ""
             let chaterTwoName = chooseProduct?.renter ?? ""
+            print(chaterOneName)
+            print(chaterTwoName)
             chatRoom.chaterOne = chaterOneName
             chatRoom.chaterTwo = chaterTwoName
             chatRoom.roomID = uuid

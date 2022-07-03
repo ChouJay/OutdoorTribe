@@ -35,6 +35,8 @@ class PostViewController: UIViewController {
     var avaliableTerm = [Date]()
     var pullDownButton = UIButton()
     
+    @IBOutlet weak var discardBtn: UIButton!
+    @IBOutlet weak var postBtn: UIButton!
     @IBOutlet weak var postTableView: UITableView!
     @IBAction func tapPost(_ sender: Any) {
         product.renter = userInfo?.name ?? ""
@@ -47,6 +49,8 @@ class PostViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()                
+        postBtn.layer.cornerRadius = 10
+        discardBtn.layer.cornerRadius = 10
         postTableView.dataSource = self
         postTableView.delegate = self
         imagePickerController.delegate = self

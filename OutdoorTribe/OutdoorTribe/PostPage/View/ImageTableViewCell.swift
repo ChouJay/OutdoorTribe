@@ -27,6 +27,7 @@ class ImageTableViewCell: UITableViewCell {
         super.awakeFromNib()
         imageCollectionView.dataSource = self
         imageCollectionView.delegate = self
+        
         // Initialization code
     }
 
