@@ -271,6 +271,7 @@ extension SearchViewController {
               let indexPath = searchTableView.indexPath(for: searchTableViewCell)
         else { return }
         detailViewController.chooseProduct = products[indexPath.row]
+        
     }
 }
 

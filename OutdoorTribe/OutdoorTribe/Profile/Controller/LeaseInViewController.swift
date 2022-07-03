@@ -44,6 +44,7 @@ extension LeaseInViewController: UITableViewDataSource {
             for: indexPath) as? LeaseInTableViewCell else { fatalError() }
         guard let urlString = leaseOrders[indexPath.row].product?.photoUrl.first,
               let url = URL(string: urlString) else { return cell }
+        cell.returnOrderDelegate = self
         cell.productPhoto.kf.setImage(with: url)
         
         if leaseOrders[indexPath.row].orderState == 3 {
@@ -64,5 +65,14 @@ extension LeaseInViewController {
         if let indexPath = leaseInTableView.indexPathForRow(at: buttonPosition) {
             destinationVC.finishedOrder = leaseOrders[indexPath.row]
         }
+    }
+}
+
+// MARK: - return order delegate
+extension LeaseInViewController: ReturnOrderDelegate {
+    func askVcReturnOrder(cell: LeaseInTableViewCell) {
+        guard let indexPath = leaseInTableView.indexPath(for: cell) else { return }
+        let orderID = leaseOrders[indexPath.row].orderID
+        OrderManger.shared.updateStateToReturn(documentId: orderID)
     }
 }

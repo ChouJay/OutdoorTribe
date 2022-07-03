@@ -7,14 +7,20 @@
 
 import UIKit
 
+protocol ReturnOrderDelegate {
+    func askVcReturnOrder(cell: LeaseInTableViewCell)
+}
+
 class LeaseInTableViewCell: UITableViewCell {
 
+    var returnOrderDelegate: ReturnOrderDelegate?
+    
     @IBOutlet weak var productPhoto: UIImageView!
     
     @IBOutlet weak var returnBtn: UIButton!
     
     @IBAction func tapReturnBtn(_ sender: Any) {
-        
+        returnOrderDelegate?.askVcReturnOrder(cell: self)
     }
     
     override func prepareForReuse() {

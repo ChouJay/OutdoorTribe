@@ -7,14 +7,20 @@
 
 import UIKit
 
+protocol FinishOrderDelegate {
+    func askVcFinishOrder(cell: RentOutTableViewCell)
+}
+
 class RentOutTableViewCell: UITableViewCell {
 
+    var finishOrderDelegate: FinishOrderDelegate?
+    
     @IBOutlet weak var productPhoto: UIImageView!
     
     @IBOutlet weak var finishBtn: UIButton!
     
     @IBAction func tapFinishBtn(_ sender: Any) {
-        
+        finishOrderDelegate?.askVcFinishOrder(cell: self)
     }
     
     override func prepareForReuse() {

@@ -125,4 +125,16 @@ class OrderManger {
         let firstoreDb = Firestore.firestore()
         firstoreDb.collection("orders").document(documentId).updateData(["orderState": 3])
     }
+    
+    func updateStateToReturn(documentId: String) {
+        let firstoreDb = Firestore.firestore()
+        firstoreDb.collection("orders").document(documentId).updateData(["orderState": 4])
+    }
+    
+    func updateStateToFinish(documentId: String) {
+        let firstoreDb = Firestore.firestore()
+        firstoreDb.collection("orders").document(documentId).updateData(["orderState": 5])
+    }
+
+
 }

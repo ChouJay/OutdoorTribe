@@ -85,6 +85,7 @@ class MapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        mapView.removeOverlays(mapView.overlays)
         navigationController?.navigationBar.isHidden = true
         ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
             self?.products = postedProducts
@@ -92,16 +93,12 @@ class MapViewController: UIViewController {
             self?.mapView.layoutView(from: self!.afterFiltedProducts)
             self?.productCollectionView.reloadData()
         }
+        productCollectionView.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard let myLocation = myLocationManager.location?.coordinate else { return }
-        print(myLocation)
-        mapView.setRegion(MKCoordinateRegion(center: myLocation,
-                                             latitudinalMeters: 700,
-                                             longitudinalMeters: 700), animated: true)
-
+        goToUesrLocation()
     }
     
     private func createCompositionalLayout() -> UICollectionViewLayout {
@@ -217,8 +214,8 @@ extension MapViewController {
     func goToUesrLocation() {
         guard let myLocation = myLocationManager.location?.coordinate else { return }
         mapView.setRegion(MKCoordinateRegion(center: myLocation,
-                                             latitudinalMeters: 700,
-                                             longitudinalMeters: 700), animated: true)
+                                             latitudinalMeters: 1000,
+                                             longitudinalMeters: 1000), animated: true)
     }
 }
 

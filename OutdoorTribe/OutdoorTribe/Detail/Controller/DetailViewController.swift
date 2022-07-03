@@ -36,6 +36,9 @@ class DetailViewController: UIViewController {
                             chaterTwo: "Fake name 2")
     var chooseProduct: Product?
     
+    
+    @IBOutlet weak var applyBtn: UIButton!
+    @IBOutlet weak var chatBtn: UIButton!
     @IBOutlet weak var detailTableView: UITableView!
     
     @IBAction func tapApplyButton(_ sender: Any) {
@@ -62,8 +65,6 @@ class DetailViewController: UIViewController {
             let uuid = UUID().uuidString
             let chaterOneName = userInfo?.name ?? ""
             let chaterTwoName = chooseProduct?.renter ?? ""
-            print(chaterOneName)
-            print(chaterTwoName)
             chatRoom.chaterOne = chaterOneName
             chatRoom.chaterTwo = chaterTwoName
             chatRoom.roomID = uuid
@@ -104,6 +105,13 @@ class DetailViewController: UIViewController {
         AccountManager.shared.getUserInfo(by: chooseProduct.renterUid) { [weak self] accountFromServer in
             self?.renterAccount = accountFromServer
             self?.detailTableView.reloadData()
+            if self?.userInfo?.name == accountFromServer.name {
+                self?.chatBtn.isEnabled = false
+                self?.chatBtn.alpha = 0.7
+                self?.applyBtn.isEnabled = false
+                self?.applyBtn.alpha = 0.7
+                
+            }
         }
     }
     

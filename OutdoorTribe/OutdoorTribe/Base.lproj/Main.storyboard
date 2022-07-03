@@ -882,6 +882,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="S08-xj-xAZ"/>
                     <connections>
+                        <outlet property="applyBtn" destination="uZY-s1-93K" id="DOo-Up-hkw"/>
+                        <outlet property="chatBtn" destination="RaJ-6G-Zgs" id="H8e-VU-ikB"/>
                         <outlet property="detailTableView" destination="JLd-eH-9qY" id="ZkT-vB-keh"/>
                         <segue destination="HOA-kl-29V" kind="show" identifier="DetailtoChatRoomSegue" id="9fu-0O-WUc"/>
                     </connections>

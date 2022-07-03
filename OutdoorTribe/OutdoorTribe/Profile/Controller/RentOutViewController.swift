@@ -50,6 +50,8 @@ extension RentOutViewController: UITableViewDataSource {
             for: indexPath) as? RentOutTableViewCell else { fatalError() }
         guard let urlString = rentOrders[indexPath.row].product?.photoUrl.first,
               let url = URL(string: urlString) else { return cell }
+        cell.finishOrderDelegate = self
+        cell.productPhoto.kf.setImage(with: url)
         
         if rentOrders[indexPath.row].orderState == 4 {
             cell.enableFinishBtn()
@@ -57,7 +59,6 @@ extension RentOutViewController: UITableViewDataSource {
             cell.disableFinishBtn()
         }
             
-        cell.productPhoto.kf.setImage(with: url)
         return cell
     }
 }
@@ -71,5 +72,14 @@ extension RentOutViewController {
         if let indexPath = rentOutTableView.indexPathForRow(at: buttonPosition) {
             destinationVC.finishedOrder = rentOrders[indexPath.row]
         }
+    }
+}
+
+// MARK: - finish order delegate
+extension RentOutViewController: FinishOrderDelegate {
+    func askVcFinishOrder(cell: RentOutTableViewCell) {
+        guard let indexPath = rentOutTableView.indexPath(for: cell) else { return }
+        let orderID = rentOrders[indexPath.row].orderID
+        OrderManger.shared.updateStateToFinish(documentId: orderID)
     }
 }
