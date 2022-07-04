@@ -162,13 +162,12 @@ extension ChatViewController: UITableViewDataSource {
                     guard let url = URL(string: otherUserPhotoUrlString) else { return cell }
                     cell.photoView.kf.setImage(with: url)
                 }
-                
+                cell.leftImage.kf.setImage(with: url)
                 let date = messages[indexPath.row].date
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "HH:mm"
                 let dateString = dateFormatter.string(from: date)
                 cell.leftTimeLabel.text = dateString
-
             }
             return cell
         }

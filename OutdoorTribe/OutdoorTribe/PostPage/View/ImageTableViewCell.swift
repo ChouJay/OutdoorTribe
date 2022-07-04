@@ -48,6 +48,7 @@ extension ImageTableViewCell: UICollectionViewDataSource {
         guard let imageItem = collectionView.dequeueReusableCell(
             withReuseIdentifier: "ImageCollectionViewCell",
             for: indexPath) as? ImageCollectionViewCell else { fatalError() }
+        imageItem.iamgeView.contentMode = .center
         imageItem.iamgeView.image = nil
         imageItem.gestureRecognizers?.removeAll()
         if indexPath.row == 0 {
@@ -57,8 +58,9 @@ extension ImageTableViewCell: UICollectionViewDataSource {
             let tap = UITapGestureRecognizer(target: self, action: #selector(choosePicture))
             imageItem.addGestureRecognizer(tap)
         } else {
-            print(uploadedPhoto[indexPath.row - 1])
             imageItem.iamgeView.image = uploadedPhoto[indexPath.row - 1]
+            imageItem.iamgeView.preferredSymbolConfiguration = .unspecified
+            imageItem.iamgeView.contentMode = .scaleAspectFill
         }
         imageItem.iamgeView.layer.cornerRadius = 10
         imageItem.iamgeView.clipsToBounds = true

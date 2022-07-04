@@ -42,13 +42,26 @@ class ScoreViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let renterName = finishedOrder?.renter,
-              let renterID = finishedOrder?.renterUid else { return }
-        AccountManager.shared.getUserInfo(by: renterID) { [weak self] accountFromServer in
-            let url = URL(string: accountFromServer.photo)
-            self?.photoView.kf.setImage(with: url)
+        guard let finishedOrder = finishedOrder,
+              let currentUserUid = firebaseAuth.currentUser?.uid else { return }
+        if currentUserUid == finishedOrder.renterUid {
+            let lessorName = finishedOrder.lessor
+            let lessorID = finishedOrder.lessorUid
+            AccountManager.shared.getUserInfo(by: lessorID) { [weak self] accountFromServer in
+                let url = URL(string: accountFromServer.photo)
+                self?.photoView.kf.setImage(with: url)
+            }
+            nameLabel.text = lessorName
+            
+        } else {
+            let renterName = finishedOrder.renter
+            let renterID = finishedOrder.renterUid
+            AccountManager.shared.getUserInfo(by: renterID) { [weak self] accountFromServer in
+                let url = URL(string: accountFromServer.photo)
+                self?.photoView.kf.setImage(with: url)
+            }
+            nameLabel.text = renterName
         }
-        nameLabel.text = renterName
     }
     /*
     // MARK: - Navigation

@@ -106,12 +106,21 @@ extension ProfileViewController: UploadPhotoDelegate {
 
 // MARK: - ImagePickerControllerDelegate
 extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.originalImage] as? UIImage {
             userPhotoImage.image = image
             guard let userID = userInfo?.userID else { return }
             AccountManager.shared.uploadUserPhoto(uploadedImage: image, userID: userID)
         }
         picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+// MARK: - prepare for segue
+extension ProfileViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let destinationVC = segue.destination as? EditPostViewController else { return }
+        destinationVC.myAccount = userInfo
     }
 }
