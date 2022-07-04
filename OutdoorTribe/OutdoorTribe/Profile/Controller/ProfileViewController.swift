@@ -107,7 +107,7 @@ extension ProfileViewController: UploadPhotoDelegate {
 // MARK: - ImagePickerControllerDelegate
 extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController,
-                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let image = info[.originalImage] as? UIImage {
             userPhotoImage.image = image
             guard let userID = userInfo?.userID else { return }

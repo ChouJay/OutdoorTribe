@@ -17,12 +17,6 @@ class SearchTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        photoImage.layer.cornerRadius = 10
-        photoImage.layer.shadowColor = UIColor.black.cgColor
-        photoImage.layer.shadowOffset = CGSize(width: 0.0, height: -3.0)
-        photoImage.layer.shadowRadius = 5
-        photoImage.layer.shadowOpacity = 0.3
-
         // Initialization code
     }
 
