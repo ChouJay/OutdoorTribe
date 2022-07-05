@@ -25,8 +25,8 @@ class TabBarController: UITabBarController {
         tabBar.layer.cornerRadius = 10
         self.delegate = self
         SignalingClient.shared.delegate = self
-        SignalingClient.shared.listenSdp(from: "George")
-        SignalingClient.shared.listenCandidate(from: "George")
+        SignalingClient.shared.listenSdp(from: "Jay")
+        SignalingClient.shared.listenCandidate(from: "Jay")
         
 //        tabBar.layer.shadowColor = UIColor.yellow.cgColor
 //        tabBar.layer.shadowOffset = CGSize(width: 0.0, height: -3.0)

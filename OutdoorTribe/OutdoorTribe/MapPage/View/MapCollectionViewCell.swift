@@ -28,7 +28,7 @@ class MapCollectionViewCell: UICollectionViewCell {
     }
     @IBAction func tapCallButton(_ sender: UIButton) {
         WebRTCClient.shared.offer { sdp in
-            WebRTCClient.shared.send(sdp: sdp, to: "Jay")
+            WebRTCClient.shared.send(sdp: sdp, to: "George")
         }
     }
     

@@ -15,22 +15,23 @@ class WebRTCClient: NSObject {
     
     var iceServers: [String]
     var peerConnection: RTCPeerConnection? // why we don't need "?"
-   // factory: not get it!
+   // what is factory?  not get it!
     private static let factory: RTCPeerConnectionFactory = {
         RTCInitializeSSL()
         let videoEncoderFactory = RTCDefaultVideoEncoderFactory()
         let videoDecoderFactory = RTCDefaultVideoDecoderFactory()
         return RTCPeerConnectionFactory(encoderFactory: videoEncoderFactory, decoderFactory: videoDecoderFactory)
     }()
-    // mediaConstrains: not get it!
-    let mediaConstrains = [kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue, kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueTrue]
+    // what is mediaConstrains? not get it!
+    let mediaConstrains = [kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue,
+                           kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueTrue]
     let rtcAudioSession =  RTCAudioSession.sharedInstance()
     let decoder = JSONDecoder()
     let encoder = JSONEncoder()
     
     init(iceServers: [String]) {
         self.iceServers = iceServers
-        super.init()
+        super.init() // why we need this?
         createPeerConnection()
     }
 // MARK: - peerConnection
@@ -42,7 +43,8 @@ class WebRTCClient: NSObject {
     
         config.continualGatheringPolicy = .gatherContinually
         
-        let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: ["DtlsSrtpKeyAgreement": kRTCMediaConstraintsValueTrue])
+        let constraints = RTCMediaConstraints(mandatoryConstraints: nil,
+                                              optionalConstraints: ["DtlsSrtpKeyAgreement": kRTCMediaConstraintsValueTrue])
         
         peerConnection = WebRTCClient.factory.peerConnection(with: config, constraints: constraints, delegate: self)
         
@@ -67,7 +69,8 @@ class WebRTCClient: NSObject {
     }
     
     func configureAudioSession() {
-        self.rtcAudioSession.lockForConfiguration() // Request exclusive access to the audio session for configuration. This call will block if the lock is held by another object
+        // Request exclusive access to the audio session for configuration. This call will block if the lock is held by another object
+        self.rtcAudioSession.lockForConfiguration()
         do {
             try self.rtcAudioSession.setCategory(AVAudioSession.Category.playAndRecord.rawValue)
             try self.rtcAudioSession.setMode(AVAudioSession.Mode.voiceChat.rawValue)
@@ -78,6 +81,7 @@ class WebRTCClient: NSObject {
     }
     
 // MARK: - signaling
+    //offer : just use webRTC sdk create a sdp -> prepare to send!!
     func offer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void) {
         let constrains = RTCMediaConstraints(mandatoryConstraints: self.mediaConstrains, optionalConstraints: nil)
         self.peerConnection?.offer(for: constrains, completionHandler: { sdp, error in
@@ -191,8 +195,9 @@ extension WebRTCClient: RTCPeerConnectionDelegate {
         debugPrint("peerConnection new gathering state: \(newState)")
     }
     
+    // will be called, when we call peerConnection.answer()!!
     func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
-        send(candidate: candidate, to: "Jay")
+        send(candidate: candidate, to: "George")
     }
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
