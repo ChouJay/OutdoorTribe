@@ -667,6 +667,7 @@ PODS:
   - "GoogleUtilities/NSData+zlib (7.7.0)"
   - GoogleUtilities/Reachability (7.7.0):
     - GoogleUtilities/Logger
+  - GoogleWebRTC (1.1.31999)
   - "gRPC-C++ (1.44.0)":
     - "gRPC-C++/Implementation (= 1.44.0)"
     - "gRPC-C++/Interface (= 1.44.0)"
@@ -741,6 +742,7 @@ DEPENDENCIES:
   - FirebaseFirestore
   - FirebaseFirestoreSwift
   - FirebaseStorage
+  - GoogleWebRTC (~> 1.1)
   - Kingfisher (~> 7.0)
   - SwiftLint
 
@@ -762,6 +764,7 @@ SPEC REPOS:
     - FirebaseStorageInternal
     - GoogleDataTransport
     - GoogleUtilities
+    - GoogleWebRTC
     - "gRPC-C++"
     - gRPC-Core
     - GTMSessionFetcher
@@ -789,6 +792,7 @@ SPEC CHECKSUMS:
   FirebaseStorageInternal: 50c963664bc73739b68eb2d8427c91de5168dbcf
   GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
+  GoogleWebRTC: b39a78c4f5cc6b0323415b9233db03a2faa7b0f0
   "gRPC-C++": 9675f953ace2b3de7c506039d77be1f2e77a8db2
   gRPC-Core: 943e491cb0d45598b0b0eb9e910c88080369290b
   GTMSessionFetcher: 681175626052e03fdde7952f7e9c7a9785719506
@@ -799,6 +803,6 @@ SPEC CHECKSUMS:
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   SwiftLint: f80f1be7fa96d30e0aa68e58d45d4ea1ccaac519
 
-PODFILE CHECKSUM: 0dae44b6bcf86b2179540fe1b88a4deab591ec88
+PODFILE CHECKSUM: b287cd285ecdc6b7d1e6324a184e485dff61ede4
 
 COCOAPODS: 1.11.3

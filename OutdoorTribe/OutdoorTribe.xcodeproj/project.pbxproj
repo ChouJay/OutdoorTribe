@@ -47,6 +47,11 @@
 		01401F6F287297130024D1E1 /* EditPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01401F6E287297130024D1E1 /* EditPostViewController.swift */; };
 		01401F71287299630024D1E1 /* EditInfoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01401F70287299630024D1E1 /* EditInfoCollectionViewCell.swift */; };
 		01401F73287299780024D1E1 /* EditPostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01401F72287299780024D1E1 /* EditPostCollectionViewCell.swift */; };
+		01401F76287340320024D1E1 /* WebRTCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01401F75287340320024D1E1 /* WebRTCClient.swift */; };
+		01401F782873DCA10024D1E1 /* SessionDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01401F772873DCA10024D1E1 /* SessionDescription.swift */; };
+		01401F7A2873E21A0024D1E1 /* IceCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01401F792873E2190024D1E1 /* IceCandidate.swift */; };
+		01401F7C2873EA0C0024D1E1 /* SignalingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01401F7B2873EA0C0024D1E1 /* SignalingClient.swift */; };
+		01401F7E28740ABC0024D1E1 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01401F7D28740ABC0024D1E1 /* Config.swift */; };
 		014C830B28632053006A4EC1 /* HeaderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C830A28632053006A4EC1 /* HeaderCollectionViewCell.swift */; };
 		014C830D28632072006A4EC1 /* HeaderCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 014C830C28632072006A4EC1 /* HeaderCollectionViewCell.xib */; };
 		014C830F28636CF5006A4EC1 /* Classification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C830E28636CF5006A4EC1 /* Classification.swift */; };
@@ -129,6 +134,11 @@
 		01401F6E287297130024D1E1 /* EditPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewController.swift; sourceTree = "<group>"; };
 		01401F70287299630024D1E1 /* EditInfoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditInfoCollectionViewCell.swift; sourceTree = "<group>"; };
 		01401F72287299780024D1E1 /* EditPostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostCollectionViewCell.swift; sourceTree = "<group>"; };
+		01401F75287340320024D1E1 /* WebRTCClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCClient.swift; sourceTree = "<group>"; };
+		01401F772873DCA10024D1E1 /* SessionDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDescription.swift; sourceTree = "<group>"; };
+		01401F792873E2190024D1E1 /* IceCandidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceCandidate.swift; sourceTree = "<group>"; };
+		01401F7B2873EA0C0024D1E1 /* SignalingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalingClient.swift; sourceTree = "<group>"; };
+		01401F7D28740ABC0024D1E1 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		014C830A28632053006A4EC1 /* HeaderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCollectionViewCell.swift; sourceTree = "<group>"; };
 		014C830C28632072006A4EC1 /* HeaderCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HeaderCollectionViewCell.xib; sourceTree = "<group>"; };
 		014C830E28636CF5006A4EC1 /* Classification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Classification.swift; sourceTree = "<group>"; };
@@ -302,6 +312,7 @@
 		012F24702859A53D00B891C1 /* OutdoorTribe */ = {
 			isa = PBXGroup;
 			children = (
+				01401F742873400F0024D1E1 /* WebRTC */,
 				01401F6B287296BD0024D1E1 /* EditpostPage */,
 				012CCEF6286C75F900BFFE1A /* UserPage */,
 				012CCEED286C4B7900BFFE1A /* SubscribePage */,
@@ -405,6 +416,18 @@
 				01401F72287299780024D1E1 /* EditPostCollectionViewCell.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		01401F742873400F0024D1E1 /* WebRTC */ = {
+			isa = PBXGroup;
+			children = (
+				01401F75287340320024D1E1 /* WebRTCClient.swift */,
+				01401F7B2873EA0C0024D1E1 /* SignalingClient.swift */,
+				01401F772873DCA10024D1E1 /* SessionDescription.swift */,
+				01401F792873E2190024D1E1 /* IceCandidate.swift */,
+				01401F7D28740ABC0024D1E1 /* Config.swift */,
+			);
+			path = WebRTC;
 			sourceTree = "<group>";
 		};
 		014C62AC2859BED800C6D75D /* PostPage */ = {
@@ -796,6 +819,8 @@
 				0195EB4B285CDCCC0015A12A /* GalleryCollectionViewCell.swift in Sources */,
 				012F24762859A53D00B891C1 /* PostViewController.swift in Sources */,
 				0139FC7728699893003C3851 /* AccountManager.swift in Sources */,
+				01401F76287340320024D1E1 /* WebRTCClient.swift in Sources */,
+				01401F7A2873E21A0024D1E1 /* IceCandidate.swift in Sources */,
 				0139FC7F286B2330003C3851 /* BookedForRenterTableViewCell.swift in Sources */,
 				0195EB7F2860830C0015A12A /* MapCollectionViewCell.swift in Sources */,
 				012CCEF3286C4C7D00BFFE1A /* SubscribeTableViewCell.swift in Sources */,
@@ -825,6 +850,7 @@
 				014C83182864458B006A4EC1 /* ChatModel.swift in Sources */,
 				0107F51A286EDAD9007E6C43 /* MessageHeaderView.swift in Sources */,
 				014C831A28644677006A4EC1 /* UserModel.swift in Sources */,
+				01401F7C2873EA0C0024D1E1 /* SignalingClient.swift in Sources */,
 				0195EB57285EF3280015A12A /* ProfileViewController.swift in Sources */,
 				014C83212865BD8B006A4EC1 /* ChatImageTableViewCell.swift in Sources */,
 				01401F6F287297130024D1E1 /* EditPostViewController.swift in Sources */,
@@ -850,6 +876,7 @@
 				01053E87285B34680074B125 /* SearchTableViewCell.swift in Sources */,
 				012F24722859A53D00B891C1 /* AppDelegate.swift in Sources */,
 				0195EB6E285F1ECF0015A12A /* BookingInfoTableViewCell.swift in Sources */,
+				01401F782873DCA10024D1E1 /* SessionDescription.swift in Sources */,
 				014C83152864365E006A4EC1 /* ChatManager.swift in Sources */,
 				012CCEF9286C764900BFFE1A /* UserViewController.swift in Sources */,
 				0139FC7C2869A4D5003C3851 /* SignUpViewController.swift in Sources */,
@@ -857,6 +884,7 @@
 				0195EB67285F172D0015A12A /* BookingViewController.swift in Sources */,
 				0195EB72285F76FD0015A12A /* BookedStageViewController.swift in Sources */,
 				014C832328687AC5006A4EC1 /* MainGalleryViewCell.swift in Sources */,
+				01401F7E28740ABC0024D1E1 /* Config.swift in Sources */,
 				012F24742859A53D00B891C1 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -918,8 +946,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -979,6 +1009,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

@@ -40,6 +40,9 @@
                         <imageReference key="image" image="phone.circle" catalog="system" symbolScale="large"/>
                         <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30" scale="large" weight="regular"/>
                     </state>
+                    <connections>
+                        <action selector="tapCallButton:" destination="iN0-l3-epB" eventType="touchUpInside" id="nsL-tb-I4P"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iIN-1r-NgE">
                     <rect key="frame" x="256" y="98" width="50" height="50"/>

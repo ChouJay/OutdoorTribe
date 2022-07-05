@@ -44,6 +44,13 @@ class SearchViewController: UIViewController {
         buttonForDoingFilter.isHidden = false
     }
     
+    @IBAction func tapAnswerBtn(_ sender: Any) {
+        WebRTCClient.shared.answer { sdp in
+            WebRTCClient.shared.send(sdp: sdp, to: "George")
+        }
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -68,9 +75,6 @@ class SearchViewController: UIViewController {
         searchBar.searchTextField.backgroundColor = .white
         searchBar.searchTextField.clipsToBounds = true
         searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
-        searchBarBackgroundView.layer.cornerRadius = 25
-        searchBarBackgroundView.alpha = 0.4
-        searchBarBackgroundView.isHidden = true
         
         mainGalleryView.delegate = self
         mainGalleryView.dataSource = self
