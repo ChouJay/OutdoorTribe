@@ -27,9 +27,7 @@ class MapCollectionViewCell: UICollectionViewCell {
         routeDelegae?.showRoute(sender: self)
     }
     @IBAction func tapCallButton(_ sender: UIButton) {
-        WebRTCClient.shared.offer { sdp in
-            WebRTCClient.shared.send(sdp: sdp, to: "George")
-        }
+        CallManager.shared.startCall(handleName: "Jay")
     }
     
     override func prepareForReuse() {

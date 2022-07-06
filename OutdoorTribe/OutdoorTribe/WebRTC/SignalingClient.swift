@@ -13,7 +13,9 @@ protocol SignalClientDelegate: AnyObject {
     
     func signalClientDidConnect(_ signalClient: SignalingClient)
     func signalClientDidDisconnect(_ signalClient: SignalingClient)
-    func signalClient(_ signalClient: SignalingClient, didReceiveRemoteSdp sdp: RTCSessionDescription, didReceiveSender sender: String?)
+    func signalClient(_ signalClient: SignalingClient,
+                      didReceiveRemoteSdp sdp: RTCSessionDescription,
+                      didReceiveSender sender: String?)
     func signalClient(_ signalClient: SignalingClient, didReceiveCandidate candidate: RTCIceCandidate)
 }
 
@@ -40,7 +42,12 @@ class SignalingClient {
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: data, options: .prettyPrinted)
                 let sessionDescription = try self.decoder.decode(SessionDescription.self, from: jsonData)
-                self.delegate?.signalClient(self, didReceiveRemoteSdp: sessionDescription.rtcSessionDescription, didReceiveSender: person)
+                self.delegate?.signalClient(self,
+                                            didReceiveRemoteSdp: sessionDescription.rtcSessionDescription,
+                                            didReceiveSender: person)
+                CallManager.shared.reportIncomingCall(uuid: UUID(), handleName: "Jay") { err in
+                    print(err)
+                }
             } catch {
                 debugPrint("Warning: Could not decode sdp data: \(error)")
                 return
@@ -58,7 +65,8 @@ class SignalingClient {
                 if diff.type == .added {
                     do {
                         // what is ?  why documents.first?
-                        let jsonData = try JSONSerialization.data(withJSONObject: documents.first?.data(), options: .prettyPrinted)
+                        let jsonData = try JSONSerialization.data(withJSONObject: documents.first?.data(),
+                                                                  options: .prettyPrinted)
                         let iceCandidate = try self.decoder.decode(IceCandidate.self, from: jsonData)
                         print(iceCandidate)
                         self.delegate?.signalClient(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)

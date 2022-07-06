@@ -62,6 +62,8 @@
 		014C831D28646E45006A4EC1 /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C831C28646E45006A4EC1 /* ChatTableViewCell.swift */; };
 		014C83212865BD8B006A4EC1 /* ChatImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C83202865BD8B006A4EC1 /* ChatImageTableViewCell.swift */; };
 		014C832328687AC5006A4EC1 /* MainGalleryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C832228687AC5006A4EC1 /* MainGalleryViewCell.swift */; };
+		014CF10D28756644006E4F4E /* CallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014CF10C28756644006E4F4E /* CallManager.swift */; };
+		014CF10F28756AAA006E4F4E /* ProviderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014CF10E28756AAA006E4F4E /* ProviderDelegate.swift */; };
 		0195EB42285CABB30015A12A /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB41285CABB30015A12A /* MapViewController.swift */; };
 		0195EB46285CD4510015A12A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB45285CD4510015A12A /* DetailViewController.swift */; };
 		0195EB49285CDBD50015A12A /* DetailGalleryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB48285CDBD50015A12A /* DetailGalleryTableViewCell.swift */; };
@@ -149,6 +151,8 @@
 		014C831C28646E45006A4EC1 /* ChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableViewCell.swift; sourceTree = "<group>"; };
 		014C83202865BD8B006A4EC1 /* ChatImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatImageTableViewCell.swift; sourceTree = "<group>"; };
 		014C832228687AC5006A4EC1 /* MainGalleryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGalleryViewCell.swift; sourceTree = "<group>"; };
+		014CF10C28756644006E4F4E /* CallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallManager.swift; sourceTree = "<group>"; };
+		014CF10E28756AAA006E4F4E /* ProviderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDelegate.swift; sourceTree = "<group>"; };
 		0195EB41285CABB30015A12A /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		0195EB45285CD4510015A12A /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		0195EB48285CDBD50015A12A /* DetailGalleryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGalleryTableViewCell.swift; sourceTree = "<group>"; };
@@ -312,6 +316,7 @@
 		012F24702859A53D00B891C1 /* OutdoorTribe */ = {
 			isa = PBXGroup;
 			children = (
+				014CF10B287565FE006E4F4E /* Call */,
 				01401F742873400F0024D1E1 /* WebRTC */,
 				01401F6B287296BD0024D1E1 /* EditpostPage */,
 				012CCEF6286C75F900BFFE1A /* UserPage */,
@@ -490,6 +495,15 @@
 				014C83202865BD8B006A4EC1 /* ChatImageTableViewCell.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		014CF10B287565FE006E4F4E /* Call */ = {
+			isa = PBXGroup;
+			children = (
+				014CF10C28756644006E4F4E /* CallManager.swift */,
+				014CF10E28756AAA006E4F4E /* ProviderDelegate.swift */,
+			);
+			path = Call;
 			sourceTree = "<group>";
 		};
 		0195EB3F285CAB910015A12A /* MapPage */ = {
@@ -866,12 +880,14 @@
 				01985D2D285C60FF00BCD866 /* Product.swift in Sources */,
 				01053E8C285B385C0074B125 /* ProductManager.swift in Sources */,
 				0195EB4D285DDCDA0015A12A /* DetailInfoTableViewCell.swift in Sources */,
+				014CF10D28756644006E4F4E /* CallManager.swift in Sources */,
 				0195EB5E285EF58D0015A12A /* NotificatoinViewController.swift in Sources */,
 				0195EB6C285F1EC30015A12A /* BookingPhotoTableViewCell.swift in Sources */,
 				0195EB42285CABB30015A12A /* MapViewController.swift in Sources */,
 				01053E82285B26620074B125 /* TabBarController.swift in Sources */,
 				0139FC7328696FD1003C3851 /* LoginViewController.swift in Sources */,
 				0195EB7C286073040015A12A /* MapView.swift in Sources */,
+				014CF10F28756AAA006E4F4E /* ProviderDelegate.swift in Sources */,
 				0195EB78286049490015A12A /* ColorExtension.swift in Sources */,
 				01053E87285B34680074B125 /* SearchTableViewCell.swift in Sources */,
 				012F24722859A53D00B891C1 /* AppDelegate.swift in Sources */,
@@ -1045,6 +1061,7 @@
 				INFOPLIST_FILE = OutdoorTribe/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "this app use mic for voice chat";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1077,6 +1094,7 @@
 				INFOPLIST_FILE = OutdoorTribe/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "this app use mic for voice chat";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

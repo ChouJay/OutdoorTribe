@@ -197,7 +197,7 @@ extension WebRTCClient: RTCPeerConnectionDelegate {
     
     // will be called, when we call peerConnection.answer()!!
     func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
-        send(candidate: candidate, to: "George")
+        send(candidate: candidate, to: "Jay")
     }
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
