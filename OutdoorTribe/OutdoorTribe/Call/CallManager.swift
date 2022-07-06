@@ -15,7 +15,7 @@ class CallManager: NSObject {
     let provider: CXProvider
     let uuid = UUID()
     
-    override init() {
+    override init() { // use CXProviderConfiguration to init provider
        let providerConfiguration = CXProviderConfiguration()
         providerConfiguration.supportsVideo = false
         providerConfiguration.maximumCallGroups = 1
@@ -28,7 +28,7 @@ class CallManager: NSObject {
     
     func reportIncomingCall(uuid: UUID, handleName: String, completion: (Error) -> Void) {
         let update = CXCallUpdate()
-        update.remoteHandle = CXHandle(type: .generic, value: handleName)
+        update.remoteHandle = CXHandle(type: .generic, value: "對方") // handleName為"對方"的名字
         update.hasVideo = false
         provider.reportNewIncomingCall(with: uuid, update: update) { error in
             print(error)
@@ -36,8 +36,8 @@ class CallManager: NSObject {
     }
     
     func startCall(handleName: String) {
-        let handle = CXHandle(type: .generic, value: handleName)
-        let startCallAction = CXStartCallAction(call: UUID(), handle: handle)
+        let handle = CXHandle(type: .generic, value: "對方")
+        let startCallAction = CXStartCallAction(call: UUID(), handle: handle) // handleName為"對方"的名字
         startCallAction.isVideo = false
         let transaction = CXTransaction(action: startCallAction)
         requestTransaction(transaction)

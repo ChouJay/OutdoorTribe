@@ -45,7 +45,7 @@ class SignalingClient {
                 self.delegate?.signalClient(self,
                                             didReceiveRemoteSdp: sessionDescription.rtcSessionDescription,
                                             didReceiveSender: person)
-                CallManager.shared.reportIncomingCall(uuid: UUID(), handleName: "Jay") { err in
+                CallManager.shared.reportIncomingCall(uuid: UUID(), handleName: "對方") { err in
                     print(err)
                 }
             } catch {
@@ -56,7 +56,11 @@ class SignalingClient {
     }
     
     func listenCandidate(from person: String) {
-        Firestore.firestore().collection(person).document("candidate").collection("candidates").addSnapshotListener { querySnapShot, err in
+        Firestore.firestore()
+            .collection(person)
+            .document("candidate")
+            .collection("candidates")
+            .addSnapshotListener { querySnapShot, err in
             guard let documents = querySnapShot?.documents else {
                 print("Error fetching documents: \(err)")
                 return

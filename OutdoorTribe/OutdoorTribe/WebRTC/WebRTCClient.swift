@@ -43,13 +43,14 @@ class WebRTCClient: NSObject {
     
         config.continualGatheringPolicy = .gatherContinually
         
-        let constraints = RTCMediaConstraints(mandatoryConstraints: nil,
-                                              optionalConstraints: ["DtlsSrtpKeyAgreement": kRTCMediaConstraintsValueTrue])
+        let constraints = RTCMediaConstraints(
+            mandatoryConstraints: nil,
+            optionalConstraints: ["DtlsSrtpKeyAgreement": kRTCMediaConstraintsValueTrue])
         
         peerConnection = WebRTCClient.factory.peerConnection(with: config, constraints: constraints, delegate: self)
         
         createMediaSenders()  // set up audioTrack & add it into peerConnection => still not send!
-        configureAudioSession() //
+        configureAudioSession()
         
     }
     
@@ -69,7 +70,8 @@ class WebRTCClient: NSObject {
     }
     
     func configureAudioSession() {
-        // Request exclusive access to the audio session for configuration. This call will block if the lock is held by another object
+        // Request exclusive access to the audio session for configuration.
+        // This call will block if the lock is held by another object
         self.rtcAudioSession.lockForConfiguration()
         do {
             try self.rtcAudioSession.setCategory(AVAudioSession.Category.playAndRecord.rawValue)
@@ -81,7 +83,7 @@ class WebRTCClient: NSObject {
     }
     
 // MARK: - signaling
-    //offer : just use webRTC sdk create a sdp -> prepare to send!!
+    // offer : just use webRTC sdk create a sdp -> prepare to send!!
     func offer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void) {
         let constrains = RTCMediaConstraints(mandatoryConstraints: self.mediaConstrains, optionalConstraints: nil)
         self.peerConnection?.offer(for: constrains, completionHandler: { sdp, error in
@@ -98,7 +100,8 @@ class WebRTCClient: NSObject {
     func send(sdp rtcSdp: RTCSessionDescription, to person: String) {
         do {
             let dataMessage = try self.encoder.encode(SessionDescription(from: rtcSdp))
-            guard let dict = try JSONSerialization.jsonObject(with: (dataMessage), options: .fragmentsAllowed) as? [String: Any] else { return }
+            guard let dict = try JSONSerialization.jsonObject(with: (dataMessage),
+                                                              options: .fragmentsAllowed) as? [String: Any] else { return }
             Firestore.firestore().collection(person).document("sdp").setData(dict) { err in
                 if let err = err {
                     print("Error send sdp: \(err)")
@@ -115,8 +118,13 @@ class WebRTCClient: NSObject {
         do {
             // what is iceCandidate
             let dataMessage = try self.encoder.encode(IceCandidate(from: rtcIceCandidate))
-            guard let dict = try JSONSerialization.jsonObject(with: dataMessage, options: .fragmentsAllowed) as? [String: Any] else { return }
-            Firestore.firestore().collection(person).document("candidate").collection("candidates").addDocument(data: dict) { err in
+            guard let dict = try JSONSerialization.jsonObject(with: dataMessage,
+                                                              options: .fragmentsAllowed) as? [String: Any] else { return }
+            Firestore.firestore()
+                .collection(person)
+                .document("candidate")
+                .collection("candidates")
+                .addDocument(data: dict) { err in
                 if let err = err {
                     print("Error send candidate: \(err)")
                 } else {
@@ -145,7 +153,10 @@ class WebRTCClient: NSObject {
 
 // MARK: - Close peer connection, clear Firestore, reset variables and re-create new peer connection, so it ready for new session
     func deleteSdpAndCandiadte(for person: String) {
-        Firestore.firestore().collection(person).document("sdp").delete() { err in
+        Firestore.firestore()
+            .collection(person)
+            .document("sdp")
+            .delete() { err in
             if let err = err {
                 print("Error removing firestore sdp: \(err)")
             } else {
@@ -153,7 +164,10 @@ class WebRTCClient: NSObject {
             }
         }
         
-        Firestore.firestore().collection(person).document("candidate").delete() { err in
+        Firestore.firestore()
+            .collection(person)
+            .document("candidate")
+            .delete() { err in
             if let err = err {
                 print("Error removing firestore candidate: \(err)")
             } else {
