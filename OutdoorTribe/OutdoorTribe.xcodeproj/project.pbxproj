@@ -64,6 +64,8 @@
 		014C832328687AC5006A4EC1 /* MainGalleryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C832228687AC5006A4EC1 /* MainGalleryViewCell.swift */; };
 		014CF10D28756644006E4F4E /* CallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014CF10C28756644006E4F4E /* CallManager.swift */; };
 		014CF10F28756AAA006E4F4E /* ProviderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014CF10E28756AAA006E4F4E /* ProviderDelegate.swift */; };
+		014CF1182877149A006E4F4E /* BlockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014CF1172877149A006E4F4E /* BlockViewController.swift */; };
+		014CF11A287714F1006E4F4E /* BlockTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014CF119287714F1006E4F4E /* BlockTableViewCell.swift */; };
 		0195EB42285CABB30015A12A /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB41285CABB30015A12A /* MapViewController.swift */; };
 		0195EB46285CD4510015A12A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB45285CD4510015A12A /* DetailViewController.swift */; };
 		0195EB49285CDBD50015A12A /* DetailGalleryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB48285CDBD50015A12A /* DetailGalleryTableViewCell.swift */; };
@@ -153,6 +155,8 @@
 		014C832228687AC5006A4EC1 /* MainGalleryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGalleryViewCell.swift; sourceTree = "<group>"; };
 		014CF10C28756644006E4F4E /* CallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallManager.swift; sourceTree = "<group>"; };
 		014CF10E28756AAA006E4F4E /* ProviderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDelegate.swift; sourceTree = "<group>"; };
+		014CF1172877149A006E4F4E /* BlockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockViewController.swift; sourceTree = "<group>"; };
+		014CF119287714F1006E4F4E /* BlockTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTableViewCell.swift; sourceTree = "<group>"; };
 		0195EB41285CABB30015A12A /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		0195EB45285CD4510015A12A /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		0195EB48285CDBD50015A12A /* DetailGalleryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGalleryTableViewCell.swift; sourceTree = "<group>"; };
@@ -316,6 +320,7 @@
 		012F24702859A53D00B891C1 /* OutdoorTribe */ = {
 			isa = PBXGroup;
 			children = (
+				014CF11228771454006E4F4E /* BlockPage */,
 				014CF10B287565FE006E4F4E /* CallKit */,
 				01401F742873400F0024D1E1 /* WebRTC */,
 				01401F6B287296BD0024D1E1 /* EditpostPage */,
@@ -504,6 +509,31 @@
 				014CF10E28756AAA006E4F4E /* ProviderDelegate.swift */,
 			);
 			path = CallKit;
+			sourceTree = "<group>";
+		};
+		014CF11228771454006E4F4E /* BlockPage */ = {
+			isa = PBXGroup;
+			children = (
+				014CF11428771468006E4F4E /* View */,
+				014CF11328771461006E4F4E /* Controller */,
+			);
+			path = BlockPage;
+			sourceTree = "<group>";
+		};
+		014CF11328771461006E4F4E /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				014CF1172877149A006E4F4E /* BlockViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		014CF11428771468006E4F4E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				014CF119287714F1006E4F4E /* BlockTableViewCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		0195EB3F285CAB910015A12A /* MapPage */ = {
@@ -875,6 +905,7 @@
 				012CCEF1286C4BB600BFFE1A /* SubscribeViewController.swift in Sources */,
 				012CCF00286D4E0D00BFFE1A /* UserInfoCollectionCell.swift in Sources */,
 				0195EB76285F81900015A12A /* BookedForLessorTableViewCell.swift in Sources */,
+				014CF1182877149A006E4F4E /* BlockViewController.swift in Sources */,
 				012CCF03286D670500BFFE1A /* sectionList.swift in Sources */,
 				0139FC87286BF6A2003C3851 /* ScoreViewController.swift in Sources */,
 				01985D2D285C60FF00BCD866 /* Product.swift in Sources */,
@@ -900,6 +931,7 @@
 				0195EB67285F172D0015A12A /* BookingViewController.swift in Sources */,
 				0195EB72285F76FD0015A12A /* BookedStageViewController.swift in Sources */,
 				014C832328687AC5006A4EC1 /* MainGalleryViewCell.swift in Sources */,
+				014CF11A287714F1006E4F4E /* BlockTableViewCell.swift in Sources */,
 				01401F7E28740ABC0024D1E1 /* Config.swift in Sources */,
 				012F24742859A53D00B891C1 /* SceneDelegate.swift in Sources */,
 			);
