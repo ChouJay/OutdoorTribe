@@ -17,6 +17,8 @@ class BookedForLessorTableViewCell: UITableViewCell {
     @IBOutlet weak var bookedPhoto: UIImageView!
     @IBOutlet weak var pickUpButton: UIButton!
     @IBOutlet weak var lessorCancelBtn: UIButton!
+    @IBOutlet weak var productName: UILabel!
+    @IBOutlet weak var pickUpDateLabel: UILabel!
     
     var changeStateDelegate: LessorChangeStateDelegate?
     

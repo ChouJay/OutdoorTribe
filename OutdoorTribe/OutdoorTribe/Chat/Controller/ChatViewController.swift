@@ -118,8 +118,6 @@ extension ChatViewController: UITableViewDataSource {
                 cell.leftTextBubble.text = messages[indexPath.row].message
                 // load otherUser photo
                 
-                
-                
                 let date = messages[indexPath.row].date
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "HH:mm"

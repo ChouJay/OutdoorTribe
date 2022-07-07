@@ -36,7 +36,6 @@ class DetailViewController: UIViewController {
                             chaterTwo: "Fake name 2")
     var chooseProduct: Product?
     
-    
     @IBOutlet weak var applyBtn: UIButton!
     @IBOutlet weak var chatBtn: UIButton!
     @IBOutlet weak var detailTableView: UITableView!
@@ -107,9 +106,9 @@ class DetailViewController: UIViewController {
             self?.detailTableView.reloadData()
             if self?.userInfo?.name == accountFromServer.name {
                 self?.chatBtn.isEnabled = false
-                self?.chatBtn.alpha = 0.7
+                self?.chatBtn.alpha = 0.5
                 self?.applyBtn.isEnabled = false
-                self?.applyBtn.alpha = 0.7
+                self?.applyBtn.alpha = 0.5
                 
             }
         }
@@ -126,6 +125,8 @@ class DetailViewController: UIViewController {
         if let destinationVC = segue.destination as? ChatViewController {
             destinationVC.chatRoom = chatRoom
             destinationVC.userInfo = userInfo
+            guard let photoUrlString = renterAccount?.photo else { return }
+            destinationVC.otherUserPhotoUrlString = photoUrlString
         } else {
             guard let destinationVC = segue.destination as? UserViewController,
                   let posterUid =  chooseProduct?.renterUid else { return }
@@ -182,7 +183,7 @@ extension DetailViewController: UITableViewDataSource {
                   let rent = chooseProduct?.rent else { return cell }
             cell.nameLabel.text = productName
             cell.addressLabel.text = addressString
-            cell.rentLabel.text = String(rent)
+//            cell.rentLabel.text = String(rent)
             guard let startDate = chooseProduct?.availableDate.first,
                   let endDate = chooseProduct?.availableDate.last else { return cell }
             cell.setRentLimitedPeriod(head: startDate,

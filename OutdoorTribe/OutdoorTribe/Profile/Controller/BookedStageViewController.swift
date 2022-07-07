@@ -56,6 +56,12 @@ extension BookedStageViewController: UITableViewDataSource {
                 cell.disableDeliverBtn()
             }
             cell.photoImage.kf.setImage(with: url)
+            cell.productName.text = bookedStateOrders[indexPath.row].product?.title
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy/MM/dd"
+            guard let date = bookedStateOrders[indexPath.row].leaseTerm.first else { return cell}
+            let dateString = dateFormatter.string(from: date)
+            cell.pickUpdateLabel.text = dateString
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(
@@ -69,6 +75,13 @@ extension BookedStageViewController: UITableViewDataSource {
                 cell.disablePickUpBtn()
             }
             cell.bookedPhoto.kf.setImage(with: url)
+            cell.productName.text = bookedStateOrders[indexPath.row].product?.title
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy/MM/dd"
+            guard let date = bookedStateOrders[indexPath.row].leaseTerm.first else { return cell}
+            let dateString = dateFormatter.string(from: date)
+            cell.pickUpDateLabel.text = dateString
+
             return cell
         }
     }

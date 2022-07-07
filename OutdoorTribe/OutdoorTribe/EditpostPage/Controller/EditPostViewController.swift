@@ -29,11 +29,6 @@ class EditPostViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let currentUserUid = firebaseAuth.currentUser?.uid else { return }
-        AccountManager.shared.getUserPost(byUserID: currentUserUid) { [weak self] productsFromServer in
-            self?.allUserProducts = productsFromServer
-            self?.editCollectionView.reloadData()
-        }
     }
     
     private func createCompositionalLayout() -> UICollectionViewLayout {

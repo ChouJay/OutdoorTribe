@@ -15,8 +15,7 @@ class EditInfoCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var ratingCountLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var photoImage: UIImageView!
-    
-    
+        
     func layoutPhotoImage() {
         photoImage.layer.cornerRadius = photoImage.frame.width / 2
     }

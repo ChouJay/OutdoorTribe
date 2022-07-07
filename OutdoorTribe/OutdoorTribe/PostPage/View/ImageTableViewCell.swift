@@ -9,10 +9,11 @@ import UIKit
 
 protocol UploadPhotoDelegate {
     func askToUploadPhoto()
+    func askToDeletePhoto(indexPath: IndexPath)
 }
 
 class ImageTableViewCell: UITableViewCell {
-
+    
     var uploadedPhoto = [UIImage]()
     var photoDelegate: UploadPhotoDelegate? {
         didSet {
@@ -48,7 +49,10 @@ extension ImageTableViewCell: UICollectionViewDataSource {
         guard let imageItem = collectionView.dequeueReusableCell(
             withReuseIdentifier: "ImageCollectionViewCell",
             for: indexPath) as? ImageCollectionViewCell else { fatalError() }
+        imageItem.deletePhotoDelegate = self
+        imageItem.removeButton.isHidden = false
         imageItem.iamgeView.contentMode = .center
+        imageItem.iamgeView.preferredSymbolConfiguration = .init(pointSize: 40, weight: .unspecified, scale: .large)
         imageItem.iamgeView.image = nil
         imageItem.gestureRecognizers?.removeAll()
         if indexPath.row == 0 {
@@ -56,6 +60,7 @@ extension ImageTableViewCell: UICollectionViewDataSource {
             imageItem.iamgeView.image = UIImage(systemName: "photo")
             imageItem.tintColor = .darkGray
             let tap = UITapGestureRecognizer(target: self, action: #selector(choosePicture))
+            imageItem.removeButton.isHidden = true
             imageItem.addGestureRecognizer(tap)
         } else {
             imageItem.iamgeView.image = uploadedPhoto[indexPath.row - 1]
@@ -82,5 +87,13 @@ extension ImageTableViewCell: UICollectionViewDelegateFlowLayout {
 extension ImageTableViewCell {
     @objc func choosePicture() {
         photoDelegate?.askToUploadPhoto()
+    }
+}
+
+// MARK: - deletePhoto delegate
+extension ImageTableViewCell: DeletePhotoDelegate {
+    func askToDeletePhoto(cell: UICollectionViewCell) {
+        guard let indexPath = imageCollectionView.indexPath(for: cell) else { return }
+        photoDelegate?.askToDeletePhoto(indexPath: indexPath)
     }
 }

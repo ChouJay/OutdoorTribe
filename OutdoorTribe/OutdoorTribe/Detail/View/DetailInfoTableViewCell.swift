@@ -17,7 +17,7 @@ class DetailInfoTableViewCell: UITableViewCell {
     var delegate: PassDateToVcDelegate?
     
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var rentLabel: UILabel!
+//    @IBOutlet weak var rentLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var amountTextField: UITextField!
 

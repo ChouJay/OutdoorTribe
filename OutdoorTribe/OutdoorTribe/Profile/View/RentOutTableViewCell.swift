@@ -15,8 +15,10 @@ class RentOutTableViewCell: UITableViewCell {
 
     var finishOrderDelegate: FinishOrderDelegate?
     
+    @IBOutlet weak var productName: UILabel!
     @IBOutlet weak var productPhoto: UIImageView!
     
+    @IBOutlet weak var returnDateLabel: UILabel!
     @IBOutlet weak var finishBtn: UIButton!
     
     @IBAction func tapFinishBtn(_ sender: Any) {

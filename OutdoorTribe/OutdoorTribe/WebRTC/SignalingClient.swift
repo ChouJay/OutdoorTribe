@@ -45,9 +45,6 @@ class SignalingClient {
                 self.delegate?.signalClient(self,
                                             didReceiveRemoteSdp: sessionDescription.rtcSessionDescription,
                                             didReceiveSender: person)
-                CallManager.shared.reportIncomingCall(uuid: UUID(), handleName: "對方") { err in
-                    print(err)
-                }
             } catch {
                 debugPrint("Warning: Could not decode sdp data: \(error)")
                 return
@@ -69,11 +66,15 @@ class SignalingClient {
                 if diff.type == .added {
                     do {
                         // what is ?  why documents.first?
-                        let jsonData = try JSONSerialization.data(withJSONObject: documents.first?.data(),
-                                                                  options: .prettyPrinted)
+                        let jsonData = try JSONSerialization.data(
+                            withJSONObject: documents.first?.data(),
+                            options: .prettyPrinted)
                         let iceCandidate = try self.decoder.decode(IceCandidate.self, from: jsonData)
                         print(iceCandidate)
                         self.delegate?.signalClient(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)
+                        CallManager.shared.reportIncomingCall(uuid: UUID(), handleName: "對方") { err in
+                            print(err)
+                        }
                     } catch {
                         debugPrint("Warning: Could not decode candidate data: \(error)")
                         return

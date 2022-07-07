@@ -13,11 +13,17 @@ class ProfileViewController: UIViewController {
     let firestoreAuth = Auth.auth()
     let imagePickerController = UIImagePickerController()
     var userInfo: Account?
+    var subscribers = [Account]()
+    var allUserProducts = [Product]()
     
     @IBOutlet weak var photoEditBtn: UIButton!
     @IBOutlet weak var userPhotoImage: UIImageView!
     @IBOutlet weak var bookingTableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
+    
+    @IBOutlet weak var postCountLabel: UILabel!
+    @IBOutlet weak var subscriCountLabel: UILabel!
+    @IBOutlet weak var ratingCountLabel: UILabel!
     
     @IBAction func tapLogOutBtn(_ sender: Any) {
         let firebaseAuth = Auth.auth()
@@ -47,7 +53,6 @@ class ProfileViewController: UIViewController {
         userPhotoImage.layer.cornerRadius = 70
         userPhotoImage.layer.borderWidth = 5
         userPhotoImage.layer.borderColor = UIColor.gray.cgColor
-        
         // Do any additional setup after loading the view.
     }
     
@@ -59,12 +64,34 @@ class ProfileViewController: UIViewController {
             if let url = URL(string: account.photo) {
                 self?.userPhotoImage.kf.setImage(with: url)
             }
+            let totalScore = account.totalScore
+            var score = 0.0
+            if account.ratingCount != 0 {
+                score = totalScore / account.ratingCount
+            }
+            let ratingCount = Int(account.ratingCount)
+            self?.ratingCountLabel.text = String(score) + "(\(String(ratingCount)))"
+        }
+        AccountManager.shared.getUserPost(byUserID: uid) { [weak self] productsFromServer in
+            self?.allUserProducts = productsFromServer
+            guard let postCount = self?.allUserProducts.count else { return }
+            self?.postCountLabel.text = String(postCount)
+        }
+        
+        SubscribeManager.shared.loadingSubscriber(currentUserID: uid) { [weak self] accountsFromServer in
+            self?.subscribers = accountsFromServer
+            guard let subscribeCount = self?.subscribers.count else { return }
+            self?.subscriCountLabel.text = String(subscribeCount)
         }
     }
 }
 
 // MARK: - uploade photo delegate
 extension ProfileViewController: UploadPhotoDelegate {
+    func askToDeletePhoto(indexPath: IndexPath) {
+        // no use
+    }
+    
     func askToUploadPhoto() {
         let controller = UIAlertController(title: "請上傳照片", message: nil, preferredStyle: .actionSheet)
         let titleAttributes = [
@@ -102,6 +129,7 @@ extension ProfileViewController: UploadPhotoDelegate {
         imagePickerController.mediaTypes = ["public.image"]
         self.present(imagePickerController, animated: true)
     }
+    
 }
 
 // MARK: - ImagePickerControllerDelegate
@@ -120,7 +148,13 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
 // MARK: - prepare for segue
 extension ProfileViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationVC = segue.destination as? EditPostViewController else { return }
-        destinationVC.myAccount = userInfo
+        if let destinationVC = segue.destination as? SubscribeViewController {
+            destinationVC.subscribers = subscribers
+            
+        } else {
+            guard let destinationVC = segue.destination as? EditPostViewController else { return }
+            destinationVC.myAccount = userInfo
+            destinationVC.allUserProducts = allUserProducts
+        }
     }
 }

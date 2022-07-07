@@ -17,6 +17,7 @@ class SearchTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        layoutPhoto()
         // Initialization code
     }
 
@@ -24,5 +25,9 @@ class SearchTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func layoutPhoto() {
+        photoImage.layer.cornerRadius = 10
     }
 }

@@ -44,13 +44,6 @@ class SearchViewController: UIViewController {
         buttonForDoingFilter.isHidden = false
     }
     
-    @IBAction func tapAnswerBtn(_ sender: Any) {
-        WebRTCClient.shared.answer { sdp in
-            WebRTCClient.shared.send(sdp: sdp, to: "George")
-        }
-    }
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -68,7 +61,6 @@ class SearchViewController: UIViewController {
         searchTableView.dataSource = self
         searchTableView.delegate = self
         searchTableView.sectionHeaderTopPadding = 0
-        searchTableView.layer.borderWidth = 2
         
         searchBar.delegate = self
         searchBar.searchTextField.layer.cornerRadius = 18
@@ -96,7 +88,6 @@ class SearchViewController: UIViewController {
     
 // MARK: - page control related
     func layoutPageController() {
-        
         pageController.addTarget(self, action: #selector(controlGallery(pageControl:)), for: .valueChanged)
         pageController.numberOfPages = 3
         pageController.currentPage = 0
@@ -114,7 +105,6 @@ class SearchViewController: UIViewController {
     
 // MARK: - date picker function
     func layoutChooseDateUI() {
-        
         startDatePicker.datePickerMode = .date
         startDatePicker.preferredDatePickerStyle = .compact
         startDatePicker.timeZone = .current
@@ -134,12 +124,7 @@ class SearchViewController: UIViewController {
             height: 40)
         print(backgroundView.frame)
         backgroundView.alpha = 0
-//        backgroundView.translatesAutoresizingMaskIntoConstraints = false
-//        backgroundView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
-//        backgroundView.widthAnchor.constraint(equalToConstant: 230).isActive = true
-//        backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-//        backgroundView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
+
         backgroundView.addSubview(buttonForDoingFilter)
         buttonForDoingFilter.addTarget(self, action: #selector(tapFilterConfirmButton), for: .touchUpInside)
         buttonForDoingFilter.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
@@ -373,15 +358,36 @@ extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
-        print(indexPath)
-        pageController.currentPage = indexPath.row
-
+        if collectionView != headerView {
+            print(indexPath)
+            pageController.currentPage = indexPath.row
+        }
     }
 }
 
 // MARK: - classcification collection view in table view header
 extension SearchViewController {
     func layOutHeaderView() {
+        let decorateView = UIView()
+        let secondDecorateView = UIView()
+        
+        view.addSubview(decorateView)
+        decorateView.translatesAutoresizingMaskIntoConstraints = false
+        decorateView.heightAnchor.constraint(equalToConstant: 10).isActive = true
+        decorateView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 330).isActive = true
+        decorateView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32).isActive = true
+        decorateView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32).isActive = true
+        decorateView.backgroundColor = .black
+        decorateView.layer.cornerRadius = 5
+        
+        decorateView.addSubview(secondDecorateView)
+        secondDecorateView.translatesAutoresizingMaskIntoConstraints = false
+        secondDecorateView.heightAnchor.constraint(equalToConstant: 5).isActive = true
+        secondDecorateView.topAnchor.constraint(equalTo: decorateView.topAnchor, constant: 0).isActive = true
+        secondDecorateView.leadingAnchor.constraint(equalTo: decorateView.leadingAnchor, constant: 0).isActive = true
+        secondDecorateView.trailingAnchor.constraint(equalTo: decorateView.trailingAnchor, constant: 0).isActive = true
+        secondDecorateView.backgroundColor = .white
+        
         headerView.collectionViewLayout = createCompositionalLayout()
         headerView.dataSource = self
         headerView.delegate = self
@@ -403,7 +409,7 @@ extension SearchViewController {
         
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .absolute(100),
-            heightDimension: .absolute(100))
+            heightDimension: .absolute(85))
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)

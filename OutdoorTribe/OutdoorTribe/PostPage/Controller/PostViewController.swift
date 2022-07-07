@@ -12,6 +12,10 @@ import FirebaseStorage
 import FirebaseFirestore
 import FirebaseAuth
 
+protocol DiscardDelegate {
+    func askToDiscardInfo()
+}
+
 class PostViewController: UIViewController {
   
     var userInfo: Account?
@@ -34,6 +38,7 @@ class PostViewController: UIViewController {
     var endDate = Date()
     var avaliableTerm = [Date]()
     var pullDownButton = UIButton()
+    var discardDelegate: DiscardDelegate?
     
     @IBOutlet weak var discardBtn: UIButton!
     @IBOutlet weak var postBtn: UIButton!
@@ -44,13 +49,22 @@ class PostViewController: UIViewController {
         uploadPhoto()
         uploadedPhoto = []
         dismiss(animated: true)
+        discardDelegate?.askToDiscardInfo()
+        postTableView.reloadData()
+    }
+    
+    @IBAction func tapDiscard(_ sender: Any) {
+        uploadedPhoto = []
+        discardDelegate?.askToDiscardInfo()
         postTableView.reloadData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()                
         postBtn.layer.cornerRadius = 10
+        postBtn.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
         discardBtn.layer.cornerRadius = 10
+        discardBtn.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         postTableView.dataSource = self
         postTableView.delegate = self
         imagePickerController.delegate = self
@@ -136,6 +150,7 @@ extension PostViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "InfoTableViewCell",
                 for: indexPath) as? InfoTableViewCell else { fatalError() }
+            discardDelegate = cell
             cell.titleTextField.delegate = self
             cell.rentTextField.delegate = self
             cell.addressTextField.delegate = self
@@ -157,6 +172,11 @@ extension PostViewController: UITableViewDelegate {
 
 // MARK: - uploade photo delegate
 extension PostViewController: UploadPhotoDelegate {
+    func askToDeletePhoto(indexPath: IndexPath) {
+        uploadedPhoto.remove(at: indexPath.row - 1)
+        postTableView.reloadData()
+    }
+
     func askToUploadPhoto() {
         let controller = UIAlertController(title: "請上傳照片", message: nil, preferredStyle: .actionSheet)
         let titleAttributes = [
@@ -198,7 +218,9 @@ extension PostViewController: UploadPhotoDelegate {
 
 // MARK: - ImagePickerControllerDelegate
 extension PostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.originalImage] as? UIImage {
             uploadedPhoto.append(image)
             print(uploadedPhoto)

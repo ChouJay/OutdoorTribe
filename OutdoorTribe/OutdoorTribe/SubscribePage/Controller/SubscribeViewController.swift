@@ -20,12 +20,6 @@ class SubscribeViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let currentUser = firebaseAuth.currentUser else { return }
-        SubscribeManager.shared.loadingSubscriber(currentUserID: currentUser.uid) { [weak self] accountsFromServer in
-            self?.subscribers = accountsFromServer
-            self?.subscribeTableView.reloadData()
-        }
-        
     }
 }
 

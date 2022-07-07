@@ -13,29 +13,45 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U7b-39-fvQ">
-                    <rect key="frame" x="20" y="8" width="374" height="84"/>
-                    <color key="backgroundColor" red="0.17254901959999999" green="0.21176470589999999" blue="0.22352941179999999" alpha="1" colorSpace="calibratedRGB"/>
-                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="20"/>
-                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                    <state key="normal" title="Follow">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </state>
-                    <connections>
-                        <action selector="tapFollowButton:" destination="EyO-bK-R4F" eventType="touchUpInside" id="ReW-Qe-NU1"/>
-                    </connections>
-                </button>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="Ptx-in-sCh">
+                    <rect key="frame" x="8" y="8" width="398" height="84"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U7b-39-fvQ">
+                            <rect key="frame" x="0.0" y="0.0" width="198" height="84"/>
+                            <color key="backgroundColor" red="0.17254901959999999" green="0.21176470589999999" blue="0.22352941179999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="18"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="Follow">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="tapFollowButton:" destination="EyO-bK-R4F" eventType="touchUpInside" id="ReW-Qe-NU1"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WZ4-rs-2P8">
+                            <rect key="frame" x="200" y="0.0" width="198" height="84"/>
+                            <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="18"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="Block">
+                                <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="tapBlockBtn:" destination="EyO-bK-R4F" eventType="touchUpInside" id="9bN-4i-Omk"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                </stackView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="VGT-aH-ZBo"/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="U7b-39-fvQ" firstAttribute="leading" secondItem="EyO-bK-R4F" secondAttribute="leading" constant="20" symbolic="YES" id="2Uk-Xd-Ot7"/>
-                <constraint firstItem="U7b-39-fvQ" firstAttribute="top" secondItem="EyO-bK-R4F" secondAttribute="top" constant="8" id="Lbj-Vb-tHj"/>
-                <constraint firstItem="VGT-aH-ZBo" firstAttribute="bottom" secondItem="U7b-39-fvQ" secondAttribute="bottom" constant="8" id="Ng5-Vx-RQs"/>
-                <constraint firstItem="U7b-39-fvQ" firstAttribute="top" secondItem="EyO-bK-R4F" secondAttribute="top" constant="8" id="ZIc-GH-f4b"/>
-                <constraint firstAttribute="trailing" secondItem="U7b-39-fvQ" secondAttribute="trailing" constant="20" symbolic="YES" id="ovn-Tn-x4Y"/>
+                <constraint firstItem="VGT-aH-ZBo" firstAttribute="bottom" secondItem="Ptx-in-sCh" secondAttribute="bottom" constant="8" id="0dx-O5-8Tl"/>
+                <constraint firstItem="Ptx-in-sCh" firstAttribute="top" secondItem="EyO-bK-R4F" secondAttribute="top" constant="8" id="cBw-2m-awW"/>
+                <constraint firstItem="VGT-aH-ZBo" firstAttribute="trailing" secondItem="Ptx-in-sCh" secondAttribute="trailing" constant="8" id="k3u-Q8-ut2"/>
+                <constraint firstItem="Ptx-in-sCh" firstAttribute="leading" secondItem="VGT-aH-ZBo" secondAttribute="leading" constant="8" id="lDa-5b-tZq"/>
             </constraints>
             <connections>
+                <outlet property="blockBtn" destination="WZ4-rs-2P8" id="51g-Rt-sN2"/>
                 <outlet property="followBtn" destination="U7b-39-fvQ" id="OfC-aa-D0r"/>
             </connections>
             <point key="canvasLocation" x="89" y="184"/>

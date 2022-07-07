@@ -16,7 +16,9 @@ class LeaseInTableViewCell: UITableViewCell {
     var returnOrderDelegate: ReturnOrderDelegate?
     
     @IBOutlet weak var productPhoto: UIImageView!
+    @IBOutlet weak var productName: UILabel!
     
+    @IBOutlet weak var returnDateLabel: UILabel!
     @IBOutlet weak var returnBtn: UIButton!
     
     @IBAction func tapReturnBtn(_ sender: Any) {

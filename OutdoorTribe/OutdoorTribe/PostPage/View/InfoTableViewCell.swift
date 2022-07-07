@@ -94,3 +94,15 @@ class InfoTableViewCell: UITableViewCell {
         })])
     }
 }
+
+// MARK: - discard delegate
+extension InfoTableViewCell: DiscardDelegate {
+    func askToDiscardInfo() {
+        titleTextField.text = ""
+        amountTextField.text = ""
+        addressTextField.text = ""
+        classificationTextField.text = ""
+        startDatePicker.date = .now
+        endDatePicker.date = .now
+    }
+}

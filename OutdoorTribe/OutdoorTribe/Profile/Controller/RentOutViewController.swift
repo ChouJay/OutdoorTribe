@@ -52,6 +52,13 @@ extension RentOutViewController: UITableViewDataSource {
               let url = URL(string: urlString) else { return cell }
         cell.finishOrderDelegate = self
         cell.productPhoto.kf.setImage(with: url)
+        cell.productName.text = rentOrders[indexPath.row].product?.title
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd"
+        guard let date = rentOrders[indexPath.row].leaseTerm.last else { return cell}
+        let dateString = dateFormatter.string(from: date)
+        cell.returnDateLabel.text = dateString
         
         if rentOrders[indexPath.row].orderState == 4 {
             cell.enableFinishBtn()

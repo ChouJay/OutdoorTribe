@@ -97,7 +97,6 @@ class ChatManager {
                     do {
                         message = try document.data(as: Message.self, decoder: Firestore.Decoder())
                         guard let message = message else { return }
-                        print(message)
                         chatMessages.append(message)
                     } catch {
                         print("decode failure: \(error)")
@@ -154,6 +153,7 @@ class ChatManager {
                         guard let message = message else { return }
                         print(message)
                         chatMessages.append(message)
+                        
                     } catch {
                         print("decode failure: \(error)")
                     }

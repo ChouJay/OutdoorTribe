@@ -7,17 +7,23 @@
 
 import UIKit
 
-protocol FollowUserDelegate {
+protocol userInteractDelegate {
     func askVcFollowUser()
+    func askVcBlockUser()
 }
 
 class PhotoWallHeaderReusableView: UICollectionReusableView {
     
-    var delegate: FollowUserDelegate?
+    var delegate: userInteractDelegate?
     
+    @IBOutlet weak var blockBtn: UIButton!
     @IBOutlet weak var followBtn: UIButton!
     @IBAction func tapFollowButton(_ sender: Any) {
         print("tset")
         delegate?.askVcFollowUser()
     }
+    @IBAction func tapBlockBtn(_ sender: Any) {
+        delegate?.askVcBlockUser()
+    }
+    
 }

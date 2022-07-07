@@ -12,6 +12,40 @@ import FirebaseStorage
 class AccountManager {
     static let shared = AccountManager()
     
+    func loadUserBlockList(byUserID: String) {
+        let firestoreDB = Firestore.firestore()
+        firestoreDB.collection("users")
+            .document(byUserID)
+            .collection("blockList")
+            .getDocuments(source: .server) { querySnapShot, error in
+                if error == nil {
+                    print(querySnapShot)
+                }
+            }
+    }
+    
+    func unBlockUser(byUserID: String, unBlockUser: Account) {
+        let firestoreDB = Firestore.firestore()
+        firestoreDB.collection("users")
+            .document(byUserID)
+            .collection("blockList")
+            .document(unBlockUser.userID).delete()
+
+    }
+    
+    func blockUser(byUserID: String, blockUser: Account) {
+        let firestoreDB = Firestore.firestore()
+        firestoreDB.collection("users")
+            .document(byUserID)
+            .collection("blockList")
+            .document(blockUser.userID)
+            .setData(blockUser.toDict) { error in
+                if error == nil {
+                    
+                }
+            }
+    }
+    
     func uploadUserPhoto(uploadedImage: UIImage, userID: String) {
         let group: DispatchGroup = DispatchGroup()
         let firestoreDB = Firestore.firestore()
@@ -34,7 +68,6 @@ class AccountManager {
                 }
             }
         }
-        
         group.notify(queue: DispatchQueue.main) {
             guard urlString != "" else { return }
             firestoreDB.collection("users").document(userID).updateData(["photo": urlString])
@@ -121,5 +154,4 @@ class AccountManager {
             }
         }
     }
-
 }

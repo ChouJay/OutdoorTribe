@@ -46,6 +46,13 @@ extension LeaseInViewController: UITableViewDataSource {
               let url = URL(string: urlString) else { return cell }
         cell.returnOrderDelegate = self
         cell.productPhoto.kf.setImage(with: url)
+        cell.productName.text = leaseOrders[indexPath.row].product?.title
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd"
+        guard let date = leaseOrders[indexPath.row].leaseTerm.last else { return cell}
+        let dateString = dateFormatter.string(from: date)
+        cell.returnDateLabel.text = dateString
         
         if leaseOrders[indexPath.row].orderState == 3 {
             cell.enableReturnBtn()

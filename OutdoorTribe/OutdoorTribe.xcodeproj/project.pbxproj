@@ -316,7 +316,7 @@
 		012F24702859A53D00B891C1 /* OutdoorTribe */ = {
 			isa = PBXGroup;
 			children = (
-				014CF10B287565FE006E4F4E /* Call */,
+				014CF10B287565FE006E4F4E /* CallKit */,
 				01401F742873400F0024D1E1 /* WebRTC */,
 				01401F6B287296BD0024D1E1 /* EditpostPage */,
 				012CCEF6286C75F900BFFE1A /* UserPage */,
@@ -497,13 +497,13 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		014CF10B287565FE006E4F4E /* Call */ = {
+		014CF10B287565FE006E4F4E /* CallKit */ = {
 			isa = PBXGroup;
 			children = (
 				014CF10C28756644006E4F4E /* CallManager.swift */,
 				014CF10E28756AAA006E4F4E /* ProviderDelegate.swift */,
 			);
-			path = Call;
+			path = CallKit;
 			sourceTree = "<group>";
 		};
 		0195EB3F285CAB910015A12A /* MapPage */ = {
