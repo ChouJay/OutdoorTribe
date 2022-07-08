@@ -37,7 +37,6 @@ class PostViewController: UIViewController {
     var startDate = Date()
     var endDate = Date()
     var avaliableTerm = [Date]()
-    var pullDownButton = UIButton()
     var discardDelegate: DiscardDelegate?
     
     @IBOutlet weak var discardBtn: UIButton!

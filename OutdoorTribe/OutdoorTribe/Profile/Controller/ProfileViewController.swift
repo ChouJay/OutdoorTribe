@@ -20,24 +20,15 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var userPhotoImage: UIImageView!
     @IBOutlet weak var bookingTableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
-    
     @IBOutlet weak var postCountLabel: UILabel!
     @IBOutlet weak var subscriCountLabel: UILabel!
     @IBOutlet weak var ratingCountLabel: UILabel!
-    
-    @IBAction func tapLogOutBtn(_ sender: Any) {
-        let firebaseAuth = Auth.auth()
-        do {
-            try firebaseAuth.signOut()
-        } catch {
-            print(error)
-        }
-    }
-    
+    @IBOutlet weak var menuBtn: UIBarButtonItem!
+    @IBOutlet var containViews: [UIView]!
+        
     @IBAction func tapEditPhotoBtn(_ sender: Any) {
         askToUploadPhoto()
     }
-    @IBOutlet var containViews: [UIView]!
     @IBAction func tapSegmentControl(_ sender: UISegmentedControl) {
         for containerView in containViews {
             containerView.isHidden = true
@@ -47,6 +38,8 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setUpPullMenuBtn()
         
         imagePickerController.delegate = self
         
@@ -83,6 +76,24 @@ class ProfileViewController: UIViewController {
             guard let subscribeCount = self?.subscribers.count else { return }
             self?.subscriCountLabel.text = String(subscribeCount)
         }
+    }
+    
+    func setUpPullMenuBtn() {
+//        menuBtn.showsMenuAsPrimaryAction = true
+        menuBtn.menu = UIMenu(children: [
+            UIAction(title: "Logout", handler: { [weak self] action in
+                let firebaseAuth = Auth.auth()
+                do {
+                    try firebaseAuth.signOut()
+                } catch {
+                    print(error)
+                }
+        }),
+            UIAction(title: "Block list", handler: { [weak self] action in
+                guard let childVC = self?.storyboard?.instantiateViewController(withIdentifier: "BlockViewController") as? BlockViewController else { return }
+                childVC.userInfo = self?.userInfo
+                self?.navigationController?.pushViewController(childVC, animated: true)
+        })])
     }
 }
 

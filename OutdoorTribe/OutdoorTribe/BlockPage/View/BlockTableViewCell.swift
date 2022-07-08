@@ -7,18 +7,24 @@
 
 import UIKit
 
+protocol RemoveBlockDelegate {
+    func askToRemoveBlock(tapedCell: UITableViewCell)
+}
+
 class BlockTableViewCell: UITableViewCell {
 
+    var removeBlockDelegate: RemoveBlockDelegate?
     
     @IBOutlet weak var blockPhotoView: UIImageView!
     @IBOutlet weak var blockNameLabel: UILabel!
     @IBOutlet weak var removeBlockBtn: UIButton!
     @IBAction func tapRemoveBlockBtn(_ sender: Any) {
+        removeBlockDelegate?.askToRemoveBlock(tapedCell: self)
     }
-    
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        layoutButton()
         // Initialization code
     }
 
@@ -30,6 +36,7 @@ class BlockTableViewCell: UITableViewCell {
     
     func layoutButton() {
         removeBlockBtn.layer.cornerRadius = 10
+        blockPhotoView.layer.cornerRadius = blockPhotoView.frame.size.height / 2
     }
 
 }

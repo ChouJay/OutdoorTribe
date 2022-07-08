@@ -12,24 +12,42 @@ import FirebaseStorage
 class AccountManager {
     static let shared = AccountManager()
     
-    func loadUserBlockList(byUserID: String) {
+    func loadUserBlockList(byUserID: String, completion: @escaping ([Account]) -> Void) {
+        var blockAccounts = [Account]()
         let firestoreDB = Firestore.firestore()
         firestoreDB.collection("users")
             .document(byUserID)
             .collection("blockList")
-            .getDocuments(source: .server) { querySnapShot, error in
-                if error == nil {
-                    print(querySnapShot)
+            .getDocuments(source: .server) { querySnapShot, err in
+            if err == nil {
+                guard let querySnapShot = querySnapShot else { return }
+                for document in querySnapShot.documents {
+                    do {
+                        var account: Account?
+                        account = try document.data(as: Account.self, decoder: Firestore.Decoder())
+                        guard let account = account else { return }
+                        blockAccounts.append(account)
+                    } catch {
+                        print(error)
+                    }
                 }
+                completion(blockAccounts)
             }
+        }
     }
     
-    func unBlockUser(byUserID: String, unBlockUser: Account) {
+    func unBlockUser(byUserID: String, unBlockUser: Account, completion: @escaping () -> Void) {
         let firestoreDB = Firestore.firestore()
         firestoreDB.collection("users")
             .document(byUserID)
             .collection("blockList")
-            .document(unBlockUser.userID).delete()
+            .document(unBlockUser.userID).delete { err in
+                if err == nil {
+                    completion()
+                } else {
+                    print(err)
+                }
+            }
 
     }
     

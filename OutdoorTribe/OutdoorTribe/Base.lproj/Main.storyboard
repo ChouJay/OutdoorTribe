@@ -1856,12 +1856,10 @@
                         <barButtonItem key="rightBarButtonItem" title="Item" id="6W9-pS-cR5">
                             <imageReference key="image" image="rectangle.portrait.and.arrow.right" catalog="system" symbolScale="large"/>
                             <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <connections>
-                                <action selector="tapLogOutBtn:" destination="Way-sg-Fux" id="2oN-cl-bfj"/>
-                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="menuBtn" destination="6W9-pS-cR5" id="L8h-Jb-zKt"/>
                         <outlet property="photoEditBtn" destination="jhB-dH-amc" id="aBF-4b-Av4"/>
                         <outlet property="postCountLabel" destination="m7k-x2-OP5" id="HRN-en-a8e"/>
                         <outlet property="ratingCountLabel" destination="3Rm-SX-kT4" id="Tez-wV-lI1"/>
@@ -2339,7 +2337,7 @@
         <!--Block View Controller-->
         <scene sceneID="4lj-8u-hnc">
             <objects>
-                <viewController id="jkS-Fn-JOg" customClass="BlockViewController" customModule="OutdoorTribe" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BlockViewController" id="jkS-Fn-JOg" customClass="BlockViewController" customModule="OutdoorTribe" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PZo-qh-u6E">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2348,7 +2346,7 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BlockTableViewCell" id="Fyg-If-vKK" customClass="BlockTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BlockTableViewCell" id="Fyg-If-vKK" customClass="BlockTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="44.5" width="414" height="80.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Fyg-If-vKK" id="aCb-5n-Kfb">
@@ -2398,7 +2396,6 @@
                                             <outlet property="blockNameLabel" destination="mPc-kw-N3m" id="QG7-dw-SY6"/>
                                             <outlet property="blockPhotoView" destination="6Y1-bA-2Pu" id="hum-zU-ODn"/>
                                             <outlet property="removeBlockBtn" destination="wDR-Cc-Odg" id="MlW-61-w1u"/>
-                                            <outlet property="tapRemoveBlockBtn" destination="wDR-Cc-Odg" id="8Od-sF-9EH"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
