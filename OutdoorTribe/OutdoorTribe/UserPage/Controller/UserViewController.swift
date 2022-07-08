@@ -13,19 +13,15 @@ class UserViewController: UIViewController {
     var posterUid = ""
     var othersAccount: Account?
     var allUserProducts = [Product]()
-    
-//    @IBAction func tapblockTest(_ sender: Any) {
-//        let firebaseAuth = Auth.auth()
-//        guard let currentUserID = firebaseAuth.currentUser?.uid,
-//              let otherAccount = othersAccount else { return }
-//
-//        AccountManager.shared.unBlockUser(byUserID: currentUserID, unBlockUser: otherAccount)
-//    }
+    var currentUserID = ""
     
     @IBOutlet weak var productCollectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let firebaseAuth = Auth.auth()
+        guard let userID = firebaseAuth.currentUser?.uid else { return }
+        currentUserID = userID
         
         productCollectionView.register(
             UINib(nibName: "PhotoWallHeaderReusableView", bundle: nil),
@@ -171,6 +167,17 @@ extension UserViewController: UICollectionViewDataSource {
             ofKind: kind,
             withReuseIdentifier: "photoWall",
             for: indexPath) as? PhotoWallHeaderReusableView else { fatalError() }
+        if currentUserID == posterUid {
+            headerView.blockBtn.isEnabled = false
+            headerView.followBtn.isEnabled = false
+            headerView.blockBtn.alpha = 0.5
+            headerView.followBtn.alpha = 0.5
+        } else {
+            headerView.blockBtn.isEnabled = true
+            headerView.followBtn.isEnabled = true
+            headerView.blockBtn.alpha = 1
+            headerView.followBtn.alpha = 1
+        }
         headerView.delegate = self
         headerView.followBtn.layer.cornerRadius = 5
         headerView.blockBtn.layer.cornerRadius = 5
@@ -187,18 +194,14 @@ extension UserViewController: UICollectionViewDelegate {
 // MARK: - follow user delegate
 extension UserViewController: userInteractDelegate {
     func askVcBlockUser() {
-        let firebaseAuth = Auth.auth()
-        guard let currentUserID = firebaseAuth.currentUser?.uid,
-              let otherAccount = othersAccount else { return }
-        
+        guard let otherAccount = othersAccount else { return }
+
         AccountManager.shared.blockUser(byUserID: currentUserID, blockUser: otherAccount)
     }
     
     func askVcFollowUser() {
-        let firebaseAuth = Auth.auth()
-        guard let currentUser = firebaseAuth.currentUser,
-              var othersAccount = othersAccount else { return }
+        guard var othersAccount = othersAccount else { return }
         othersAccount.followerCount += 1
-        SubscribeManager.shared.followUser(currentUserID: currentUser.uid, otherUser: othersAccount)
+        SubscribeManager.shared.followUser(currentUserID: currentUserID, otherUser: othersAccount)
     }
 }
