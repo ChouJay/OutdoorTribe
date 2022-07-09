@@ -25,8 +25,8 @@ class TabBarController: UITabBarController {
         tabBar.layer.cornerRadius = 10
         self.delegate = self
         SignalingClient.shared.delegate = self
-        SignalingClient.shared.listenSdp(from: "George")
-        SignalingClient.shared.listenCandidate(from: "George")
+        SignalingClient.shared.listenSdp(from: "Jay")
+        SignalingClient.shared.listenCandidate(from: "Jay")
         
 //        tabBar.layer.shadowColor = UIColor.yellow.cgColor
 //        tabBar.layer.shadowOffset = CGSize(width: 0.0, height: -3.0)
@@ -79,11 +79,25 @@ extension TabBarController: UITabBarControllerDelegate {
 
 // SignalClient delegate
 extension TabBarController: SignalClientDelegate {
-    func signalClient(_ signalClient: SignalingClient, didReceiveRemoteSdp sdp: RTCSessionDescription, didReceiveSender sender: String?) {
+    func signalClient(_ signalClient: SignalingClient,
+                      didReceiveRemoteSdp sdp: RTCSessionDescription,
+                      didReceiveSender sender: String?) {
         print("Received remote sdp")
         WebRTCClient.shared.peerConnection?.setRemoteDescription(sdp, completionHandler: { error in
-            print(error)
+            if error != nil {
+                print(error)
+            } else {
+                print("sdp sender: \(sender)")
+            }
         })
+        print(sdp.type.rawValue)
+        if sdp.type.rawValue == 0 {
+            CallManager.shared.reportIncomingCall(uuid: CallManager.shared.uuid, handleName: "George") { err in
+                print(err)
+            }
+        } else {
+            CallManager.shared.provider.reportOutgoingCall(with: CallManager.shared.uuid, startedConnectingAt: nil)
+        }
         print("Received sender")
 //        self.oppositePerson = sender ?? ""
         
@@ -93,6 +107,7 @@ extension TabBarController: SignalClientDelegate {
         print("Received remote candidate")
 //        self.remoteCandidateCount += 1
         WebRTCClient.shared.peerConnection?.add(candidate)
+        
     }
     
     func signalClientDidConnect(_ signalClient: SignalingClient) {

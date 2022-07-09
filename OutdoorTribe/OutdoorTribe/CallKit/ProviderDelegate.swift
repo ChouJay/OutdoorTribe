@@ -18,29 +18,42 @@ extension CallManager: CXProviderDelegate {
     func provider(_ provider: CXProvider, perform action: CXStartCallAction) {
         // signal!
         WebRTCClient.shared.offer { sdp in
-            WebRTCClient.shared.send(sdp: sdp, to: "對方")
+            WebRTCClient.shared.send(sdp: sdp, to: "George")
         }
         // configureAudioSession
         WebRTCClient.shared.rtcAudioSession.audioSessionDidActivate(CallManager.shared.configureAudioSession())
         WebRTCClient.shared.rtcAudioSession.isAudioEnabled = true
+        provider.reportOutgoingCall(with: self.uuid, connectedAt: nil) // 還不明確
         action.fulfill()
         
     }
     
+
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
         // configure audio session
         WebRTCClient.shared.rtcAudioSession.audioSessionDidActivate(CallManager.shared.configureAudioSession())
         WebRTCClient.shared.rtcAudioSession.isAudioEnabled = true
         // WebRTC answer
         WebRTCClient.shared.answer { sdp in
-            WebRTCClient.shared.send(sdp: sdp, to: "對方")
-            provider.reportOutgoingCall(with: self.uuid, connectedAt: nil) // 還不明確
+            WebRTCClient.shared.send(sdp: sdp, to: "George")
+           
         }
         action.fulfill()
     }
     
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
-        WebRTCClient.shared.deleteSdpAndCandiadte(for: "對方")
+        let endCallAction = CXEndCallAction(call: uuid)
+        let transaction = CXTransaction(action: endCallAction)
+        callController.request(transaction, completion: { error in
+            if let error = error {
+            print(error)
+            }
+        })
+
+        WebRTCClient.shared.deleteSdpAndCandiadte(for: "George")
+//  simultaneously clean up a green bar flashes on top of the screen
+        provider.reportCall(with: uuid, endedAt: Date(), reason: CXCallEndedReason.remoteEnded)
+        
     }
     
     func provider(_ provider: CXProvider, didActivate audioSession: AVAudioSession) {

@@ -32,7 +32,7 @@ class WebRTCClient: NSObject {
     init(iceServers: [String]) {
         self.iceServers = iceServers
         super.init() // why we need this?
-        createPeerConnection()
+        
     }
 // MARK: - peerConnection
     func createPeerConnection() {
@@ -100,8 +100,9 @@ class WebRTCClient: NSObject {
     func send(sdp rtcSdp: RTCSessionDescription, to person: String) {
         do {
             let dataMessage = try self.encoder.encode(SessionDescription(from: rtcSdp))
-            guard let dict = try JSONSerialization.jsonObject(with: (dataMessage),
-                                                              options: .fragmentsAllowed) as? [String: Any] else { return }
+            guard let dict = try JSONSerialization.jsonObject(
+                with: (dataMessage),
+                options: .fragmentsAllowed) as? [String: Any] else { return }
             Firestore.firestore().collection(person).document("sdp").setData(dict) { err in
                 if let err = err {
                     print("Error send sdp: \(err)")
@@ -118,8 +119,9 @@ class WebRTCClient: NSObject {
         do {
             // what is iceCandidate
             let dataMessage = try self.encoder.encode(IceCandidate(from: rtcIceCandidate))
-            guard let dict = try JSONSerialization.jsonObject(with: dataMessage,
-                                                              options: .fragmentsAllowed) as? [String: Any] else { return }
+            guard let dict = try JSONSerialization.jsonObject(
+                with: dataMessage,
+                options: .fragmentsAllowed) as? [String: Any] else { return }
             Firestore.firestore()
                 .collection(person)
                 .document("candidate")
@@ -129,6 +131,16 @@ class WebRTCClient: NSObject {
                     print("Error send candidate: \(err)")
                 } else {
                     print("Candidate sent!")
+                }
+            }
+            Firestore.firestore()
+                .collection(person)
+                .document("candidate")
+                .setData(["sender": "George"]) { err in
+                if let err = err {
+                    print("Error send candidate: \(err)")
+                } else {
+                    print("sender sent!")
                 }
             }
         } catch {
@@ -163,17 +175,22 @@ class WebRTCClient: NSObject {
                 print("Firestore sdp successfully removed!")
             }
         }
+        Firestore.firestore()
+            .collection(person)
+            .document("candidate")
+            .delete()
+        
         
         Firestore.firestore()
             .collection(person)
             .document("candidate")
-            .delete() { err in
-            if let err = err {
-                print("Error removing firestore candidate: \(err)")
-            } else {
-                print("Firestore candidate successfully removed!")
+            .collection("candidates")
+            .getDocuments(source: .server, completion: { querySnapShot, err in
+            guard let querySnapShot = querySnapShot else { return }
+            for document in querySnapShot.documents {
+                document.reference.delete()
             }
-        }
+        })
     }
     
     func closePeerConnection() {
@@ -211,7 +228,7 @@ extension WebRTCClient: RTCPeerConnectionDelegate {
     
     // will be called, when we call peerConnection.answer()!!
     func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
-        send(candidate: candidate, to: "Jay")
+        send(candidate: candidate, to: "George") //是否只有offer時會call, 還是answer也會？ 感覺answer也要call 較合理
     }
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {

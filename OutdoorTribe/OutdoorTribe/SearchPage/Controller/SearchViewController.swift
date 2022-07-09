@@ -8,10 +8,14 @@
 import UIKit
 import FirebaseFirestore
 import Kingfisher
+import FirebaseAuth
 
 class SearchViewController: UIViewController {
     var products = [Product]()
     var afterFiltedProducts = [Product]()
+    var afterFiltedAndBlockProducts = [Product]()
+    var allUserInfo = [Account]()
+    var blockUsers = [Account]()
     var isFilter = false {
         didSet {
             switch isFilter {
@@ -23,7 +27,6 @@ class SearchViewController: UIViewController {
         }
     }
     @IBOutlet weak var searchBarBackgroundView: UIView!
-    var allUserInfo = [Account]()
     var buttonForDoingFilter = UIButton()
     var buttonForStopFilter = UIButton()
     var backgroundView = UIView()
@@ -73,17 +76,22 @@ class SearchViewController: UIViewController {
         mainGalleryView.collectionViewLayout = createGalleryCompositionalLayout()
         
         tabBarController?.tabBar.clipsToBounds = true
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         ProductManager.shared.retrievePostedProduct { productsFromFireStore in
             self.products = productsFromFireStore
             self.afterFiltedProducts = productsFromFireStore
             self.searchTableView.reloadData()
         }
         navigationController?.navigationBar.isHidden = true
+        
+        guard let currentUserID = Auth.auth().currentUser?.uid else { return }
+        AccountManager.shared.loadUserBlockList(byUserID: currentUserID) { [weak self] accounts in
+            self?.blockUsers = accounts
+        }
     }
     
 // MARK: - page control related
@@ -214,21 +222,35 @@ extension SearchViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         1
     }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        afterFiltedProducts.count
+        afterFiltedAndBlockProducts = []
+        if blockUsers.count == 0 {
+            afterFiltedAndBlockProducts = afterFiltedProducts
+        } else {
+            for product in afterFiltedProducts {
+                for blockUser in blockUsers {
+                    if product.renterUid != blockUser.userID {
+                        afterFiltedAndBlockProducts.append(product)
+                    }
+                }
+            }
+        }
+        print(afterFiltedAndBlockProducts.count)
+        return afterFiltedAndBlockProducts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "SearchTableViewCell",
             for: indexPath) as? SearchTableViewCell else { fatalError() }
-        print(afterFiltedProducts.count)
-        guard let urlString = afterFiltedProducts[indexPath.row].photoUrl.first else { return cell }
+        print(afterFiltedAndBlockProducts.count)
+        guard let urlString = afterFiltedAndBlockProducts[indexPath.row].photoUrl.first else { return cell }
         cell.photoImage.kf.setImage(with: URL(string: urlString))
-        cell.titleLabel.text = afterFiltedProducts[indexPath.row].title
-        cell.renterNameLabel.text = afterFiltedProducts[indexPath.row].renter
-        cell.addressLabel.text = afterFiltedProducts[indexPath.row].addressString
-        for userInfo in allUserInfo where afterFiltedProducts[indexPath.row].renter == userInfo.name {
+        cell.titleLabel.text = afterFiltedAndBlockProducts[indexPath.row].title
+        cell.renterNameLabel.text = afterFiltedAndBlockProducts[indexPath.row].renter
+        cell.addressLabel.text = afterFiltedAndBlockProducts[indexPath.row].addressString
+        for userInfo in allUserInfo where afterFiltedAndBlockProducts[indexPath.row].renter == userInfo.name {
             let totalScore = userInfo.totalScore
             let ratingCount = userInfo.ratingCount
             if ratingCount != 0 {

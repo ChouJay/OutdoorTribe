@@ -42,6 +42,7 @@ class SignalingClient {
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: data, options: .prettyPrinted)
                 let sessionDescription = try self.decoder.decode(SessionDescription.self, from: jsonData)
+    
                 self.delegate?.signalClient(self,
                                             didReceiveRemoteSdp: sessionDescription.rtcSessionDescription,
                                             didReceiveSender: person)
@@ -65,16 +66,14 @@ class SignalingClient {
             querySnapShot?.documentChanges.forEach({ diff in
                 if diff.type == .added {
                     do {
+                        print(diff.document.data())
                         // what is ?  why documents.first?
                         let jsonData = try JSONSerialization.data(
                             withJSONObject: documents.first?.data(),
                             options: .prettyPrinted)
                         let iceCandidate = try self.decoder.decode(IceCandidate.self, from: jsonData)
-                        print(iceCandidate)
+                        print("iceCandidate: \(iceCandidate)")
                         self.delegate?.signalClient(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)
-                        CallManager.shared.reportIncomingCall(uuid: UUID(), handleName: "對方") { err in
-                            print(err)
-                        }
                     } catch {
                         debugPrint("Warning: Could not decode candidate data: \(error)")
                         return
