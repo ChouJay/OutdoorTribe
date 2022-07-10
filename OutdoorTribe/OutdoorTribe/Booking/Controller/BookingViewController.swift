@@ -10,13 +10,12 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 class BookingViewController: UIViewController {
-    var choosedOrderDocument: QueryDocumentSnapshot?
-    var applyOrder: Order?
+    var applyingOrder: Order?
     
     @IBOutlet weak var bookInfoTableView: UITableView!
     
     @IBAction func tapAgreeButton(_ sender: UIButton) {
-        guard let documentID = choosedOrderDocument?.data()["orderID"] as? String else { return }
+        guard let documentID = applyingOrder?.orderID else { return }
         OrderManger.shared.updateStateToBooked(documentId: documentID)
         navigationController?.popViewController(animated: true)
     }
@@ -29,13 +28,6 @@ class BookingViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        do {
-            applyOrder = try choosedOrderDocument?.data(as: Order.self, decoder: Firestore.Decoder())
-            guard let applyOrder = applyOrder else { return }
-        } catch {
-            print("decode failure: \(error)")
-        }
     }
 }
 
@@ -50,8 +42,8 @@ extension BookingViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "BookingPhotoTableViewCell",
                 for: indexPath) as? BookingPhotoTableViewCell else { fatalError() }
-            guard let product = choosedOrderDocument?.data()["product"] as? [String: Any] else { return cell }
-            guard let urlStringArray = product["photoUrl"] as? [String] else { return cell }
+            guard let product = applyingOrder?.product else { return cell }
+            guard let urlStringArray = applyingOrder?.product?.photoUrl else { return cell }
             cell.galleryUrlStrings = urlStringArray
             cell.layoutPageController()
             return cell
@@ -59,10 +51,10 @@ extension BookingViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "BookingInfoTableViewCell",
                 for: indexPath) as? BookingInfoTableViewCell else { fatalError() }
-            cell.lessorNameLabel.text = applyOrder?.lessor
-            cell.productName.text = applyOrder?.product?.title
-            cell.addressLabel.text = applyOrder?.product?.addressString
-            guard let requiredAmount = applyOrder?.requiredAmount else { return cell }
+            cell.lessorNameLabel.text = applyingOrder?.lessor
+            cell.productName.text = applyingOrder?.product?.title
+            cell.addressLabel.text = applyingOrder?.product?.addressString
+            guard let requiredAmount = applyingOrder?.requiredAmount else { return cell }
             cell.amountLabel.text = String(requiredAmount)
             
             return cell

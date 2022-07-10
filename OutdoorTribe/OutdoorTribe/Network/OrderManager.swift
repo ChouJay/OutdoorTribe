@@ -90,16 +90,29 @@ class OrderManger {
         }
     }
     
-    func retrieveApplyingOrder(userName: String,_ completion: @escaping ([QueryDocumentSnapshot]) -> ()) {
-        var documents = [QueryDocumentSnapshot]()
+    func retrieveApplyingOrder(userName: String, _ completion: @escaping ([Order]) -> Void) {
+        var orders = [Order]()
         let firstoreDb = Firestore.firestore()
-        firstoreDb.collection("orders").whereField("orderState", isEqualTo: 0).whereField("renter", isEqualTo: userName).getDocuments(source: .server) { querySnapShot, error in
-            if error == nil && querySnapShot != nil {
-                for document in querySnapShot!.documents {
-                    documents.append(document)
-                    print(documents)
+        firstoreDb.collection("orders")
+            .whereField("orderState", isEqualTo: 0)
+            .whereField("renter", isEqualTo: userName)
+            .getDocuments(source: .server) { querySnapShot, error in
+            guard let querySnapShot = querySnapShot else { return }
+            if error == nil {
+                for document in querySnapShot.documents {
+                    let order: Order?
+                    do {
+                        order = try document.data(as: Order.self, decoder: Firestore.Decoder())
+                        guard let order = order else { return }
+                        print(order)
+                        if order.renter == userName {
+                            orders.append(order)
+                        }
+                    } catch {
+                        print("decode failure: \(error)")
+                    }
                 }
-                completion(documents)
+                completion(orders)
             }
         }
     }

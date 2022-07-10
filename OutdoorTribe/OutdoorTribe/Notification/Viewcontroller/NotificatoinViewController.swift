@@ -16,7 +16,7 @@ class NotificatoinViewController: UIViewController {
     var allUserInfo = [Account]()
     var blockUsers = [Account]()
     var userInfo: Account?
-    var orderDocumentsFromFirestore = [QueryDocumentSnapshot]()
+    var applyingOrders = [Order]()
     var chatRooms = [ChatRoom]()
     lazy var collectionViewFromCell = UICollectionView()
     
@@ -52,6 +52,7 @@ class NotificatoinViewController: UIViewController {
                     if self?.blockUsers.count == 0 {
                         self?.chatRooms = chatRoomsFromServer
                     } else {
+                        self?.chatRooms = []
                         for chatRoom in chatRoomsFromServer {
                             guard let blockUsers = self?.blockUsers else { return }
                             for blockUser in blockUsers {
@@ -63,8 +64,20 @@ class NotificatoinViewController: UIViewController {
                     }
                     self?.chatRoomTableView.reloadSections(IndexSet(integer: 1), with: .none)
                 }
-                OrderManger.shared.retrieveApplyingOrder(userName: userInfo.name) { documents in
-                    self?.orderDocumentsFromFirestore = documents
+                OrderManger.shared.retrieveApplyingOrder(userName: userInfo.name) { ordersFromFirestore in
+                    if self?.blockUsers.count == 0 {
+                        self?.applyingOrders = ordersFromFirestore
+                    } else {
+                        self?.applyingOrders = []
+                        for order in ordersFromFirestore {
+                            guard let blockUsers = self?.blockUsers else { return }
+                            for blockUser in blockUsers {
+                                if order.lessorUid != blockUser.userID {
+                                    self?.applyingOrders.append(order)
+                                }
+                            }
+                        }
+                    }
                     self?.chatRoomTableView.reloadSections(IndexSet(integer: 0), with: .none)
                 }
             }
@@ -97,7 +110,7 @@ extension NotificatoinViewController: UITableViewDataSource {
                 withIdentifier: "ApplyTableViewCell",
                 for: indexPath) as? ApplyTableViewCell else { fatalError() }
         
-            cell.orderDocumentsFromFirestore = orderDocumentsFromFirestore
+            cell.applyingOrders = applyingOrders
             collectionViewFromCell = cell.applyCollectionView
             return cell
         case 1:
@@ -161,7 +174,7 @@ extension NotificatoinViewController {
                   let indexPath = collectionViewFromCell.indexPath(for: applyCollectionViewCell)
             else { return }
             print(indexPath)
-            bookingViewController.choosedOrderDocument = orderDocumentsFromFirestore[indexPath.row]
+            bookingViewController.applyingOrder = applyingOrders[indexPath.row]
         case "ToChatViewController":
             guard let chatVC = segue.destination as? ChatViewController,
                   let chatListTableViewCell = sender as? ChatListTableViewCell,
