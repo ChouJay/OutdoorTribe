@@ -90,19 +90,39 @@ class MapViewController: UIViewController {
         super.viewWillAppear(animated)
         mapView.removeOverlays(mapView.overlays)
         navigationController?.navigationBar.isHidden = true
-        ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
-            self?.products = postedProducts
-            self?.afterFiltedProducts = postedProducts
-    
-            self?.mapView.layoutView(from: self!.afterFiltedProducts)
-            self?.productCollectionView.reloadData()
+        
+        if let currentUserID = Auth.auth().currentUser?.uid {
+            AccountManager.shared.loadUserBlockList(byUserID: currentUserID) { [weak self] accounts in
+                self?.blockUsers = accounts
+                ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
+                    self?.products = postedProducts
+                    self?.afterFiltedProducts = []
+                    guard let blockUsers = self?.blockUsers,
+                          let afterFiltedProducts = self?.afterFiltedProducts else { return }
+                    if blockUsers.count == 0 {
+                        self?.afterFiltedProducts = postedProducts
+                    } else {
+                        for product in postedProducts {
+                            for blockUser in blockUsers {
+                                if product.renterUid != blockUser.userID {
+                                    self?.afterFiltedProducts.append(product)
+                                }
+                            }
+                        }
+                    }
+                    self?.mapView.layoutView(from: self!.afterFiltedProducts)
+                    self?.productCollectionView.reloadData()
+                }
+            }
+        } else {
+            ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
+                self?.products = postedProducts
+                self?.afterFiltedProducts = postedProducts
+                self?.mapView.layoutView(from: self!.afterFiltedProducts)
+                self?.productCollectionView.reloadData()
+            }
         }
         productCollectionView.isHidden = true
-        
-        guard let currentUserID = Auth.auth().currentUser?.uid else { return }
-        AccountManager.shared.loadUserBlockList(byUserID: currentUserID) { [weak self] accounts in
-            self?.blockUsers = accounts
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -151,20 +171,7 @@ class MapViewController: UIViewController {
 // MARK: - collection view dataSource
 extension MapViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        afterFiltedAndBlockProducts = []
-        if blockUsers.count == 0 {
-            afterFiltedAndBlockProducts = afterFiltedProducts
-            
-        } else {
-            for product in afterFiltedProducts {
-                for blockUser in blockUsers {
-                    if product.renterUid != blockUser.userID {
-                        afterFiltedAndBlockProducts.append(product)
-                    }
-                }
-            }
-        }
-        return afterFiltedAndBlockProducts.count
+        return afterFiltedProducts.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -174,12 +181,12 @@ extension MapViewController: UICollectionViewDataSource {
             for: indexPath) as? MapCollectionViewCell else { fatalError() }
         item.hideEstimateTimeLabel()
         item.routeDelegae = self
-        guard let urlString = afterFiltedAndBlockProducts[indexPath.row].photoUrl.first,
+        guard let urlString = afterFiltedProducts[indexPath.row].photoUrl.first,
               let url = URL(string: urlString) else { return item }
         item.photoImageView.kf.setImage(with: url)
-        item.titleLabel.text = afterFiltedAndBlockProducts[indexPath.row].title
-        item.renterNameLabel.text = afterFiltedAndBlockProducts[indexPath.row].renter
-        for userInfo in allUserInfo where afterFiltedAndBlockProducts[indexPath.row].renter == userInfo.name {
+        item.titleLabel.text = afterFiltedProducts[indexPath.row].title
+        item.renterNameLabel.text = afterFiltedProducts[indexPath.row].renter
+        for userInfo in allUserInfo where afterFiltedProducts[indexPath.row].renter == userInfo.name {
             let totalScore = userInfo.totalScore
             let ratingCount = userInfo.ratingCount
             if ratingCount != 0 {
@@ -249,7 +256,19 @@ extension MapViewController: UISearchBarDelegate {
             case false:
                 ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
                     self?.products = postedProducts
-                    self?.afterFiltedProducts = postedProducts
+                    self?.afterFiltedProducts = []
+                    guard let blockUsers = self?.blockUsers else { return }
+                    if blockUsers.count == 0 {
+                        self?.afterFiltedProducts = postedProducts
+                    } else {
+                        for product in postedProducts {
+                            for blockUser in blockUsers {
+                                if product.renterUid != blockUser.userID {
+                                    self?.afterFiltedProducts.append(product)
+                                }
+                            }
+                        }
+                    }
                     self?.mapView.layoutView(from: self!.afterFiltedProducts)
                     self?.productCollectionView.reloadData()
                 }
@@ -271,7 +290,19 @@ extension MapViewController: UISearchBarDelegate {
             guard let keyWord = searchBar.text else { return }
             ProductManager.shared.searchPostedProduct(keyWord: keyWord) { [weak self] postedProducts in
                 self?.products = postedProducts
-                self?.afterFiltedProducts = postedProducts
+                self?.afterFiltedProducts = []
+                guard let blockUsers = self?.blockUsers else { return }
+                if blockUsers.count == 0 {
+                    self?.afterFiltedProducts = postedProducts
+                } else {
+                    for product in postedProducts {
+                        for blockUser in blockUsers {
+                            if product.renterUid != blockUser.userID {
+                                self?.afterFiltedProducts.append(product)
+                            }
+                        }
+                    }
+                }
                 self?.mapView.layoutView(from: self!.afterFiltedProducts)
                 self?.productCollectionView.reloadData()
             }
@@ -379,7 +410,15 @@ extension MapViewController: UISearchBarDelegate {
             let availableSet = Set(product.availableDate)
             let filterSet = Set(daysBetweenTwoDate(startDate: startDatePicker.date, endDate: endDatePicker.date))
             if filterSet.isSubset(of: availableSet) {
-                afterFiltedProducts.append(product)
+                if blockUsers.count == 0 {
+                    afterFiltedProducts.append(product)
+                } else {
+                    for blockUser in blockUsers {
+                        if product.renterUid != blockUser.userID {
+                            afterFiltedProducts.append(product)
+                        }
+                    }
+                }
             }
         }
         isFilter = true
@@ -489,6 +528,6 @@ extension MapViewController {
         guard let indexPath = sender as? IndexPath,
               let detailViewController = segue.destination as? DetailViewController else { return }
         
-        detailViewController.chooseProduct = products[indexPath.row]
+        detailViewController.chooseProduct = afterFiltedProducts[indexPath.row]
     }
 }
