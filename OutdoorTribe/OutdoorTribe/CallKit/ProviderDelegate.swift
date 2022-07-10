@@ -18,11 +18,12 @@ extension CallManager: CXProviderDelegate {
     func provider(_ provider: CXProvider, perform action: CXStartCallAction) {
         // signal!
         WebRTCClient.shared.offer { sdp in
-            WebRTCClient.shared.send(sdp: sdp, to: "Jay")
+            WebRTCClient.shared.send(sdp: sdp, to: "George")
         }
         // configureAudioSession
         WebRTCClient.shared.rtcAudioSession.audioSessionDidActivate(CallManager.shared.configureAudioSession())
         WebRTCClient.shared.rtcAudioSession.isAudioEnabled = true
+        print(provider)
         provider.reportOutgoingCall(with: self.uuid, connectedAt: nil) // 還不明確
         action.fulfill()
         
@@ -34,7 +35,7 @@ extension CallManager: CXProviderDelegate {
         WebRTCClient.shared.rtcAudioSession.isAudioEnabled = true
         // WebRTC answer
         WebRTCClient.shared.answer { sdp in
-            WebRTCClient.shared.send(sdp: sdp, to: "Jay")
+            WebRTCClient.shared.send(sdp: sdp, to: "George")
             action.fulfill()
         }
     }

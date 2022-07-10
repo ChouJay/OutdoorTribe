@@ -14,6 +14,7 @@ class NotificatoinViewController: UIViewController {
     
     let firestoreAuth = Auth.auth()
     var allUserInfo = [Account]()
+    var blockUsers = [Account]()
     var userInfo: Account?
     var orderDocumentsFromFirestore = [QueryDocumentSnapshot]()
     var chatRooms = [ChatRoom]()
@@ -42,16 +43,30 @@ class NotificatoinViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         guard let uid = firestoreAuth.currentUser?.uid else { return }
-        AccountManager.shared.getUserInfo(by: uid) { [weak self] account in
-            self?.userInfo = account
-            guard let userInfo = self?.userInfo else { return }
-            ChatManager.shared.loadingChatRoom(userName: userInfo.name) { [weak self] chatRoomsFromServer in
-                self?.chatRooms = chatRoomsFromServer
-                self?.chatRoomTableView.reloadSections(IndexSet(integer: 1), with: .none)
-            }
-            OrderManger.shared.retrieveApplyingOrder(userName: userInfo.name) { documents in
-                self?.orderDocumentsFromFirestore = documents
-                self?.chatRoomTableView.reloadSections(IndexSet(integer: 0), with: .none)
+        AccountManager.shared.loadUserBlockList(byUserID: uid) { [weak self] accounts in
+            self?.blockUsers = accounts
+            AccountManager.shared.getUserInfo(by: uid) { [weak self] account in
+                self?.userInfo = account
+                guard let userInfo = self?.userInfo else { return }
+                ChatManager.shared.loadingChatRoom(userName: userInfo.name) { [weak self] chatRoomsFromServer in
+                    if self?.blockUsers.count == 0 {
+                        self?.chatRooms = chatRoomsFromServer
+                    } else {
+                        for chatRoom in chatRoomsFromServer {
+                            guard let blockUsers = self?.blockUsers else { return }
+                            for blockUser in blockUsers {
+                                if chatRoom.chaterOne != blockUser.name && chatRoom.chaterTwo != blockUser.name {
+                                    self?.chatRooms.append(chatRoom)
+                                }
+                            }
+                        }
+                    }
+                    self?.chatRoomTableView.reloadSections(IndexSet(integer: 1), with: .none)
+                }
+                OrderManger.shared.retrieveApplyingOrder(userName: userInfo.name) { documents in
+                    self?.orderDocumentsFromFirestore = documents
+                    self?.chatRoomTableView.reloadSections(IndexSet(integer: 0), with: .none)
+                }
             }
         }
     }

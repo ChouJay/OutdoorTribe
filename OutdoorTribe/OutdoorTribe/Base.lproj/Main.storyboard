@@ -2334,6 +2334,46 @@
             </objects>
             <point key="canvasLocation" x="2643" y="1901"/>
         </scene>
+        <!--End Call View Controller-->
+        <scene sceneID="Rmm-ue-qlv">
+            <objects>
+                <viewController storyboardIdentifier="EndCallViewController" id="mJx-oQ-a7w" customClass="EndCallViewController" customModule="OutdoorTribe" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dj6-j2-7yo">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h8d-is-IjQ">
+                                <rect key="frame" x="157" y="612" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="0Hu-zS-ce9"/>
+                                    <constraint firstAttribute="width" constant="100" id="ELD-fz-4qS"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="systemRedColor"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal">
+                                    <imageReference key="image" image="phone.down.circle.fill" catalog="system" symbolScale="large"/>
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="100"/>
+                                </state>
+                                <connections>
+                                    <action selector="tapEndCallBtn:" destination="mJx-oQ-a7w" eventType="touchUpInside" id="gbq-Ge-4pp"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="zlx-XH-Lxm"/>
+                        <color key="backgroundColor" red="0.30367054845374147" green="0.29045489429999999" blue="0.28003409499999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="zlx-XH-Lxm" firstAttribute="bottom" secondItem="h8d-is-IjQ" secondAttribute="bottom" constant="150" id="1f2-UY-A2U"/>
+                            <constraint firstItem="h8d-is-IjQ" firstAttribute="centerX" secondItem="zlx-XH-Lxm" secondAttribute="centerX" id="JU5-AU-kEw"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="endCallBtn" destination="h8d-is-IjQ" id="Ac2-Kh-G2T"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kdd-8O-gmW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-958" y="2776"/>
+        </scene>
         <!--Block View Controller-->
         <scene sceneID="4lj-8u-hnc">
             <objects>
@@ -3276,7 +3316,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="jaS-GZ-trm"/>
+        <segue reference="ex2-Y5-saD"/>
         <segue reference="9fu-0O-WUc"/>
         <segue reference="dHE-vd-JrA"/>
         <segue reference="gev-hz-6wC"/>
@@ -3299,6 +3339,7 @@
         <image name="person.circle" catalog="system" width="128" height="121"/>
         <image name="person.crop.circle" catalog="system" width="128" height="121"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
+        <image name="phone.down.circle.fill" catalog="system" width="128" height="121"/>
         <image name="photo" catalog="system" width="128" height="93"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="plus.circle.fill" catalog="system" width="128" height="121"/>
@@ -3328,6 +3369,9 @@
         </systemColor>
         <systemColor name="systemGroupedBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -39,13 +39,18 @@ class CallManager: NSObject {
     
     func startCall(handleName: String) {
         let handle = CXHandle(type: .generic, value: handleName)
-        let startCallAction = CXStartCallAction(call: UUID(), handle: handle) // handleName為"對方"的名字
+        let startCallAction = CXStartCallAction(call: uuid, handle: handle) // handleName為"對方"的名字
         startCallAction.isVideo = false
         let transaction = CXTransaction(action: startCallAction)
         requestTransaction(transaction)
         
-        provider.reportOutgoingCall(with: uuid, startedConnectingAt: nil)
-        
+    }
+    
+    func endCall() {
+      let endCallAction = CXEndCallAction(call: uuid)
+      let transaction = CXTransaction(action: endCallAction)
+      
+      requestTransaction(transaction)
     }
     
     private func requestTransaction(_ transaction: CXTransaction) {

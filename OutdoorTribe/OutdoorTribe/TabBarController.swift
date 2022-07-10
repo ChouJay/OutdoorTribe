@@ -25,8 +25,8 @@ class TabBarController: UITabBarController {
         tabBar.layer.cornerRadius = 10
         self.delegate = self
         SignalingClient.shared.delegate = self
-        SignalingClient.shared.listenSdp(from: "George")
-        SignalingClient.shared.listenCandidate(from: "George")
+        SignalingClient.shared.listenSdp(from: "Jay")
+        SignalingClient.shared.listenCandidate(from: "Jay")
         
 //        tabBar.layer.shadowColor = UIColor.yellow.cgColor
 //        tabBar.layer.shadowOffset = CGSize(width: 0.0, height: -3.0)
@@ -90,22 +90,19 @@ extension TabBarController: SignalClientDelegate {
                 print("sdp sender: \(sender)")
             }
         })
-        print(sdp.type.rawValue)
         if sdp.type.rawValue == 0 {
-            CallManager.shared.reportIncomingCall(uuid: CallManager.shared.uuid, handleName: "Jay") { err in
+            CallManager.shared.reportIncomingCall(uuid: CallManager.shared.uuid, handleName: "George") { err in
                 print(err)
             }
         } else {
             CallManager.shared.provider.reportOutgoingCall(with: CallManager.shared.uuid, startedConnectingAt: nil)
         }
         print("Received sender")
-//        self.oppositePerson = sender ?? ""
         
     }
     
     func signalClient(_ signalClient: SignalingClient, didReceiveCandidate candidate: RTCIceCandidate) {
         print("Received remote candidate")
-//        self.remoteCandidateCount += 1
         WebRTCClient.shared.peerConnection?.add(candidate)
         
     }

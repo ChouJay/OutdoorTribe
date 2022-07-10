@@ -136,7 +136,7 @@ class WebRTCClient: NSObject {
             Firestore.firestore()
                 .collection(person)
                 .document("candidate")
-                .setData(["sender": "George"]) { err in
+                .setData(["sender": "Jay"]) { err in
                 if let err = err {
                     print("Error send candidate: \(err)")
                 } else {
@@ -228,7 +228,7 @@ extension WebRTCClient: RTCPeerConnectionDelegate {
     
     // will be called, when we call peerConnection.answer()!!
     func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
-        send(candidate: candidate, to: "Jay") //是否只有offer時會call, 還是answer也會？ 感覺answer也要call 較合理
+        send(candidate: candidate, to: "George") //是否只有offer時會call, 還是answer也會？ 感覺answer也要call 較合理
     }
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {

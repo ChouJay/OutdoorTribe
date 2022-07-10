@@ -9,6 +9,7 @@ import UIKit
 
 protocol MapRouteDelegate {
     func showRoute(sender: MapCollectionViewCell)
+    func showCallUI()
 }
 
 class MapCollectionViewCell: UICollectionViewCell {
@@ -27,8 +28,9 @@ class MapCollectionViewCell: UICollectionViewCell {
         routeDelegae?.showRoute(sender: self)
     }
     @IBAction func tapCallButton(_ sender: UIButton) {
-        WebRTCClient.shared.createPeerConnection()
-        CallManager.shared.startCall(handleName: "Jay")
+//        WebRTCClient.shared.createPeerConnection()
+        CallManager.shared.startCall(handleName: "George")
+        routeDelegae?.showCallUI()
     }
     
     override func prepareForReuse() {

@@ -66,6 +66,7 @@
 		014CF1182877149A006E4F4E /* BlockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014CF1172877149A006E4F4E /* BlockViewController.swift */; };
 		014CF11A287714F1006E4F4E /* BlockTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014CF119287714F1006E4F4E /* BlockTableViewCell.swift */; };
 		0168A074287A6BED00227491 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0168A073287A6BED00227491 /* GoogleService-Info.plist */; };
+		0168A077287AA0A000227491 /* EndCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0168A076287AA0A000227491 /* EndCallViewController.swift */; };
 		0195EB42285CABB30015A12A /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB41285CABB30015A12A /* MapViewController.swift */; };
 		0195EB46285CD4510015A12A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB45285CD4510015A12A /* DetailViewController.swift */; };
 		0195EB49285CDBD50015A12A /* DetailGalleryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB48285CDBD50015A12A /* DetailGalleryTableViewCell.swift */; };
@@ -157,6 +158,7 @@
 		014CF1172877149A006E4F4E /* BlockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockViewController.swift; sourceTree = "<group>"; };
 		014CF119287714F1006E4F4E /* BlockTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTableViewCell.swift; sourceTree = "<group>"; };
 		0168A073287A6BED00227491 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0168A076287AA0A000227491 /* EndCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndCallViewController.swift; sourceTree = "<group>"; };
 		0195EB41285CABB30015A12A /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		0195EB45285CD4510015A12A /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		0195EB48285CDBD50015A12A /* DetailGalleryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGalleryTableViewCell.swift; sourceTree = "<group>"; };
@@ -320,6 +322,7 @@
 		012F24702859A53D00B891C1 /* OutdoorTribe */ = {
 			isa = PBXGroup;
 			children = (
+				0168A075287AA08500227491 /* EndCallPage */,
 				014CF11228771454006E4F4E /* BlockPage */,
 				014CF10B287565FE006E4F4E /* CallKit */,
 				01401F742873400F0024D1E1 /* WebRTC */,
@@ -534,6 +537,14 @@
 				014CF119287714F1006E4F4E /* BlockTableViewCell.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		0168A075287AA08500227491 /* EndCallPage */ = {
+			isa = PBXGroup;
+			children = (
+				0168A076287AA0A000227491 /* EndCallViewController.swift */,
+			);
+			path = EndCallPage;
 			sourceTree = "<group>";
 		};
 		0195EB3F285CAB910015A12A /* MapPage */ = {
@@ -911,6 +922,7 @@
 				01985D2D285C60FF00BCD866 /* Product.swift in Sources */,
 				01053E8C285B385C0074B125 /* ProductManager.swift in Sources */,
 				0195EB4D285DDCDA0015A12A /* DetailInfoTableViewCell.swift in Sources */,
+				0168A077287AA0A000227491 /* EndCallViewController.swift in Sources */,
 				014CF10D28756644006E4F4E /* CallManager.swift in Sources */,
 				0195EB5E285EF58D0015A12A /* NotificatoinViewController.swift in Sources */,
 				0195EB6C285F1EC30015A12A /* BookingPhotoTableViewCell.swift in Sources */,
