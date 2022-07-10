@@ -378,7 +378,7 @@ extension MapViewController: UISearchBarDelegate {
             hStack.addArrangedSubview(subView)
         }
         hStack.axis = .horizontal
-        hStack.distribution = .fill
+        hStack.distribution = .fillProportionally
         backgroundView.addSubview(hStack)
         
         hStack.translatesAutoresizingMaskIntoConstraints = false
