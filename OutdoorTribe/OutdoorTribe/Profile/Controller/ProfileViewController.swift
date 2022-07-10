@@ -63,7 +63,7 @@ class ProfileViewController: UIViewController {
                 score = totalScore / account.ratingCount
             }
             let ratingCount = Int(account.ratingCount)
-            self?.ratingCountLabel.text = String(score) + "(\(String(ratingCount)))"
+            self?.ratingCountLabel.text = String(format: "%.1f", score) + "(\(String(ratingCount)))"
         }
         AccountManager.shared.getUserPost(byUserID: uid) { [weak self] productsFromServer in
             self?.allUserProducts = productsFromServer
@@ -81,7 +81,7 @@ class ProfileViewController: UIViewController {
     func setUpPullMenuBtn() {
 //        menuBtn.showsMenuAsPrimaryAction = true
         menuBtn.menu = UIMenu(children: [
-            UIAction(title: "Logout", handler: { [weak self] action in
+            UIAction(title: "Logout", handler: { _ in
                 let firebaseAuth = Auth.auth()
                 do {
                     try firebaseAuth.signOut()
@@ -89,11 +89,27 @@ class ProfileViewController: UIViewController {
                     print(error)
                 }
         }),
-            UIAction(title: "Block list", handler: { [weak self] action in
-                guard let childVC = self?.storyboard?.instantiateViewController(withIdentifier: "BlockViewController") as? BlockViewController else { return }
+            UIAction(title: "Block list", handler: { [weak self] _ in
+                guard let childVC = self?.storyboard?.instantiateViewController(
+                    withIdentifier: "BlockViewController") as? BlockViewController else { return }
                 childVC.userInfo = self?.userInfo
                 self?.navigationController?.pushViewController(childVC, animated: true)
-        })])
+        }),
+            UIAction(title: "Delete account", handler: { _ in
+                let firebaseAuth = Auth.auth()
+                guard let currentUserID = firebaseAuth.currentUser?.uid else { return }
+                firebaseAuth.currentUser?.delete(completion: { err in
+                    if err == nil {
+                        AccountManager.shared.deleteUserAccount(userID: currentUserID)
+                        SubscribeManager.shared.deleteOthersSubscriptionWithUser(userID: currentUserID)
+                        ProductManager.shared.deleteProductWithUser(userID: currentUserID)
+                        OrderManger.shared.deleteOrderByUser(userID: currentUserID)
+                    } else {
+                        print(err)
+                    }
+                })
+        })
+        ])
     }
 }
 

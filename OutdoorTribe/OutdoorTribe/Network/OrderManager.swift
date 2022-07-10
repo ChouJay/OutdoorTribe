@@ -11,6 +11,25 @@ import FirebaseFirestore
 class OrderManger {
     static let shared = OrderManger()
     
+    func deleteOrderByUser(userID: String) {
+        let firestoreDb = Firestore.firestore()
+        firestoreDb.collection("orders").getDocuments(source: .server) { querySnapShot, err in
+            if err == nil {
+                guard let querySnapShot = querySnapShot else { return }
+                for document in querySnapShot.documents {
+                    print(document.data())
+                    if let productRenterID = document.data()["renterUid"] as? String {
+                        if userID == productRenterID {
+                            document.reference.delete()
+                        }
+                    }
+                }
+            } else {
+                print(err)
+            }
+        }
+    }
+    
     func retrieveLeasingOrder(userName: String, _ completion: @escaping ([Order]) -> Void) {
         let firstoreDb = Firestore.firestore()
         firstoreDb.collection("orders")

@@ -165,7 +165,7 @@ extension DetailViewController: UITableViewDataSource {
             if renterAccount.ratingCount != 0 {
                 score = totalScore / renterAccount.ratingCount
             }
-            cell.scoreLabel.text = String(score)+"(\(String(Int(renterAccount.ratingCount))))"
+            cell.scoreLabel.text = String(format: "%.1f", score) + "(\(String(Int(renterAccount.ratingCount))))"
         
             if renterAccount.photo != "" {
                 guard let url = URL(string: renterAccount.photo) else { return cell }

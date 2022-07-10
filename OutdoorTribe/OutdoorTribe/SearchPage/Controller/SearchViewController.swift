@@ -254,7 +254,7 @@ extension SearchViewController: UITableViewDataSource {
             let ratingCount = userInfo.ratingCount
             if ratingCount != 0 {
                 let score = totalScore / ratingCount
-                cell.scoreLabel.text = String(score) + "(\(String(Int(ratingCount))))"
+                cell.scoreLabel.text = String(format: "%.1f", score) + "(\(String(Int(ratingCount))))"
             } else {
                 cell.scoreLabel.text = "no rating"
             }

@@ -136,7 +136,7 @@ extension UserViewController: UICollectionViewDataSource {
             if othersAccount.ratingCount != 0 {
                 score = totalScore / othersAccount.ratingCount
             }
-            item.scoreLabel.text = String(score)
+            item.scoreLabel.text = String(format: "%.1f", score)
             item.nameLabel.text = othersAccount.name
             item.followerCountLabel.text = String(othersAccount.followerCount)
             item.postCountLabel.text = String(allUserProducts.count)

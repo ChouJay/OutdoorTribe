@@ -108,7 +108,7 @@ extension EditPostViewController: UICollectionViewDataSource {
             if myAccount.ratingCount != 0 {
                 score = totalScore / myAccount.ratingCount
             }
-            item.scoreLabel.text = String(score)
+            item.scoreLabel.text = String(format: "%.1f", score)
             item.nameLabel.text = myAccount.name
             item.followerCountLabel.text = String(myAccount.followerCount)
             item.postCountLabel.text = String(allUserProducts.count)

@@ -12,6 +12,11 @@ import FirebaseStorage
 class AccountManager {
     static let shared = AccountManager()
     
+    func deleteUserAccount(userID: String) {
+        let firestoreDB = Firestore.firestore()
+        firestoreDB.collection("users").document(userID).delete()
+    }
+    
     func loadUserBlockList(byUserID: String, completion: @escaping ([Account]) -> Void) {
         var blockAccounts = [Account]()
         let firestoreDB = Firestore.firestore()

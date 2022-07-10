@@ -13,6 +13,25 @@ import FirebaseAuth
 class ProductManager {
     static let shared = ProductManager()
     
+    func deleteProductWithUser(userID: String) {
+        let firestoreDb = Firestore.firestore()
+        firestoreDb.collection("product").getDocuments(source: .server) { querySnapShot, err in
+            if err == nil {
+                guard let querySnapShot = querySnapShot else { return }
+                for document in querySnapShot.documents {
+                    print(document.data())
+                    if let productRenterID = document.data()["renterUid"] as? String {
+                        if userID == productRenterID {
+                            document.reference.delete()
+                        }
+                    }
+                }
+            } else {
+                print(err)
+            }
+        }
+    }
+    
     func classifyPostedProduct(keyWord: String, _ completion: @escaping ([Product]) -> Void) {
         var products = [Product]()
         let firstoreDb = Firestore.firestore()

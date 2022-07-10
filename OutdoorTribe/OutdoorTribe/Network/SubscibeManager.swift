@@ -11,6 +11,21 @@ import FirebaseFirestore
 class SubscribeManager {
     static let shared = SubscribeManager()
     
+    func deleteOthersSubscriptionWithUser(userID: String) {
+        let firestoreDB = Firestore.firestore()
+        firestoreDB.collection("subscription").getDocuments(source: .server, completion: { querySnapShot, err in
+            if err == nil {
+                guard let querySnapShot = querySnapShot else { return }
+                for document in querySnapShot.documents {
+                    print(document)
+                    document.reference.collection("otherUsers").document(userID).delete()
+                }
+            } else {
+               print(err)
+            }
+        })
+    }
+    
     func loadingSubscriber(currentUserID: String, completion: @escaping ([Account]) -> Void) {
         let firestoreDB = Firestore.firestore()
         var accounts = [Account]()
@@ -55,6 +70,11 @@ class SubscribeManager {
             .collection("otherUsers")
             .document(otherUser.userID)
             .setData(otherUser.toDict)
+        
+        firestoreDB.collection("subscription")
+            .document(currentUserID)
+            .setData(["toBeQuery": "ok"])
+        
         // user count add 1
         firestoreDB.collection("users")
             .document(otherUser.userID)

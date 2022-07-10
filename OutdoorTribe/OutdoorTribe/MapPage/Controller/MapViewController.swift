@@ -191,7 +191,7 @@ extension MapViewController: UICollectionViewDataSource {
             let ratingCount = userInfo.ratingCount
             if ratingCount != 0 {
                 let score = totalScore / ratingCount
-                item.scoreLabel.text = String(score) + "(\(String(Int(ratingCount))))"
+                item.scoreLabel.text = String(format: "%.1f", score) + "(\(String(Int(ratingCount))))"
             } else {
                 item.scoreLabel.text = "no rating"
             }
