@@ -32,7 +32,7 @@ class WebRTCClient: NSObject {
     init(iceServers: [String]) {
         self.iceServers = iceServers
         super.init() // why we need this?
-        
+        createPeerConnection()
     }
 // MARK: - peerConnection
     func createPeerConnection() {
@@ -150,7 +150,8 @@ class WebRTCClient: NSObject {
     
 // MARK: - Device B create answer SDP and send it along with Candidates to device A thru Firestore
     func answer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void) {
-        let constrains = RTCMediaConstraints(mandatoryConstraints: self.mediaConstrains, optionalConstraints: nil)
+         let constrains = RTCMediaConstraints(mandatoryConstraints: self.mediaConstrains, optionalConstraints: nil)
+        print(peerConnection)
         peerConnection?.answer(for: constrains, completionHandler: { sdp, err in
             guard let sdp = sdp else {
                 print(err)
@@ -179,7 +180,6 @@ class WebRTCClient: NSObject {
             .collection(person)
             .document("candidate")
             .delete()
-        
         
         Firestore.firestore()
             .collection(person)
@@ -228,7 +228,7 @@ extension WebRTCClient: RTCPeerConnectionDelegate {
     
     // will be called, when we call peerConnection.answer()!!
     func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
-        send(candidate: candidate, to: "George") //是否只有offer時會call, 還是answer也會？ 感覺answer也要call 較合理
+        send(candidate: candidate, to: "Jay") //是否只有offer時會call, 還是answer也會？ 感覺answer也要call 較合理
     }
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {

@@ -31,6 +31,7 @@ class CallManager: NSObject {
         let update = CXCallUpdate()
         update.remoteHandle = CXHandle(type: .generic, value: handleName) // handleName為"對方"的名字
         update.hasVideo = false
+        print(uuid)
         provider.reportNewIncomingCall(with: uuid, update: update) { error in
             print(error)
         }

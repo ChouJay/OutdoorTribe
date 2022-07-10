@@ -18,7 +18,7 @@ extension CallManager: CXProviderDelegate {
     func provider(_ provider: CXProvider, perform action: CXStartCallAction) {
         // signal!
         WebRTCClient.shared.offer { sdp in
-            WebRTCClient.shared.send(sdp: sdp, to: "George")
+            WebRTCClient.shared.send(sdp: sdp, to: "Jay")
         }
         // configureAudioSession
         WebRTCClient.shared.rtcAudioSession.audioSessionDidActivate(CallManager.shared.configureAudioSession())
@@ -28,21 +28,20 @@ extension CallManager: CXProviderDelegate {
         
     }
     
-
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
         // configure audio session
         WebRTCClient.shared.rtcAudioSession.audioSessionDidActivate(CallManager.shared.configureAudioSession())
         WebRTCClient.shared.rtcAudioSession.isAudioEnabled = true
         // WebRTC answer
         WebRTCClient.shared.answer { sdp in
-            WebRTCClient.shared.send(sdp: sdp, to: "George")
-           
+            WebRTCClient.shared.send(sdp: sdp, to: "Jay")
+            action.fulfill()
         }
-        action.fulfill()
     }
     
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
-        let endCallAction = CXEndCallAction(call: uuid)
+        print(CallManager.shared.uuid)
+        let endCallAction = CXEndCallAction(call: CallManager.shared.uuid)
         let transaction = CXTransaction(action: endCallAction)
         callController.request(transaction, completion: { error in
             if let error = error {
@@ -52,7 +51,7 @@ extension CallManager: CXProviderDelegate {
 
         WebRTCClient.shared.deleteSdpAndCandiadte(for: "George")
 //  simultaneously clean up a green bar flashes on top of the screen
-        provider.reportCall(with: uuid, endedAt: Date(), reason: CXCallEndedReason.remoteEnded)
+        provider.reportCall(with: CallManager.shared.uuid, endedAt: Date(), reason: CXCallEndedReason.remoteEnded)
         
     }
     

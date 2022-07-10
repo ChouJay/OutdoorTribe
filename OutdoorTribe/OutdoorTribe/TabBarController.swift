@@ -25,8 +25,8 @@ class TabBarController: UITabBarController {
         tabBar.layer.cornerRadius = 10
         self.delegate = self
         SignalingClient.shared.delegate = self
-        SignalingClient.shared.listenSdp(from: "Jay")
-        SignalingClient.shared.listenCandidate(from: "Jay")
+        SignalingClient.shared.listenSdp(from: "George")
+        SignalingClient.shared.listenCandidate(from: "George")
         
 //        tabBar.layer.shadowColor = UIColor.yellow.cgColor
 //        tabBar.layer.shadowOffset = CGSize(width: 0.0, height: -3.0)
@@ -92,7 +92,7 @@ extension TabBarController: SignalClientDelegate {
         })
         print(sdp.type.rawValue)
         if sdp.type.rawValue == 0 {
-            CallManager.shared.reportIncomingCall(uuid: CallManager.shared.uuid, handleName: "George") { err in
+            CallManager.shared.reportIncomingCall(uuid: CallManager.shared.uuid, handleName: "Jay") { err in
                 print(err)
             }
         } else {

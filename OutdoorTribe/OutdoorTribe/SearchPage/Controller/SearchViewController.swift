@@ -236,7 +236,6 @@ extension SearchViewController: UITableViewDataSource {
                 }
             }
         }
-        print(afterFiltedAndBlockProducts.count)
         return afterFiltedAndBlockProducts.count
     }
     

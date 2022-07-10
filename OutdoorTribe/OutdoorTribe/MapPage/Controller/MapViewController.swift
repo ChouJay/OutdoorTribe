@@ -9,14 +9,17 @@ import UIKit
 import MapKit
 import CoreLocation
 import Kingfisher
+import FirebaseAuth
 
 class MapViewController: UIViewController {
     
     var allCell = [MapCollectionViewCell]()
     var allUserInfo = [Account]()
+    var blockUsers = [Account]()
     var currentIndex: Int?
     var products = [Product]()
     var afterFiltedProducts = [Product]()
+    var afterFiltedAndBlockProducts = [Product]()
     var myLocationManager = CLLocationManager()
     var isFilter = false {
         didSet {
@@ -90,10 +93,16 @@ class MapViewController: UIViewController {
         ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
             self?.products = postedProducts
             self?.afterFiltedProducts = postedProducts
+    
             self?.mapView.layoutView(from: self!.afterFiltedProducts)
             self?.productCollectionView.reloadData()
         }
         productCollectionView.isHidden = true
+        
+        guard let currentUserID = Auth.auth().currentUser?.uid else { return }
+        AccountManager.shared.loadUserBlockList(byUserID: currentUserID) { [weak self] accounts in
+            self?.blockUsers = accounts
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -142,7 +151,20 @@ class MapViewController: UIViewController {
 // MARK: - collection view dataSource
 extension MapViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        afterFiltedProducts.count
+        afterFiltedAndBlockProducts = []
+        if blockUsers.count == 0 {
+            afterFiltedAndBlockProducts = afterFiltedProducts
+            
+        } else {
+            for product in afterFiltedProducts {
+                for blockUser in blockUsers {
+                    if product.renterUid != blockUser.userID {
+                        afterFiltedAndBlockProducts.append(product)
+                    }
+                }
+            }
+        }
+        return afterFiltedAndBlockProducts.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -152,12 +174,12 @@ extension MapViewController: UICollectionViewDataSource {
             for: indexPath) as? MapCollectionViewCell else { fatalError() }
         item.hideEstimateTimeLabel()
         item.routeDelegae = self
-        guard let urlString = afterFiltedProducts[indexPath.row].photoUrl.first,
+        guard let urlString = afterFiltedAndBlockProducts[indexPath.row].photoUrl.first,
               let url = URL(string: urlString) else { return item }
         item.photoImageView.kf.setImage(with: url)
-        item.titleLabel.text = afterFiltedProducts[indexPath.row].title
-        item.renterNameLabel.text = afterFiltedProducts[indexPath.row].renter
-        for userInfo in allUserInfo where afterFiltedProducts[indexPath.row].renter == userInfo.name {
+        item.titleLabel.text = afterFiltedAndBlockProducts[indexPath.row].title
+        item.renterNameLabel.text = afterFiltedAndBlockProducts[indexPath.row].renter
+        for userInfo in allUserInfo where afterFiltedAndBlockProducts[indexPath.row].renter == userInfo.name {
             let totalScore = userInfo.totalScore
             let ratingCount = userInfo.ratingCount
             if ratingCount != 0 {
