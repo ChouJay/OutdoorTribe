@@ -17,7 +17,6 @@ class OrderManger {
             if err == nil {
                 guard let querySnapShot = querySnapShot else { return }
                 for document in querySnapShot.documents {
-                    print(document.data())
                     if let productRenterID = document.data()["renterUid"] as? String {
                         if userID == productRenterID {
                             document.reference.delete()

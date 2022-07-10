@@ -22,7 +22,9 @@ class ChatViewController: UIViewController {
                             lastMessage: "hi",
                             lastDate: Date(),
                             chaterOne: "Fake name 1",
-                            chaterTwo: "Fake name 2")
+                            chaterOneUid: "Fake Uid 1",
+                            chaterTwo: "Fake name 2",
+                            chaterTwoUid: "Fake Uid 2")
     
     var chatMessage = Message(sender: "Fake name",
                               receiver: "Fake name",

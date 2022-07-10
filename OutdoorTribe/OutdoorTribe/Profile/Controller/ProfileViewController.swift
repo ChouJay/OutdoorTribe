@@ -104,6 +104,7 @@ class ProfileViewController: UIViewController {
                         SubscribeManager.shared.deleteOthersSubscriptionWithUser(userID: currentUserID)
                         ProductManager.shared.deleteProductWithUser(userID: currentUserID)
                         OrderManger.shared.deleteOrderByUser(userID: currentUserID)
+                        ChatManager.shared.deleteChatRoomByUser(userID: currentUserID)
                     } else {
                         print(err)
                     }

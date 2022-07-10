@@ -33,7 +33,9 @@ class DetailViewController: UIViewController {
                             lastMessage: "Hi",
                             lastDate: Date(),
                             chaterOne: "Fake name 1",
-                            chaterTwo: "Fake name 2")
+                            chaterOneUid: "Fake Uid 1",
+                            chaterTwo: "Fake name 2",
+                            chaterTwoUid: "Fake Uid 2")
     var chooseProduct: Product?
     
     @IBOutlet weak var applyBtn: UIButton!
@@ -68,11 +70,16 @@ class DetailViewController: UIViewController {
             chatRoom.chaterTwo = chaterTwoName
             chatRoom.roomID = uuid
             chatRoom.users = [chaterOneName, chaterTwoName]
+            chatRoom.chaterOneUid = userInfo?.userID ?? "Fake Uid"
+            chatRoom.chaterTwoUid = chooseProduct?.renterUid ?? "Fake Uid"
+            print(chaterOneName)
+            print(chaterTwoName)
             ChatManager.shared.createChatRoomIfNeed(
                 chatRoom: chatRoom,
                 chaterOne: chaterOneName,
                 chaterTwo: chaterTwoName) { [weak self] existChatRoom in
                     self?.chatRoom = existChatRoom
+                    print(self?.chatRoom)
                     self?.performSegue(withIdentifier: "DetailtoChatRoomSegue", sender: nil)
             }
         }

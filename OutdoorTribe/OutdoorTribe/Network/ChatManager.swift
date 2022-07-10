@@ -12,6 +12,27 @@ import FirebaseStorage
 class ChatManager {
     static let shared = ChatManager()
     
+    func deleteChatRoomByUser(userID: String) {
+        let firestoreDb = Firestore.firestore()
+        firestoreDb.collection("chatRoom").getDocuments(source: .server) { querySnapShot, err in
+            if err == nil {
+                guard let querySnapShot = querySnapShot else { return }
+                for document in querySnapShot.documents {
+                    if let chaterOneUid = document.data()["chaterOneUid"] as? String,
+                       let chaterTwoUid = document.data()["chaterTwoUid"] as? String {
+                        print(chaterOneUid)
+                        print(chaterTwoUid)
+                        if userID == chaterOneUid || userID == chaterTwoUid {
+                            document.reference.delete()
+                        }
+                    }
+                }
+            } else {
+                print(err)
+            }
+        }
+    }
+    
     func updateChatRoomLastMessageIfSendPhoto(in roomID: String) {
         let firestoreDB = Firestore.firestore()
         firestoreDB.collection("chatRoom").document(roomID).updateData(["lastMessage": "send a photo"])
@@ -28,6 +49,7 @@ class ChatManager {
                               chaterOne: String,
                               chaterTwo: String,
                               completion: @escaping (ChatRoom) -> Void) {
+        print(chatRoom)
         let firestoreDb = Firestore.firestore()
         firestoreDb.collection("chatRoom")
             .whereField("users", arrayContainsAny: [chaterOne, chaterTwo])
@@ -36,8 +58,8 @@ class ChatManager {
                 if querySnapShot?.documents.count == 0 {
                     print("set chat collection!")
                     self.createChatRoom(create: chatRoom)
+                    completion(chatRoom)
                 } else {
-                    print("chat zoom exist")
                     guard let querySnapShot = querySnapShot else { return }
                     for document in querySnapShot.documents {
                         let set: Set<String> = [chaterOne, chaterTwo]
@@ -48,14 +70,19 @@ class ChatManager {
                             print(document.documentID)
                             var existChatRoom: ChatRoom?
                             do {
+                                print("chat zoom exist")
                                 existChatRoom = try document.data(as: ChatRoom.self, decoder: Firestore.Decoder())
                                 guard let existChatRoom = existChatRoom else { return }
                                 completion(existChatRoom)
+                                return
                             } catch {
                                 print("decode failure: \(error)")
                             }
                         }
                     }
+                    print("set chat room when there is no exidted!")
+                    self.createChatRoom(create: chatRoom)
+                    completion(chatRoom)
                 }
             } else {
                 print(error)
@@ -69,6 +96,7 @@ class ChatManager {
         document.setData(chatRoom.toDict) { error in
             if error == nil {
                 // push chat room VC
+                
             } else {
                 print("set data error: \(error)")
             }
