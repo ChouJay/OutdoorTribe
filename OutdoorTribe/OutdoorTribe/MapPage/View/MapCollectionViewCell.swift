@@ -55,17 +55,17 @@ class MapCollectionViewCell: UICollectionViewCell {
         photoImageView.layer.cornerRadius = 10
         photoImageView.clipsToBounds = true
         
-//        phoneButton.translatesAutoresizingMaskIntoConstraints = false
-//        phoneButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 10).isActive = true
-//        phoneButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 7).isActive = true
-//        phoneButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 7 ).isActive = true
-//        phoneButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 12).isActive = true
-//        
-//        routeButton.translatesAutoresizingMaskIntoConstraints = false
-//        routeButton.trailingAnchor.constraint(equalTo: phoneButton.leadingAnchor, constant: 0).isActive = true
-//        routeButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 12).isActive = true
-//        routeButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 7).isActive = true
-//        routeButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 7 ).isActive = true
+        phoneButton.translatesAutoresizingMaskIntoConstraints = false
+        phoneButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
+        phoneButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 8).isActive = true
+        phoneButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 8 ).isActive = true
+        phoneButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -12).isActive = true
+
+        routeButton.translatesAutoresizingMaskIntoConstraints = false
+        routeButton.trailingAnchor.constraint(equalTo: phoneButton.leadingAnchor, constant: 0).isActive = true
+        routeButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -12).isActive = true
+        routeButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 8 ).isActive = true
+        routeButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 8 ).isActive = true
         
     }
     
