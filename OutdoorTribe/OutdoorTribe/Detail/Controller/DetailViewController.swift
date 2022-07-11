@@ -190,6 +190,7 @@ extension DetailViewController: UITableViewDataSource {
                   let rent = chooseProduct?.rent else { return cell }
             cell.nameLabel.text = productName
             cell.addressLabel.text = addressString
+            cell.descriptionTextView.text = chooseProduct?.description ?? ""
 //            cell.rentLabel.text = String(rent)
             guard let startDate = chooseProduct?.availableDate.first,
                   let endDate = chooseProduct?.availableDate.last else { return cell }

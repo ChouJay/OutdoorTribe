@@ -21,8 +21,12 @@ class LeaseInTableViewCell: UITableViewCell {
     @IBOutlet weak var returnDateLabel: UILabel!
     @IBOutlet weak var returnBtn: UIButton!
     
+    @IBOutlet weak var leaseInCallBtn: UIButton!
+    
     @IBAction func tapReturnBtn(_ sender: Any) {
         returnOrderDelegate?.askVcReturnOrder(cell: self)
+    }
+    @IBAction func tapCallBtn(_ sender: Any) {
     }
     
     override func prepareForReuse() {
@@ -44,6 +48,9 @@ class LeaseInTableViewCell: UITableViewCell {
     func layoutStuff() {
         productPhoto.layer.cornerRadius = 10
         returnBtn.layer.cornerRadius = 10
+        leaseInCallBtn.layer.cornerRadius = 10
+        leaseInCallBtn.layer.borderWidth = 1
+        leaseInCallBtn.layer.borderColor = UIColor.darkGray.cgColor
     }
     
     func enableReturnBtn() {

@@ -150,8 +150,8 @@ extension PostViewController: UITableViewDataSource {
                 withIdentifier: "InfoTableViewCell",
                 for: indexPath) as? InfoTableViewCell else { fatalError() }
             discardDelegate = cell
+            cell.descriptionTextView.delegate = self
             cell.titleTextField.delegate = self
-            cell.rentTextField.delegate = self
             cell.addressTextField.delegate = self
             cell.passDateDelegate = self
             cell.classificationTextField.delegate = self
@@ -245,7 +245,23 @@ extension PostViewController: UIImagePickerControllerDelegate, UINavigationContr
 }
 
 // MARK: - text field delegate
-extension PostViewController: UITextFieldDelegate {
+extension PostViewController: UITextFieldDelegate, UITextViewDelegate {
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Description"
+            textView.textColor = UIColor.lightGray
+        } else {
+            product.description = textView.text ?? "No description"
+        }
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         switch textField.placeholder {
         case "title":

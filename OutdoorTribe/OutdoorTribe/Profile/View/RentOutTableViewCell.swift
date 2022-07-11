@@ -15,6 +15,7 @@ class RentOutTableViewCell: UITableViewCell {
 
     var finishOrderDelegate: FinishOrderDelegate?
     
+    @IBOutlet weak var rentOutCallBtn: UIButton!
     @IBOutlet weak var productName: UILabel!
     @IBOutlet weak var productPhoto: UIImageView!
     
@@ -23,6 +24,9 @@ class RentOutTableViewCell: UITableViewCell {
     
     @IBAction func tapFinishBtn(_ sender: Any) {
         finishOrderDelegate?.askVcFinishOrder(cell: self)
+    }
+    
+    @IBAction func tapCallBtn(_ sender: Any) {
     }
     
     override func prepareForReuse() {
@@ -44,6 +48,9 @@ class RentOutTableViewCell: UITableViewCell {
     func layoutStuff() {
         productPhoto.layer.cornerRadius = 10
         finishBtn.layer.cornerRadius = 10
+        rentOutCallBtn.layer.cornerRadius = 10
+        rentOutCallBtn.layer.borderWidth = 1
+        rentOutCallBtn.layer.borderColor = UIColor.darkGray.cgColor
     }
 
     func enableFinishBtn() {

@@ -66,7 +66,7 @@
                                                                             <constraint firstAttribute="width" constant="20" id="LBG-4L-zfo"/>
                                                                             <constraint firstAttribute="height" constant="20" id="tGE-E4-XHM"/>
                                                                         </constraints>
-                                                                        <color key="tintColor" red="0.81568627449999997" green="0.78823529410000004" blue="0.7533929197" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                                        <color key="tintColor" red="0.0039215688589999999" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                                         <state key="normal" image="xmark.circle.fill" catalog="system"/>
                                                                         <connections>
@@ -103,10 +103,10 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="InfoTableViewCell" id="Z6g-mB-0se" customClass="InfoTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="215.5" width="414" height="760.5"/>
+                                        <rect key="frame" x="0.0" y="215.5" width="414" height="490.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Z6g-mB-0se" id="4Pu-vx-on3">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="760.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="490.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0NZ-n3-vie">
@@ -117,16 +117,8 @@
                                                     <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="rent / day" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZhM-GJ-3As">
-                                                    <rect key="frame" x="20" y="160" width="374" height="50"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="50" id="W2Y-Es-0Ya"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kdb-Qj-nFl">
-                                                    <rect key="frame" x="20" y="230" width="374" height="50"/>
+                                                    <rect key="frame" x="20" y="160" width="374" height="50"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="50" id="HQx-Jv-DdA"/>
                                                     </constraints>
@@ -134,22 +126,21 @@
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
                                                 <textField opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="classification" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BvX-ws-AdQ">
-                                                    <rect key="frame" x="20" y="300" width="374" height="50"/>
+                                                    <rect key="frame" x="20" y="230" width="374" height="50"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="50" id="RpS-FN-40r"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="justified" translatesAutoresizingMaskIntoConstraints="NO" id="Uqc-TN-mQU">
-                                                    <rect key="frame" x="20" y="440" width="374" height="300.5"/>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="Description" textAlignment="justified" translatesAutoresizingMaskIntoConstraints="NO" id="Uqc-TN-mQU">
+                                                    <rect key="frame" x="20" y="370" width="374" height="100.5"/>
                                                     <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="300" id="0uP-c0-6af"/>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="0uP-c0-6af"/>
                                                     </constraints>
-                                                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                                    <color key="textColor" systemColor="labelColor"/>
-                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="14"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 </textView>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="ammount" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2O9-fO-yKe">
@@ -161,7 +152,7 @@
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gjh-Mm-8mI">
-                                                    <rect key="frame" x="214" y="370" width="180" height="50"/>
+                                                    <rect key="frame" x="214" y="300" width="180" height="50"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="To:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xf9-4l-XN0">
                                                             <rect key="frame" x="0.0" y="0.0" width="40" height="50"/>
@@ -196,7 +187,7 @@
                                                     </constraints>
                                                 </stackView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fVn-8r-bDz">
-                                                    <rect key="frame" x="20" y="370" width="180" height="50"/>
+                                                    <rect key="frame" x="20" y="300" width="180" height="50"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="From:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dXP-WC-f8K">
                                                             <rect key="frame" x="0.0" y="0.0" width="42" height="50"/>
@@ -228,7 +219,7 @@
                                                     </constraints>
                                                 </stackView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0tj-KG-T4Z">
-                                                    <rect key="frame" x="344" y="300" width="50" height="50"/>
+                                                    <rect key="frame" x="344" y="230" width="50" height="50"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="50" id="QZY-97-cSu"/>
                                                         <constraint firstAttribute="width" constant="50" id="qlF-Lj-NA1"/>
@@ -247,12 +238,10 @@
                                                 <constraint firstItem="0NZ-n3-vie" firstAttribute="leading" secondItem="4Pu-vx-on3" secondAttribute="leading" constant="20" symbolic="YES" id="9QA-B0-XKV"/>
                                                 <constraint firstItem="Uqc-TN-mQU" firstAttribute="leading" secondItem="4Pu-vx-on3" secondAttribute="leading" constant="20" symbolic="YES" id="ILO-Tr-aJc"/>
                                                 <constraint firstItem="Gjh-Mm-8mI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fVn-8r-bDz" secondAttribute="trailing" id="SrY-Np-Avs"/>
-                                                <constraint firstAttribute="trailing" secondItem="ZhM-GJ-3As" secondAttribute="trailing" constant="20" symbolic="YES" id="V6r-hh-tsI"/>
                                                 <constraint firstItem="fVn-8r-bDz" firstAttribute="leading" secondItem="4Pu-vx-on3" secondAttribute="leading" constant="20" id="WEa-nx-hVD"/>
                                                 <constraint firstItem="2O9-fO-yKe" firstAttribute="top" secondItem="0NZ-n3-vie" secondAttribute="bottom" constant="20" id="ZR2-OD-zdb"/>
                                                 <constraint firstItem="Uqc-TN-mQU" firstAttribute="top" secondItem="Gjh-Mm-8mI" secondAttribute="bottom" constant="20" id="ZVr-01-iS9"/>
                                                 <constraint firstItem="BvX-ws-AdQ" firstAttribute="top" secondItem="Kdb-Qj-nFl" secondAttribute="bottom" constant="20" id="avT-nL-3Mn"/>
-                                                <constraint firstItem="ZhM-GJ-3As" firstAttribute="top" secondItem="2O9-fO-yKe" secondAttribute="bottom" constant="20" id="bV9-SA-iJM"/>
                                                 <constraint firstItem="BvX-ws-AdQ" firstAttribute="leading" secondItem="4Pu-vx-on3" secondAttribute="leading" constant="20" id="cFl-vb-ZN2"/>
                                                 <constraint firstItem="Gjh-Mm-8mI" firstAttribute="top" secondItem="BvX-ws-AdQ" secondAttribute="bottom" constant="20" id="cs9-9A-Wk1"/>
                                                 <constraint firstItem="0NZ-n3-vie" firstAttribute="top" secondItem="4Pu-vx-on3" secondAttribute="top" constant="20" symbolic="YES" id="d7D-ut-h3X"/>
@@ -265,9 +254,8 @@
                                                 <constraint firstItem="fVn-8r-bDz" firstAttribute="top" secondItem="BvX-ws-AdQ" secondAttribute="bottom" constant="20" id="kQ0-ge-Zce"/>
                                                 <constraint firstAttribute="trailing" secondItem="Uqc-TN-mQU" secondAttribute="trailing" constant="20" symbolic="YES" id="kzn-NJ-9Dv"/>
                                                 <constraint firstAttribute="trailing" secondItem="2O9-fO-yKe" secondAttribute="trailing" constant="20" id="n91-Pp-rdX"/>
-                                                <constraint firstItem="Kdb-Qj-nFl" firstAttribute="top" secondItem="ZhM-GJ-3As" secondAttribute="bottom" constant="20" id="qUu-FL-x5Q"/>
+                                                <constraint firstItem="Kdb-Qj-nFl" firstAttribute="top" secondItem="2O9-fO-yKe" secondAttribute="bottom" constant="20" id="qUu-FL-x5Q"/>
                                                 <constraint firstAttribute="trailing" secondItem="Gjh-Mm-8mI" secondAttribute="trailing" constant="20" id="tBh-IM-szM"/>
-                                                <constraint firstItem="ZhM-GJ-3As" firstAttribute="leading" secondItem="4Pu-vx-on3" secondAttribute="leading" constant="20" symbolic="YES" id="ynS-tA-z6m"/>
                                                 <constraint firstAttribute="trailing" secondItem="BvX-ws-AdQ" secondAttribute="trailing" constant="20" symbolic="YES" id="zWO-WA-efM"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -275,9 +263,9 @@
                                             <outlet property="addressTextField" destination="Kdb-Qj-nFl" id="qft-Tc-SHl"/>
                                             <outlet property="amountTextField" destination="2O9-fO-yKe" id="2hY-fT-H4t"/>
                                             <outlet property="classificationTextField" destination="BvX-ws-AdQ" id="c4k-59-gH1"/>
+                                            <outlet property="descriptionTextView" destination="Uqc-TN-mQU" id="4Xs-Ox-iwe"/>
                                             <outlet property="endDatePicker" destination="zNw-h8-c3m" id="6Kv-uS-iaD"/>
                                             <outlet property="pullDownBtn" destination="0tj-KG-T4Z" id="xl3-16-JZT"/>
-                                            <outlet property="rentTextField" destination="ZhM-GJ-3As" id="lUf-tI-y8R"/>
                                             <outlet property="startDatePicker" destination="i4I-Xt-qKO" id="9E5-Jb-CJT"/>
                                             <outlet property="titleTextField" destination="0NZ-n3-vie" id="BCz-3L-lYN"/>
                                         </connections>
@@ -550,7 +538,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="826"/>
                                 <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DetailGalleryTableViewCell" id="ANb-ZL-P47" customClass="DetailGalleryTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DetailGalleryTableViewCell" id="ANb-ZL-P47" customClass="DetailGalleryTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="49.5" width="414" height="400.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ANb-ZL-P47" id="NQC-cQ-ycv">
@@ -682,64 +670,64 @@
                                             <segue destination="5VT-jT-Iru" kind="show" id="POk-Rx-IpJ"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="DetailInfoTableViewCell" id="eOf-ZO-ych" customClass="DetailInfoTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="530.5" width="414" height="458"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="DetailInfoTableViewCell" id="eOf-ZO-ych" customClass="DetailInfoTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="530.5" width="414" height="403"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="eOf-ZO-ych" id="fge-h7-IM2">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="458"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="403"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zCC-Nr-SUj">
-                                                    <rect key="frame" x="20" y="20" width="59" height="23.5"/>
+                                                    <rect key="frame" x="20" y="20" width="59" height="22.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="59" id="PbT-jf-ExF"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="20"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Amount:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XoW-mm-QKU">
-                                                    <rect key="frame" x="20" y="63.5" width="76" height="23.5"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                                    <rect key="frame" x="20" y="62.5" width="74.5" height="22.5"/>
+                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="20"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MpO-Mt-34J">
-                                                    <rect key="frame" x="20" y="194" width="107.5" height="23.5"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                                    <rect key="frame" x="20" y="190" width="106" height="22.5"/>
+                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="20"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="3gW-ti-Pwe">
-                                                    <rect key="frame" x="20" y="237.5" width="374" height="200.5"/>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3gW-ti-Pwe">
+                                                    <rect key="frame" x="20" y="232.5" width="374" height="150.5"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="qDp-1l-TeK"/>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="150" id="qDp-1l-TeK"/>
                                                     </constraints>
                                                     <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 </textView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="nameLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kJp-RP-FdR">
-                                                    <rect key="frame" x="91" y="20" width="303" height="23.5"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                                    <rect key="frame" x="91" y="20" width="303" height="22.5"/>
+                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="20"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="addressLabel" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wvf-RS-RjE">
-                                                    <rect key="frame" x="111.5" y="150.5" width="282.5" height="23.5"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                                    <rect key="frame" x="111.5" y="147.5" width="282.5" height="22.5"/>
+                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="20"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="0" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pNi-eW-KQk">
-                                                    <rect key="frame" x="108" y="58.5" width="37" height="34"/>
+                                                    <rect key="frame" x="106.5" y="57" width="37" height="34"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="yDz-Hr-kdu">
-                                                    <rect key="frame" x="140" y="94" width="254" height="50"/>
+                                                    <rect key="frame" x="140" y="91.5" width="254" height="50"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="5d4-bt-rlv">
                                                             <rect key="frame" x="0.0" y="0.0" width="125" height="50"/>
@@ -768,20 +756,20 @@
                                                     </subviews>
                                                 </stackView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lease term:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UL3-QJ-lPT">
-                                                    <rect key="frame" x="20" y="107" width="110" height="23.5"/>
+                                                    <rect key="frame" x="20" y="105" width="110" height="22.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="110" id="3yE-31-bTL"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="20"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Address:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nvd-7p-7y9">
-                                                    <rect key="frame" x="20" y="150.5" width="79.5" height="23.5"/>
+                                                    <rect key="frame" x="20" y="147.5" width="79.5" height="22.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="79.5" id="t24-fS-suc"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="20"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -2175,6 +2163,9 @@
                                                             <color key="tintColor" red="0.17254901959999999" green="0.21176470589999999" blue="0.22352941179999999" alpha="1" colorSpace="calibratedRGB"/>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" image="phone.fill" catalog="system"/>
+                                                            <connections>
+                                                                <action selector="tapCallBtn:" destination="eXK-zn-Vhu" eventType="touchUpInside" id="BO0-iP-Ahz"/>
+                                                            </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z32-wA-Ng6">
                                                             <rect key="frame" x="131" y="0.0" width="123" height="30"/>
@@ -2230,6 +2221,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="leaseInCallBtn" destination="6Iv-p1-71V" id="dIs-to-g9J"/>
                                             <outlet property="productName" destination="aR9-Uz-E1h" id="mxm-nl-TfH"/>
                                             <outlet property="productPhoto" destination="axU-ed-aXk" id="2sW-Mm-jlu"/>
                                             <outlet property="returnBtn" destination="z32-wA-Ng6" id="FmX-mH-REe"/>
@@ -2614,6 +2606,9 @@
                                                             <color key="tintColor" red="0.17254901959999999" green="0.21176470589999999" blue="0.22352941179999999" alpha="1" colorSpace="calibratedRGB"/>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" image="phone.fill" catalog="system"/>
+                                                            <connections>
+                                                                <action selector="tapCallBtn:" destination="QWd-PB-W3E" eventType="touchUpInside" id="XdY-Sj-KxL"/>
+                                                            </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eNy-4O-U13">
                                                             <rect key="frame" x="131" y="0.0" width="123" height="30"/>
@@ -2672,6 +2667,7 @@
                                             <outlet property="finishBtn" destination="eNy-4O-U13" id="jrj-ru-Wjh"/>
                                             <outlet property="productName" destination="Fcu-1V-qvl" id="faJ-ff-Ttz"/>
                                             <outlet property="productPhoto" destination="yBO-Hq-pAp" id="bqd-yY-cv7"/>
+                                            <outlet property="rentOutCallBtn" destination="G1J-7n-v0t" id="Rsk-C8-Wgk"/>
                                             <outlet property="returnDateLabel" destination="pPb-N0-xam" id="X7z-OY-0AQ"/>
                                         </connections>
                                     </tableViewCell>

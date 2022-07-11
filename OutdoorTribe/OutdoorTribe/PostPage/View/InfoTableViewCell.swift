@@ -18,18 +18,19 @@ class InfoTableViewCell: UITableViewCell {
     var passDateDelegate: PassDateToPostVCDelegate?
     
     @IBOutlet weak var titleTextField: UITextField!
-    @IBOutlet weak var rentTextField: UITextField!
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var classificationTextField: UITextField!
     @IBOutlet weak var startDatePicker: UIDatePicker!
     @IBOutlet weak var endDatePicker: UIDatePicker!
     @IBOutlet weak var pullDownBtn: UIButton!
+    @IBOutlet weak var descriptionTextView: UITextView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         setDatePickerValueChange()
         setUpPullDownBtn()
+        layoutTextView()
         // Initialization code
     }
     
@@ -53,6 +54,13 @@ class InfoTableViewCell: UITableViewCell {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM dd"
         return formatter.string(from: date)
+    }
+    
+    func layoutTextView() {
+        descriptionTextView.textColor = .lightGray
+        descriptionTextView.layer.cornerRadius = 5
+        descriptionTextView.layer.borderWidth = 0.5
+        descriptionTextView.layer.borderColor = UIColor.lightGray.cgColor
     }
     
     func setDatePickerValueChange() {
@@ -97,6 +105,7 @@ class InfoTableViewCell: UITableViewCell {
 // MARK: - discard delegate
 extension InfoTableViewCell: DiscardDelegate {
     func askToDiscardInfo() {
+        descriptionTextView.text = ""
         titleTextField.text = ""
         amountTextField.text = ""
         addressTextField.text = ""
