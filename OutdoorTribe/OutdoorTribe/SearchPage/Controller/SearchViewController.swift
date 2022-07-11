@@ -85,7 +85,9 @@ class SearchViewController: UIViewController {
             self.products = productsFromFireStore
             self.afterFiltedProducts = productsFromFireStore
             self.searchTableView.reloadData()
+            
         }
+        searchTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: UIScreen.main.bounds.height / 4).isActive = true
         navigationController?.navigationBar.isHidden = true
         
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
@@ -395,7 +397,7 @@ extension SearchViewController {
         view.addSubview(decorateView)
         decorateView.translatesAutoresizingMaskIntoConstraints = false
         decorateView.heightAnchor.constraint(equalToConstant: 10).isActive = true
-        decorateView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 330).isActive = true
+        decorateView.topAnchor.constraint(equalTo: searchTableView.topAnchor, constant: 80).isActive = true
         decorateView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32).isActive = true
         decorateView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32).isActive = true
         decorateView.backgroundColor = .black

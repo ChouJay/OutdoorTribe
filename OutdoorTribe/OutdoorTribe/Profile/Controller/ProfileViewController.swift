@@ -81,13 +81,15 @@ class ProfileViewController: UIViewController {
     func setUpPullMenuBtn() {
 //        menuBtn.showsMenuAsPrimaryAction = true
         menuBtn.menu = UIMenu(children: [
-            UIAction(title: "Logout", handler: { _ in
+            UIAction(title: "Logout", handler: { [weak self] _ in
                 let firebaseAuth = Auth.auth()
                 do {
                     try firebaseAuth.signOut()
                 } catch {
                     print(error)
                 }
+                
+                self?.tabBarController?.selectedIndex = 0
         }),
             UIAction(title: "Block list", handler: { [weak self] _ in
                 guard let childVC = self?.storyboard?.instantiateViewController(
