@@ -9,6 +9,7 @@ import UIKit
 import FirebaseFirestore
 import Kingfisher
 import FirebaseAuth
+import IQKeyboardManagerSwift
 
 class SearchViewController: UIViewController {
     var products = [Product]()
@@ -316,12 +317,14 @@ extension SearchViewController: UISearchBarDelegate {
                 self?.products = postedProducts
                 self?.afterFiltedProducts = postedProducts
                 self?.searchTableView.reloadData()
+                self?.searchBar.endEditing(true)
             }
         case true:
             ProductManager.shared.searchPostedProduct(keyWord: keyWord) { [weak self] postedProducts in
                 self?.products = postedProducts
                 self?.tapFilterConfirmButton()
                 self?.searchTableView.reloadData()
+                self?.searchBar.endEditing(true)
             }
         }
     }

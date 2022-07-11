@@ -3338,6 +3338,7 @@
         <segue reference="POk-Rx-IpJ"/>
         <segue reference="gev-hz-6wC"/>
     </inferredMetricsTieBreakers>
+    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
     <resources>
         <image name="b54210b0d0a76d50ba7bd5da1c4e6168" width="564" height="705"/>
         <image name="calendar" catalog="system" width="128" height="106"/>
