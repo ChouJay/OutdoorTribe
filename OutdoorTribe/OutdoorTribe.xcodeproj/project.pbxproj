@@ -92,7 +92,7 @@
 		0195EB7F2860830C0015A12A /* MapCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB7E2860830C0015A12A /* MapCollectionViewCell.swift */; };
 		0195EB81286092550015A12A /* MapCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0195EB80286092550015A12A /* MapCollectionViewCell.xib */; };
 		01985D2D285C60FF00BCD866 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01985D2C285C60FF00BCD866 /* Product.swift */; };
-		C506E71BEA3BE2F4FE3833EB /* Pods_OutdoorTribe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDA5D174B1216E73E2AF55B5 /* Pods_OutdoorTribe.framework */; };
+		177B893A40A68DC70E138D2E /* Pods_OutdoorTribe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95D0DCBF4CDC9823D271F726 /* Pods_OutdoorTribe.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -184,9 +184,9 @@
 		0195EB7E2860830C0015A12A /* MapCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCollectionViewCell.swift; sourceTree = "<group>"; };
 		0195EB80286092550015A12A /* MapCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapCollectionViewCell.xib; sourceTree = "<group>"; };
 		01985D2C285C60FF00BCD866 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
-		0E0B4ECBCD96D3042D7A6FC4 /* Pods-OutdoorTribe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OutdoorTribe.debug.xcconfig"; path = "Target Support Files/Pods-OutdoorTribe/Pods-OutdoorTribe.debug.xcconfig"; sourceTree = "<group>"; };
-		3928DF2F39D836799E1DEA99 /* Pods-OutdoorTribe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OutdoorTribe.release.xcconfig"; path = "Target Support Files/Pods-OutdoorTribe/Pods-OutdoorTribe.release.xcconfig"; sourceTree = "<group>"; };
-		EDA5D174B1216E73E2AF55B5 /* Pods_OutdoorTribe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OutdoorTribe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		03BFA277AF998FD004DB4812 /* Pods-OutdoorTribe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OutdoorTribe.release.xcconfig"; path = "Target Support Files/Pods-OutdoorTribe/Pods-OutdoorTribe.release.xcconfig"; sourceTree = "<group>"; };
+		95D0DCBF4CDC9823D271F726 /* Pods_OutdoorTribe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OutdoorTribe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E3F1B1CC52159B95FEA1F04E /* Pods-OutdoorTribe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OutdoorTribe.debug.xcconfig"; path = "Target Support Files/Pods-OutdoorTribe/Pods-OutdoorTribe.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,7 +194,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C506E71BEA3BE2F4FE3833EB /* Pods_OutdoorTribe.framework in Frameworks */,
+				177B893A40A68DC70E138D2E /* Pods_OutdoorTribe.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,7 +307,7 @@
 				012F24702859A53D00B891C1 /* OutdoorTribe */,
 				012F246F2859A53D00B891C1 /* Products */,
 				7C3C22C040AACC32FC3FBC61 /* Pods */,
-				EA88BB61A3E577606B5FC9ED /* Frameworks */,
+				F4867876094A559AFC570899 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -716,16 +716,16 @@
 		7C3C22C040AACC32FC3FBC61 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				0E0B4ECBCD96D3042D7A6FC4 /* Pods-OutdoorTribe.debug.xcconfig */,
-				3928DF2F39D836799E1DEA99 /* Pods-OutdoorTribe.release.xcconfig */,
+				E3F1B1CC52159B95FEA1F04E /* Pods-OutdoorTribe.debug.xcconfig */,
+				03BFA277AF998FD004DB4812 /* Pods-OutdoorTribe.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		EA88BB61A3E577606B5FC9ED /* Frameworks */ = {
+		F4867876094A559AFC570899 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				EDA5D174B1216E73E2AF55B5 /* Pods_OutdoorTribe.framework */,
+				95D0DCBF4CDC9823D271F726 /* Pods_OutdoorTribe.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -737,12 +737,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 012F24822859A53E00B891C1 /* Build configuration list for PBXNativeTarget "OutdoorTribe" */;
 			buildPhases = (
-				6B66E3F09EB4E37686DE4805 /* [CP] Check Pods Manifest.lock */,
+				E011432FCB3B1184091CB5BC /* [CP] Check Pods Manifest.lock */,
 				012F246A2859A53D00B891C1 /* Sources */,
 				012F246B2859A53D00B891C1 /* Frameworks */,
 				012F246C2859A53D00B891C1 /* Resources */,
-				630C9F04CC101886B9FD8009 /* [CP] Embed Pods Frameworks */,
 				01053E7E2859FC7D0074B125 /* SwiftLint */,
+				2006EC63AB818C5CA6423312 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -824,7 +824,7 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n\n";
 		};
-		630C9F04CC101886B9FD8009 /* [CP] Embed Pods Frameworks */ = {
+		2006EC63AB818C5CA6423312 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -841,7 +841,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OutdoorTribe/Pods-OutdoorTribe-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6B66E3F09EB4E37686DE4805 /* [CP] Check Pods Manifest.lock */ = {
+		E011432FCB3B1184091CB5BC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1093,7 +1093,7 @@
 		};
 		012F24832859A53E00B891C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0E0B4ECBCD96D3042D7A6FC4 /* Pods-OutdoorTribe.debug.xcconfig */;
+			baseConfigurationReference = E3F1B1CC52159B95FEA1F04E /* Pods-OutdoorTribe.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1126,7 +1126,7 @@
 		};
 		012F24842859A53E00B891C1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3928DF2F39D836799E1DEA99 /* Pods-OutdoorTribe.release.xcconfig */;
+			baseConfigurationReference = 03BFA277AF998FD004DB4812 /* Pods-OutdoorTribe.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

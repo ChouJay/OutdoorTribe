@@ -20,6 +20,7 @@ class MapCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var timeStackView: UIStackView!
     @IBOutlet weak var estimatedTimeLabel: UILabel!
     @IBOutlet weak var routeButton: UIButton!
+    @IBOutlet weak var phoneButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var renterNameLabel: UILabel!
@@ -53,6 +54,19 @@ class MapCollectionViewCell: UICollectionViewCell {
         
         photoImageView.layer.cornerRadius = 10
         photoImageView.clipsToBounds = true
+        
+//        phoneButton.translatesAutoresizingMaskIntoConstraints = false
+//        phoneButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 10).isActive = true
+//        phoneButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 7).isActive = true
+//        phoneButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 7 ).isActive = true
+//        phoneButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 12).isActive = true
+//        
+//        routeButton.translatesAutoresizingMaskIntoConstraints = false
+//        routeButton.trailingAnchor.constraint(equalTo: phoneButton.leadingAnchor, constant: 0).isActive = true
+//        routeButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 12).isActive = true
+//        routeButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 7).isActive = true
+//        routeButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 7 ).isActive = true
+        
     }
     
     func hideEstimateTimeLabel() {

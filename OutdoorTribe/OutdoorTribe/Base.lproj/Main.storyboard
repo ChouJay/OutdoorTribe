@@ -199,21 +199,18 @@
                                                     <rect key="frame" x="20" y="370" width="180" height="50"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="From:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dXP-WC-f8K">
-                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="42" height="50"/>
                                                             <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jne-U3-wMF">
-                                                            <rect key="frame" x="50" y="0.0" width="120" height="50"/>
+                                                            <rect key="frame" x="42" y="0.0" width="128" height="50"/>
                                                             <subviews>
                                                                 <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" style="compact" translatesAutoresizingMaskIntoConstraints="NO" id="i4I-Xt-qKO">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="120" height="50"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="50"/>
                                                                 </datePicker>
                                                             </subviews>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="120" id="9yg-Im-2tA"/>
-                                                            </constraints>
                                                         </stackView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="45" placeholderIntrinsicHeight="50" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="45i-1z-CO5">
                                                             <rect key="frame" x="170" y="0.0" width="10" height="50"/>
@@ -967,7 +964,7 @@
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="VC6-iC-iSl">
                                                             <rect key="frame" x="166" y="0.0" width="83" height="42"/>
                                                             <subviews>
-                                                                <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="viy-OY-xhV">
+                                                                <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="viy-OY-xhV">
                                                                     <rect key="frame" x="15" y="0.0" width="53" height="18"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Qiy-PR-Zpq">
@@ -978,7 +975,7 @@
                                                                                 <constraint firstAttribute="width" constant="18" id="u7H-o2-xkh"/>
                                                                             </constraints>
                                                                         </imageView>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o0m-S0-rGh">
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="4" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o0m-S0-rGh">
                                                                             <rect key="frame" x="18" y="0.0" width="11.5" height="18"/>
                                                                             <fontDescription key="fontDescription" name="Galvji" family="Galvji" pointSize="18"/>
                                                                             <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1209,8 +1206,6 @@
                                                 <constraint firstItem="LNp-t9-VCD" firstAttribute="leading" secondItem="Kcv-6g-z4o" secondAttribute="leading" constant="330" id="BLn-ZW-YYz"/>
                                                 <constraint firstItem="RPD-7n-MAO" firstAttribute="centerY" secondItem="Kcv-6g-z4o" secondAttribute="centerY" id="BpL-Rd-bsl"/>
                                                 <constraint firstAttribute="bottom" secondItem="bDt-jc-Zh2" secondAttribute="bottom" constant="9" id="G2j-ZD-2Lh"/>
-                                                <constraint firstAttribute="bottom" secondItem="LNp-t9-VCD" secondAttribute="bottom" constant="12" id="LZm-O4-iwu"/>
-                                                <constraint firstItem="LNp-t9-VCD" firstAttribute="centerY" secondItem="Kcv-6g-z4o" secondAttribute="centerY" id="La2-UP-pBq"/>
                                                 <constraint firstItem="kry-VP-0UU" firstAttribute="leading" secondItem="zjX-h9-a0k" secondAttribute="trailing" constant="5" id="Q10-mA-ERI"/>
                                                 <constraint firstItem="GXW-zq-0bQ" firstAttribute="leading" secondItem="bDt-jc-Zh2" secondAttribute="trailing" constant="8" id="QXS-ja-WTL"/>
                                                 <constraint firstAttribute="trailing" secondItem="LNp-t9-VCD" secondAttribute="trailing" constant="35" id="VLy-Dz-n7v"/>
@@ -1219,7 +1214,6 @@
                                                 <constraint firstAttribute="bottom" secondItem="kry-VP-0UU" secondAttribute="bottom" constant="9" id="eHh-ED-rR2"/>
                                                 <constraint firstItem="bDt-jc-Zh2" firstAttribute="top" secondItem="Kcv-6g-z4o" secondAttribute="top" constant="9" id="f6a-GV-0hA"/>
                                                 <constraint firstItem="kry-VP-0UU" firstAttribute="bottom" secondItem="zjX-h9-a0k" secondAttribute="bottom" id="gMK-qz-wQZ"/>
-                                                <constraint firstItem="LNp-t9-VCD" firstAttribute="top" secondItem="Kcv-6g-z4o" secondAttribute="top" constant="12" id="gN7-Oz-hUG"/>
                                                 <constraint firstItem="kry-VP-0UU" firstAttribute="centerY" secondItem="Kcv-6g-z4o" secondAttribute="centerY" id="lH3-fk-usb"/>
                                                 <constraint firstAttribute="trailing" secondItem="kry-VP-0UU" secondAttribute="trailing" constant="20" symbolic="YES" id="mlL-P7-NPC"/>
                                                 <constraint firstItem="bDt-jc-Zh2" firstAttribute="leading" secondItem="RPD-7n-MAO" secondAttribute="trailing" constant="10" id="om1-wS-OCm"/>
@@ -3185,8 +3179,8 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="83" height="42"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bIf-ip-jsC">
-                                                                    <rect key="frame" x="37" y="0.0" width="9.5" height="21.5"/>
-                                                                    <fontDescription key="fontDescription" name="Galvji-Bold" family="Galvji" pointSize="18"/>
+                                                                    <rect key="frame" x="37" y="0.0" width="9" height="21.5"/>
+                                                                    <fontDescription key="fontDescription" name="Galvji" family="Galvji" pointSize="18"/>
                                                                     <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
@@ -3202,8 +3196,8 @@
                                                             <rect key="frame" x="83" y="0.0" width="83" height="42"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F4h-fB-UBN">
-                                                                    <rect key="frame" x="29.5" y="0.0" width="24" height="21.5"/>
-                                                                    <fontDescription key="fontDescription" name="Galvji-Bold" family="Galvji" pointSize="18"/>
+                                                                    <rect key="frame" x="30" y="0.0" width="23" height="21.5"/>
+                                                                    <fontDescription key="fontDescription" name="Galvji" family="Galvji" pointSize="18"/>
                                                                     <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
@@ -3218,26 +3212,26 @@
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="CBD-aW-Dsf">
                                                             <rect key="frame" x="166" y="0.0" width="83" height="42"/>
                                                             <subviews>
-                                                                <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ohb-hU-t7U">
-                                                                    <rect key="frame" x="13.5" y="0.0" width="56.5" height="18"/>
+                                                                <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="KWy-VM-64f">
+                                                                    <rect key="frame" x="15" y="0.0" width="53" height="18"/>
                                                                     <subviews>
-                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="1iH-ii-xuQ">
+                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="eZe-82-g8z">
                                                                             <rect key="frame" x="0.0" y="-0.5" width="18" height="18"/>
                                                                             <color key="tintColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                             <constraints>
-                                                                                <constraint firstAttribute="height" constant="18" id="VMP-5J-Ivh"/>
-                                                                                <constraint firstAttribute="width" constant="18" id="hCh-8V-tRX"/>
+                                                                                <constraint firstAttribute="height" constant="18" id="JD7-U2-6Hh"/>
+                                                                                <constraint firstAttribute="width" constant="18" id="eKW-pO-ZDi"/>
                                                                             </constraints>
                                                                         </imageView>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gkd-Et-mmi">
-                                                                            <rect key="frame" x="18" y="0.0" width="12.5" height="18"/>
-                                                                            <fontDescription key="fontDescription" name="Galvji-Bold" family="Galvji" pointSize="18"/>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="4" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cCG-aD-UeX">
+                                                                            <rect key="frame" x="18" y="0.0" width="11.5" height="18"/>
+                                                                            <fontDescription key="fontDescription" name="Galvji" family="Galvji" pointSize="18"/>
                                                                             <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="(2)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Rt-Qd-gIT">
-                                                                            <rect key="frame" x="30.5" y="0.0" width="26" height="18"/>
-                                                                            <fontDescription key="fontDescription" name="Galvji-Bold" family="Galvji" pointSize="18"/>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="(2)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eSf-ga-cxw">
+                                                                            <rect key="frame" x="29.5" y="0.0" width="23.5" height="18"/>
+                                                                            <fontDescription key="fontDescription" name="Galvji" family="Galvji" pointSize="18"/>
                                                                             <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
@@ -3271,8 +3265,8 @@
                                             <outlet property="nameLabel" destination="sbS-M4-RwB" id="7vN-iB-oJa"/>
                                             <outlet property="photoImage" destination="QWa-NB-brx" id="qS0-ls-Qbg"/>
                                             <outlet property="postCountLabel" destination="bIf-ip-jsC" id="osC-Ba-p9o"/>
-                                            <outlet property="ratingCountLabel" destination="5Rt-Qd-gIT" id="wyg-kD-gbE"/>
-                                            <outlet property="scoreLabel" destination="gkd-Et-mmi" id="9z4-yr-ssV"/>
+                                            <outlet property="ratingCountLabel" destination="eSf-ga-cxw" id="ttq-vw-37O"/>
+                                            <outlet property="scoreLabel" destination="cCG-aD-UeX" id="bUJ-vr-byv"/>
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="EditPostCollectionViewCell" id="afn-5n-4ag" customClass="EditPostCollectionViewCell" customModule="OutdoorTribe" customModuleProvider="target">
@@ -3316,14 +3310,14 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HAZ-RV-hax" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1780" y="1158"/>
+            <point key="canvasLocation" x="1841" y="1158"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="ex2-Y5-saD"/>
         <segue reference="9fu-0O-WUc"/>
         <segue reference="POk-Rx-IpJ"/>
-        <segue reference="gev-hz-6wC"/>
+        <segue reference="d5V-Du-ocr"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="b54210b0d0a76d50ba7bd5da1c4e6168" width="564" height="705"/>
