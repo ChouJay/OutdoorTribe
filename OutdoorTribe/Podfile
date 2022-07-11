@@ -9,6 +9,11 @@ target 'OutdoorTribe' do
 
 pod 'FirebaseFirestore'
 pod 'FirebaseAuth'
+pod 'FirebaseStorage'
 pod 'SwiftLint'
-
+pod 'Kingfisher', '~> 7.0'
+pod 'FirebaseFirestoreSwift'
+pod 'Cosmos', '~> 23.0'
+pod 'GoogleWebRTC', '~> 1.1'
+pod 'IQKeyboardManagerSwift'
 end
