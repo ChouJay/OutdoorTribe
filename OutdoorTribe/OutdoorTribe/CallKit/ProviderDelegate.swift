@@ -19,7 +19,7 @@ extension CallManager: CXProviderDelegate {
         WebRTCClient.shared.createPeerConnection()
         // signal!
         WebRTCClient.shared.offer { sdp in
-            WebRTCClient.shared.send(sdp: sdp, to: "George")
+            WebRTCClient.shared.send(sdp: sdp, to: "Jay")
         }
         // configureAudioSession
         WebRTCClient.shared.rtcAudioSession.audioSessionDidActivate(CallManager.shared.configureAudioSession())
@@ -36,7 +36,7 @@ extension CallManager: CXProviderDelegate {
         WebRTCClient.shared.rtcAudioSession.isAudioEnabled = true
         // WebRTC answer
         WebRTCClient.shared.answer { sdp in
-            WebRTCClient.shared.send(sdp: sdp, to: "George")
+            WebRTCClient.shared.send(sdp: sdp, to: "Jay")
             action.fulfill()
         }
     }
@@ -51,7 +51,7 @@ extension CallManager: CXProviderDelegate {
             }
         })
 
-        WebRTCClient.shared.deleteSdpAndCandiadte(for: "George")
+        WebRTCClient.shared.deleteSdpAndCandiadte(for: "Jay")
 //  simultaneously clean up a green bar flashes on top of the screen
         provider.reportCall(with: CallManager.shared.uuid, endedAt: Date(), reason: CXCallEndedReason.remoteEnded)
         
@@ -59,11 +59,11 @@ extension CallManager: CXProviderDelegate {
     
     func provider(_ provider: CXProvider, didActivate audioSession: AVAudioSession) {
         // be called after answerCallAction
-        CallManager.shared.configureAudioSession() // 不確定要不要留?
+        WebRTCClient.shared.rtcAudioSession.audioSessionDidActivate(audioSession)
         WebRTCClient.shared.rtcAudioSession.isAudioEnabled = true
     }
     
     func provider(_ provider: CXProvider, didDeactivate audioSession: AVAudioSession) {
-        WebRTCClient.shared.rtcAudioSession.audioSessionDidDeactivate(CallManager.shared.configureAudioSession())
+        WebRTCClient.shared.rtcAudioSession.audioSessionDidDeactivate(audioSession)
     }
 }

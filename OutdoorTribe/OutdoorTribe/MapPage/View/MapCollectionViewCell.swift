@@ -29,8 +29,7 @@ class MapCollectionViewCell: UICollectionViewCell {
         routeDelegae?.showRoute(sender: self)
     }
     @IBAction func tapCallButton(_ sender: UIButton) {
-//        WebRTCClient.shared.createPeerConnection()
-        CallManager.shared.startCall(handleName: "George")
+        CallManager.shared.startCall(handleName: "Jay")
         routeDelegae?.showCallUI()
     }
     
