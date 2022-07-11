@@ -91,7 +91,7 @@ class WebRTCClient: NSObject {
                 print(error)
                 return
             }
-            self.peerConnection?.setLocalDescription(sdp, completionHandler: { error in
+            self.peerConnection?.setLocalDescription(sdp, completionHandler: { _ in
                 completion(sdp) // pass sdp to someone who call this func
             })
         })
@@ -166,6 +166,7 @@ class WebRTCClient: NSObject {
 
 // MARK: - Close peer connection, clear Firestore, reset variables and re-create new peer connection, so it ready for new session
     func deleteSdpAndCandiadte(for person: String) {
+        closePeerConnection()
         Firestore.firestore()
             .collection(person)
             .document("sdp")
@@ -173,24 +174,28 @@ class WebRTCClient: NSObject {
             if let err = err {
                 print("Error removing firestore sdp: \(err)")
             } else {
+                Firestore.firestore()
+                    .collection(person)
+                    .document("candidate")
+                    .collection("candidates")
+                    .getDocuments(source: .server, completion: { querySnapShot, err in
+                    if err == nil {
+                        guard let querySnapShot = querySnapShot else { return }
+                        for document in querySnapShot.documents {
+                            document.reference.delete()
+                        }
+                        print("Firestore candidate successfully removed!")
+                        Firestore.firestore()
+                            .collection(person)
+                            .document("candidate")
+                            .delete()
+                    } else {
+                            print(err)
+                    }
+                })
                 print("Firestore sdp successfully removed!")
             }
         }
-        Firestore.firestore()
-            .collection(person)
-            .document("candidate")
-            .delete()
-        
-        Firestore.firestore()
-            .collection(person)
-            .document("candidate")
-            .collection("candidates")
-            .getDocuments(source: .server, completion: { querySnapShot, err in
-            guard let querySnapShot = querySnapShot else { return }
-            for document in querySnapShot.documents {
-                document.reference.delete()
-            }
-        })
     }
     
     func closePeerConnection() {

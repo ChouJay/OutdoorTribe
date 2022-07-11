@@ -16,6 +16,7 @@ extension CallManager: CXProviderDelegate {
     }
     
     func provider(_ provider: CXProvider, perform action: CXStartCallAction) {
+        WebRTCClient.shared.createPeerConnection()
         // signal!
         WebRTCClient.shared.offer { sdp in
             WebRTCClient.shared.send(sdp: sdp, to: "George")

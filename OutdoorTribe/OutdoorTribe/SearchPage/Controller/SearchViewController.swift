@@ -87,7 +87,9 @@ class SearchViewController: UIViewController {
             self.searchTableView.reloadData()
             
         }
-        searchTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: UIScreen.main.bounds.height / 4).isActive = true
+        searchTableView.topAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.topAnchor,
+            constant: UIScreen.main.bounds.height * 1 / 3).isActive = true
         navigationController?.navigationBar.isHidden = true
         
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
@@ -231,10 +233,8 @@ extension SearchViewController: UITableViewDataSource {
             afterFiltedAndBlockProducts = afterFiltedProducts
         } else {
             for product in afterFiltedProducts {
-                for blockUser in blockUsers {
-                    if product.renterUid != blockUser.userID {
-                        afterFiltedAndBlockProducts.append(product)
-                    }
+                for blockUser in blockUsers where product.renterUid != blockUser.userID {
+                    afterFiltedAndBlockProducts.append(product)
                 }
             }
         }

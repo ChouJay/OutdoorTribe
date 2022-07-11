@@ -65,7 +65,8 @@ extension TabBarController: UITabBarControllerDelegate {
         if viewController.tabBarItem.tag >= 2 {
             let firebaseAuth = Auth.auth()
             if firebaseAuth.currentUser == nil {
-                guard let childVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController else { return false }
+                guard let childVC = storyboard?.instantiateViewController(
+                    withIdentifier: "LoginViewController") as? LoginViewController else { return false }
                 childVC.modalPresentationStyle = .fullScreen
                 present(childVC, animated: true, completion: nil)
                 return false
