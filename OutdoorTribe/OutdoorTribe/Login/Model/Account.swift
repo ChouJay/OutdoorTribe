@@ -14,9 +14,10 @@ struct Account: Codable {
     var name: String
     var photo: String
     var totalScore: Double
-    var ratingCount: Int
+    var ratingCount: Double
     var createDate: Date = Date()
     var point: Int
+    var followerCount: Int
     
     var toDict: [String: Any] {
         return [
@@ -28,7 +29,8 @@ struct Account: Codable {
             "totalScore": totalScore as Any,
             "ratingCount": ratingCount as Any,
             "createDate": createDate as Any,
-            "point": point as Any
+            "point": point as Any,
+            "followerCount": followerCount as Any
         ]
     }
 }

@@ -9,10 +9,11 @@ import UIKit
 
 protocol UploadPhotoDelegate {
     func askToUploadPhoto()
+    func askToDeletePhoto(indexPath: IndexPath)
 }
 
 class ImageTableViewCell: UITableViewCell {
-
+    
     var uploadedPhoto = [UIImage]()
     var photoDelegate: UploadPhotoDelegate? {
         didSet {
@@ -27,6 +28,7 @@ class ImageTableViewCell: UITableViewCell {
         super.awakeFromNib()
         imageCollectionView.dataSource = self
         imageCollectionView.delegate = self
+        
         // Initialization code
     }
 
@@ -42,19 +44,28 @@ extension ImageTableViewCell: UICollectionViewDataSource {
         return 1 + uploadedPhoto.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let imageItem = collectionView.dequeueReusableCell(
             withReuseIdentifier: "ImageCollectionViewCell",
             for: indexPath) as? ImageCollectionViewCell else { fatalError() }
+        imageItem.deletePhotoDelegate = self
+        imageItem.removeButton.isHidden = false
+        imageItem.iamgeView.contentMode = .center
+        imageItem.iamgeView.preferredSymbolConfiguration = .init(pointSize: 40, weight: .unspecified, scale: .large)
         imageItem.iamgeView.image = nil
         imageItem.gestureRecognizers?.removeAll()
         if indexPath.row == 0 {
             imageItem.iamgeView.backgroundColor = .lightGray
+            imageItem.iamgeView.image = UIImage(systemName: "photo")
+            imageItem.tintColor = .darkGray
             let tap = UITapGestureRecognizer(target: self, action: #selector(choosePicture))
+            imageItem.removeButton.isHidden = true
             imageItem.addGestureRecognizer(tap)
         } else {
-            print(uploadedPhoto[indexPath.row - 1])
             imageItem.iamgeView.image = uploadedPhoto[indexPath.row - 1]
+            imageItem.iamgeView.preferredSymbolConfiguration = .unspecified
+            imageItem.iamgeView.contentMode = .scaleAspectFill
         }
         imageItem.iamgeView.layer.cornerRadius = 10
         imageItem.iamgeView.clipsToBounds = true
@@ -64,7 +75,9 @@ extension ImageTableViewCell: UICollectionViewDataSource {
 
 // MARK: - collection view delegate
 extension ImageTableViewCell: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
         
         return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
     }
@@ -77,5 +90,10 @@ extension ImageTableViewCell {
     }
 }
 
-
-
+// MARK: - deletePhoto delegate
+extension ImageTableViewCell: DeletePhotoDelegate {
+    func askToDeletePhoto(cell: UICollectionViewCell) {
+        guard let indexPath = imageCollectionView.indexPath(for: cell) else { return }
+        photoDelegate?.askToDeletePhoto(indexPath: indexPath)
+    }
+}

@@ -10,12 +10,14 @@ import UIKit
 class SearchTableViewCell: UITableViewCell {
     
     @IBOutlet weak var photoImage: UIImageView!
-    
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var renterNameLabel: UILabel!
+    @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var scoreLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        photoImage.layer.cornerRadius = 10
+        layoutPhoto()
         // Initialization code
     }
 
@@ -24,5 +26,8 @@ class SearchTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
+    
+    func layoutPhoto() {
+        photoImage.layer.cornerRadius = 10
+    }
 }

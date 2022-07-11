@@ -12,6 +12,10 @@ import FirebaseStorage
 import FirebaseFirestore
 import FirebaseAuth
 
+protocol DiscardDelegate {
+    func askToDiscardInfo()
+}
+
 class PostViewController: UIViewController {
   
     var userInfo: Account?
@@ -32,20 +36,34 @@ class PostViewController: UIViewController {
                           classification: "")
     var startDate = Date()
     var endDate = Date()
-    var leaseTerm = [Date]()
+    var avaliableTerm = [Date]()
+    var discardDelegate: DiscardDelegate?
     
+    @IBOutlet weak var discardBtn: UIButton!
+    @IBOutlet weak var postBtn: UIButton!
     @IBOutlet weak var postTableView: UITableView!
     @IBAction func tapPost(_ sender: Any) {
         product.renter = userInfo?.name ?? ""
-        product.renter = userInfo?.userID ?? ""
+        product.renterUid = userInfo?.userID ?? ""
         uploadPhoto()
         uploadedPhoto = []
         dismiss(animated: true)
+        discardDelegate?.askToDiscardInfo()
+        postTableView.reloadData()
+    }
+    
+    @IBAction func tapDiscard(_ sender: Any) {
+        uploadedPhoto = []
+        discardDelegate?.askToDiscardInfo()
         postTableView.reloadData()
     }
     
     override func viewDidLoad() {
-        super.viewDidLoad()
+        super.viewDidLoad()                
+        postBtn.layer.cornerRadius = 10
+        postBtn.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+        discardBtn.layer.cornerRadius = 10
+        discardBtn.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         postTableView.dataSource = self
         postTableView.delegate = self
         imagePickerController.delegate = self
@@ -131,11 +149,11 @@ extension PostViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "InfoTableViewCell",
                 for: indexPath) as? InfoTableViewCell else { fatalError() }
+            discardDelegate = cell
+            cell.descriptionTextView.delegate = self
             cell.titleTextField.delegate = self
-            cell.rentTextField.delegate = self
             cell.addressTextField.delegate = self
-            cell.beginDateTextField.delegate = self
-            cell.lastDateTextField.delegate = self
+            cell.passDateDelegate = self
             cell.classificationTextField.delegate = self
             return cell
         default:
@@ -153,6 +171,11 @@ extension PostViewController: UITableViewDelegate {
 
 // MARK: - uploade photo delegate
 extension PostViewController: UploadPhotoDelegate {
+    func askToDeletePhoto(indexPath: IndexPath) {
+        uploadedPhoto.remove(at: indexPath.row - 1)
+        postTableView.reloadData()
+    }
+
     func askToUploadPhoto() {
         let controller = UIAlertController(title: "請上傳照片", message: nil, preferredStyle: .actionSheet)
         let titleAttributes = [
@@ -194,7 +217,9 @@ extension PostViewController: UploadPhotoDelegate {
 
 // MARK: - ImagePickerControllerDelegate
 extension PostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.originalImage] as? UIImage {
             uploadedPhoto.append(image)
             print(uploadedPhoto)
@@ -220,7 +245,23 @@ extension PostViewController: UIImagePickerControllerDelegate, UINavigationContr
 }
 
 // MARK: - text field delegate
-extension PostViewController: UITextFieldDelegate {
+extension PostViewController: UITextFieldDelegate, UITextViewDelegate {
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Description"
+            textView.textColor = UIColor.lightGray
+        } else {
+            product.description = textView.text ?? "No description"
+        }
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         switch textField.placeholder {
         case "title":
@@ -236,34 +277,36 @@ extension PostViewController: UITextFieldDelegate {
         case "amount":
             guard let amountString = textField.text else { return }
             product.totalAmount = Int(amountString) ?? 1
-        case "begin date":
-            guard let dateString = textField.text else { return }
-            startDate = convertDateStringToDate(textFieldText: dateString)
-            daysBetweenTwoDate()
-        case "last date":
-            guard let dateString = textField.text else { return }
-            endDate = convertDateStringToDate(textFieldText: dateString)
-            daysBetweenTwoDate()
         case "classification":
             product.classification = textField.text ?? ""
-            
+
         default:
             print("error")
         }
     }
 // MARK: - Date related function
     func daysBetweenTwoDate() {
-        leaseTerm = []
+        avaliableTerm = []
         let calendar = Calendar.current
         guard startDate < endDate else { return }
-        let components = calendar.dateComponents([.day], from: startDate, to: endDate)
+        guard let standardStartDate = calendar.date(
+                bySettingHour: 0,
+                minute: 0,
+                second: 0,
+                of: startDate)?.addingTimeInterval(28800),
+              let standardEndDate = calendar.date(
+                bySettingHour: 0,
+                minute: 0,
+                second: 0,
+                of: endDate)?.addingTimeInterval(28800) else { return }
+        let components = calendar.dateComponents([.day], from: standardStartDate, to: standardEndDate)
         guard let days = components.day else { return }
         for round in 0...days {
-            guard let dateBeAdded = calendar.date(byAdding: .day, value: round, to: startDate) else { return}
-            leaseTerm.append(dateBeAdded)
+            guard let dateBeAdded = calendar.date(byAdding: .day, value: round, to: standardStartDate) else { return}
+            avaliableTerm.append(dateBeAdded)
         }
-        product.availableDate = leaseTerm
-        print(leaseTerm)
+        product.availableDate = avaliableTerm
+        print(avaliableTerm)
     }
     
     func convertDateStringToDate(textFieldText: String) -> Date {
@@ -278,5 +321,24 @@ extension PostViewController: UITextFieldDelegate {
         component.year = 2022
         guard let correctDate = calendar.date(from: component) else { fatalError() }
         return correctDate
+    }
+}
+
+// MARK: - pass date from cell delegate
+extension PostViewController: PassDateToPostVCDelegate {
+    func passClassificationToVC(text: String) {
+        product.classification = text
+    }
+    
+    func passStartDateToVC(chooseDate: Date) {
+        startDate = chooseDate
+        print(startDate)
+        daysBetweenTwoDate()
+    }
+    
+    func passEndDateToVC(chooseDate: Date) {
+        endDate = chooseDate
+        print(endDate)
+        daysBetweenTwoDate()
     }
 }

@@ -17,6 +17,8 @@ class BookedForLessorTableViewCell: UITableViewCell {
     @IBOutlet weak var bookedPhoto: UIImageView!
     @IBOutlet weak var pickUpButton: UIButton!
     @IBOutlet weak var lessorCancelBtn: UIButton!
+    @IBOutlet weak var productName: UILabel!
+    @IBOutlet weak var pickUpDateLabel: UILabel!
     
     var changeStateDelegate: LessorChangeStateDelegate?
     
@@ -33,6 +35,7 @@ class BookedForLessorTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        layoutStuff()
         // Initialization code
     }
 
@@ -40,6 +43,13 @@ class BookedForLessorTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func layoutStuff() {
+        bookedPhoto.layer.cornerRadius = 10
+        pickUpButton.layer.cornerRadius = 10
+        lessorCancelBtn.layer.cornerRadius = 10
+
     }
     
     func disablePickUpBtn() {

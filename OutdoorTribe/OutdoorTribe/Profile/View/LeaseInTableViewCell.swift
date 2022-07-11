@@ -7,14 +7,26 @@
 
 import UIKit
 
+protocol ReturnOrderDelegate {
+    func askVcReturnOrder(cell: LeaseInTableViewCell)
+}
+
 class LeaseInTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var productPhoto: UIImageView!
+    var returnOrderDelegate: ReturnOrderDelegate?
     
+    @IBOutlet weak var productPhoto: UIImageView!
+    @IBOutlet weak var productName: UILabel!
+    
+    @IBOutlet weak var returnDateLabel: UILabel!
     @IBOutlet weak var returnBtn: UIButton!
     
+    @IBOutlet weak var leaseInCallBtn: UIButton!
+    
     @IBAction func tapReturnBtn(_ sender: Any) {
-        
+        returnOrderDelegate?.askVcReturnOrder(cell: self)
+    }
+    @IBAction func tapCallBtn(_ sender: Any) {
     }
     
     override func prepareForReuse() {
@@ -23,6 +35,7 @@ class LeaseInTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        layoutStuff()
         // Initialization code
     }
 
@@ -30,6 +43,14 @@ class LeaseInTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func layoutStuff() {
+        productPhoto.layer.cornerRadius = 10
+        returnBtn.layer.cornerRadius = 10
+        leaseInCallBtn.layer.cornerRadius = 10
+        leaseInCallBtn.layer.borderWidth = 1
+        leaseInCallBtn.layer.borderColor = UIColor.darkGray.cgColor
     }
     
     func enableReturnBtn() {

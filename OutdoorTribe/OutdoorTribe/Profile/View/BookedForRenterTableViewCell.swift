@@ -17,6 +17,8 @@ class BookedForRenterTableViewCell: UITableViewCell {
     @IBOutlet weak var deliverBtn: UIButton!
     @IBOutlet weak var cancelBtn: UIButton!
     @IBOutlet weak var photoImage: UIImageView!
+    @IBOutlet weak var productName: UILabel!
+    @IBOutlet weak var pickUpdateLabel: UILabel!
     
     var changeStateDelegate: RenterChangeStateDelegate?
     
@@ -32,6 +34,7 @@ class BookedForRenterTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        layoutStuff()
         // Initialization code
     }
 
@@ -41,6 +44,12 @@ class BookedForRenterTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+    func layoutStuff() {
+        photoImage.layer.cornerRadius = 10
+        deliverBtn.layer.cornerRadius = 10
+        cancelBtn.layer.cornerRadius = 10
+    }
+    
     func disableDeliverBtn() {
         deliverBtn.isEnabled = false
         deliverBtn.backgroundColor = .gray

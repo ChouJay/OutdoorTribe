@@ -8,7 +8,14 @@
 import UIKit
 
 class BookingInfoTableViewCell: UITableViewCell {
-
+    
+    @IBOutlet weak var lessorNameLabel: UILabel!
+    @IBOutlet weak var leaseDate: UILabel!
+    @IBOutlet weak var productName: UILabel!
+    @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var amountLabel: UILabel!
+    @IBOutlet weak var descriptionTextView: UITextView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

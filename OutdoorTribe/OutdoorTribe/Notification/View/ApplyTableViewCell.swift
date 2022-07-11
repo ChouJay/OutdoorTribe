@@ -12,7 +12,7 @@ import Kingfisher
 
 class ApplyTableViewCell: UITableViewCell {
 
-    var orderDocumentsFromFirestore = [QueryDocumentSnapshot]() {
+    var applyingOrders = [Order]() {
         didSet {
             applyCollectionView.reloadData()
         }
@@ -37,17 +37,18 @@ class ApplyTableViewCell: UITableViewCell {
 // MARK: - collection view dataSource
 extension ApplyTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        orderDocumentsFromFirestore.count
+        applyingOrders.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let item = collectionView.dequeueReusableCell(
             withReuseIdentifier: "ApplyCollectionViewCell",
             for: indexPath) as? ApplyCollectionViewCell else { fatalError() }
-        guard let product = orderDocumentsFromFirestore[indexPath.row].data()["product"] as? [String: Any] else { return item }
-        print(product)
-        guard let urlStringArray = product["photoUrl"] as? [String] else { return item}
-        
+        guard let product = applyingOrders[indexPath.row].product else { return item }
+        let urlStringArray = product.photoUrl
+        let titleString = product.title
+        item.applicationNameLabel.text = titleString
         item.notifiedPhoto.kf.setImage(with: URL(string: urlStringArray.first!))
         item.setupPhotoLayout()
         return item
@@ -56,7 +57,9 @@ extension ApplyTableViewCell: UICollectionViewDataSource {
 
 // MARK: - collection view delegate
 extension ApplyTableViewCell: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
         
         return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     }

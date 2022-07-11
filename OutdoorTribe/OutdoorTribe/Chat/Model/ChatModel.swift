@@ -13,7 +13,9 @@ struct ChatRoom: Codable {
     var lastMessage: String
     var lastDate: Date
     var chaterOne: String
+    var chaterOneUid: String
     var chaterTwo: String
+    var chaterTwoUid: String
     
     var toDict: [String: Any] {
         return [
@@ -22,7 +24,9 @@ struct ChatRoom: Codable {
             "lastMessage": lastMessage as Any,
             "lastDate": lastDate as Any,
             "chaterOne": chaterOne as Any,
-            "chaterTwo": chaterTwo as Any
+            "chaterOneUid": chaterOneUid as Any,
+            "chaterTwo": chaterTwo as Any,
+            "chaterTwoUid": chaterTwoUid as Any
         ]
     }
 }

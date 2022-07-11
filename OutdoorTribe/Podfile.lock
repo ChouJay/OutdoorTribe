@@ -667,6 +667,7 @@ PODS:
   - "GoogleUtilities/NSData+zlib (7.7.0)"
   - GoogleUtilities/Reachability (7.7.0):
     - GoogleUtilities/Logger
+  - GoogleWebRTC (1.1.31999)
   - "gRPC-C++ (1.44.0)":
     - "gRPC-C++/Implementation (= 1.44.0)"
     - "gRPC-C++/Interface (= 1.44.0)"
@@ -719,7 +720,8 @@ PODS:
     - Libuv-gRPC (= 0.0.10)
   - gRPC-Core/Interface (1.44.0)
   - GTMSessionFetcher/Core (2.0.0)
-  - Kingfisher (7.2.4)
+  - IQKeyboardManagerSwift (6.5.10)
+  - Kingfisher (7.3.0)
   - leveldb-library (1.22.1)
   - Libuv-gRPC (0.0.10):
     - Libuv-gRPC/Implementation (= 0.0.10)
@@ -741,6 +743,8 @@ DEPENDENCIES:
   - FirebaseFirestore
   - FirebaseFirestoreSwift
   - FirebaseStorage
+  - GoogleWebRTC (~> 1.1)
+  - IQKeyboardManagerSwift
   - Kingfisher (~> 7.0)
   - SwiftLint
 
@@ -762,9 +766,11 @@ SPEC REPOS:
     - FirebaseStorageInternal
     - GoogleDataTransport
     - GoogleUtilities
+    - GoogleWebRTC
     - "gRPC-C++"
     - gRPC-Core
     - GTMSessionFetcher
+    - IQKeyboardManagerSwift
     - Kingfisher
     - leveldb-library
     - Libuv-gRPC
@@ -789,16 +795,18 @@ SPEC CHECKSUMS:
   FirebaseStorageInternal: 50c963664bc73739b68eb2d8427c91de5168dbcf
   GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
+  GoogleWebRTC: b39a78c4f5cc6b0323415b9233db03a2faa7b0f0
   "gRPC-C++": 9675f953ace2b3de7c506039d77be1f2e77a8db2
   gRPC-Core: 943e491cb0d45598b0b0eb9e910c88080369290b
   GTMSessionFetcher: 681175626052e03fdde7952f7e9c7a9785719506
-  Kingfisher: 2457be2121734e69e54a2312ecc0150eb9ae70b3
+  IQKeyboardManagerSwift: 52962c76ab33532f15ad9f3ff4e5715eda5335bb
+  Kingfisher: cdb1189a9223b1bc028816bd47c8b8101a58831c
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   SwiftLint: f80f1be7fa96d30e0aa68e58d45d4ea1ccaac519
 
-PODFILE CHECKSUM: 0dae44b6bcf86b2179540fe1b88a4deab591ec88
+PODFILE CHECKSUM: cdcb6035efd9de57dc18e6c0c1ce806e5037c679
 
 COCOAPODS: 1.11.3

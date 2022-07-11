@@ -17,7 +17,7 @@ class DetailInfoTableViewCell: UITableViewCell {
     var delegate: PassDateToVcDelegate?
     
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var rentLabel: UILabel!
+//    @IBOutlet weak var rentLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var amountTextField: UITextField!
 
@@ -32,7 +32,6 @@ class DetailInfoTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
         // Configure the view for the selected state
     }
     
