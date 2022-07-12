@@ -473,7 +473,6 @@ extension MapViewController {
 // MARK: - route function delegate
 extension MapViewController: MapRouteDelegate {
     func showCallUI() {
-        print(storyboard)
         guard let callVC = storyboard?.instantiateViewController(withIdentifier: "EndCallViewController") as? EndCallViewController else { return }
         callVC.modalPresentationStyle = .fullScreen
         present(callVC, animated: true, completion: nil)
