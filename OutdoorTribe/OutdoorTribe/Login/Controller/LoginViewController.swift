@@ -19,6 +19,12 @@ class LoginViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func tapPrivacyPolicyBtn(_ sender: Any) {
+        let controller = WebView()
+        controller.url = "https://www.privacypolicies.com/live/87961b7a-bce1-4d58-b679-0517b6dec594"
+        present(controller, animated: true)
+    }
+    
     @IBAction func tapLoginBtn(_ sender: Any) {
         guard let emailString = emailTextField.text,
               let passwordString = passwordTextField.text else { return }

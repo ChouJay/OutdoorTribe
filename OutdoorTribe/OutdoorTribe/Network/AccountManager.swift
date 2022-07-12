@@ -76,7 +76,7 @@ class AccountManager {
         let storageRef = storage.reference()
         let path = "userPhoto/\(UUID().uuidString).jpg"
         var urlString = ""
-        guard let imageData = uploadedImage.jpegData(compressionQuality: 0.7) else { return }
+        guard let imageData = uploadedImage.jpegData(compressionQuality: 0.5) else { return }
         let fileRef = storageRef.child(path)
         group.enter()
         fileRef.putData(imageData, metadata: nil) { storageMetadata, error in

@@ -97,6 +97,11 @@ class ProfileViewController: UIViewController {
                 childVC.userInfo = self?.userInfo
                 self?.navigationController?.pushViewController(childVC, animated: true)
         }),
+            UIAction(title: "Privacy policy", handler: { [weak self] _ in
+                let controller = WebView()
+                controller.url = "https://www.privacypolicies.com/live/87961b7a-bce1-4d58-b679-0517b6dec594"
+                self?.present(controller, animated: true)
+        }),
             UIAction(title: "Delete account", handler: { _ in
                 let firebaseAuth = Auth.auth()
                 guard let currentUserID = firebaseAuth.currentUser?.uid else { return }
@@ -115,6 +120,8 @@ class ProfileViewController: UIViewController {
         ])
     }
 }
+
+
 
 // MARK: - uploade photo delegate
 extension ProfileViewController: UploadPhotoDelegate {
