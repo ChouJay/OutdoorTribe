@@ -3004,6 +3004,16 @@
                                     <action selector="tapDismissButton:" destination="SdR-8t-wIa" eventType="touchUpInside" id="kaY-eQ-MGW"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o4i-Wa-amz">
+                                <rect key="frame" x="159.5" y="812" width="95" height="30"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Privacy policy">
+                                    <color key="titleColor" white="0.91924426020000005" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="tapPrivacyPolicyBtn:" destination="SdR-8t-wIa" eventType="touchUpInside" id="tfl-ZZ-617"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="LtJ-l9-3ut"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3018,7 +3028,9 @@
                             <constraint firstItem="LtJ-l9-3ut" firstAttribute="trailing" secondItem="LEY-wN-ebk" secondAttribute="trailing" constant="40" id="Rwn-cs-Ih0"/>
                             <constraint firstAttribute="bottom" secondItem="BqC-To-2MU" secondAttribute="bottom" id="VUB-ZZ-CPM"/>
                             <constraint firstItem="lNl-9Q-PrS" firstAttribute="centerX" secondItem="LjW-gL-b4o" secondAttribute="centerX" id="cTx-4a-ngJ"/>
+                            <constraint firstItem="o4i-Wa-amz" firstAttribute="bottom" secondItem="LtJ-l9-3ut" secondAttribute="bottom" constant="-20" id="eo0-CX-Hw0"/>
                             <constraint firstItem="KHW-CZ-oeZ" firstAttribute="centerX" secondItem="LjW-gL-b4o" secondAttribute="centerX" id="fpL-jQ-ZEw"/>
+                            <constraint firstItem="o4i-Wa-amz" firstAttribute="centerX" secondItem="BqC-To-2MU" secondAttribute="centerX" id="gKp-qB-3eS"/>
                             <constraint firstItem="LtJ-l9-3ut" firstAttribute="trailing" secondItem="BqC-To-2MU" secondAttribute="trailing" id="mm9-IG-hGd"/>
                             <constraint firstItem="KHW-CZ-oeZ" firstAttribute="top" secondItem="lNl-9Q-PrS" secondAttribute="bottom" constant="16" id="nOb-B4-gEh"/>
                             <constraint firstItem="lNl-9Q-PrS" firstAttribute="top" secondItem="wEX-av-vwP" secondAttribute="bottom" constant="16" id="nao-Gv-hUH"/>
@@ -3335,7 +3347,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="jaS-GZ-trm"/>
         <segue reference="9fu-0O-WUc"/>
-        <segue reference="POk-Rx-IpJ"/>
+        <segue reference="dHE-vd-JrA"/>
         <segue reference="gev-hz-6wC"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
