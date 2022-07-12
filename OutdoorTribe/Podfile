@@ -16,4 +16,6 @@ pod 'FirebaseFirestoreSwift'
 pod 'Cosmos', '~> 23.0'
 pod 'GoogleWebRTC', '~> 1.1'
 pod 'IQKeyboardManagerSwift'
+pod 'Firebase/Crashlytics'
+
 end

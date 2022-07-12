@@ -746,6 +746,7 @@
 				012F246C2859A53D00B891C1 /* Resources */,
 				01053E7E2859FC7D0074B125 /* SwiftLint */,
 				2006EC63AB818C5CA6423312 /* [CP] Embed Pods Frameworks */,
+				01056362287D16240095A2E7 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -826,6 +827,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n\n";
+		};
+		01056362287D16240095A2E7 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		2006EC63AB818C5CA6423312 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1103,14 +1123,15 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = OutdoorTribe/OutdoorTribe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = L56CMAKYB6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OutdoorTribe/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "Your camera will be use";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Will use your camera to take a photo";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSLocationUsageDescription = "Will use location in Map page";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Will use your location in Map page";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "this app use mic for voice chat";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -1138,14 +1159,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = OutdoorTribe/OutdoorTribe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = L56CMAKYB6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OutdoorTribe/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "Your camera will be use";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Will use your camera to take a photo";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSLocationUsageDescription = "Will use location in Map page";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Will use your location in Map page";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "this app use mic for voice chat";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
