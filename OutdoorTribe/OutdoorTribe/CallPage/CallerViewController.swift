@@ -7,12 +7,13 @@
 
 import UIKit
 
-class EndCallViewController: UIViewController {
+class CallerViewController: UIViewController {
 
+    @IBOutlet weak var calleeNameLabel: UILabel!
     @IBOutlet weak var endCallBtn: UIButton!
     
     @IBAction func tapEndCallBtn(_ sender: Any) {
-        CallManager.shared.endCall()
+        WebRTCClient.shared.deleteSdpAndCandiadte(for: "George") //  caller!! delete callee sdp & candidate!
         dismiss(animated: true, completion: nil)
     }
     

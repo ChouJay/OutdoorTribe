@@ -13,6 +13,8 @@ import WebRTC
 class WebRTCClient: NSObject {
     static let shared = WebRTCClient(iceServers: Config.defaultIce.webRTCIceServers)
     
+    var caller = ""
+    var callee = ""
     var iceServers: [String]
     var peerConnection: RTCPeerConnection? // why we don't need "?"
    // what is factory?  not get it!
@@ -32,8 +34,7 @@ class WebRTCClient: NSObject {
     init(iceServers: [String]) {
         self.iceServers = iceServers
         super.init() // why we need this?
-        rtcAudioSession.useManualAudio = true
-        rtcAudioSession.isAudioEnabled = false
+        createPeerConnection()
     }
 // MARK: - peerConnection
     func createPeerConnection() {
@@ -99,7 +100,7 @@ class WebRTCClient: NSObject {
         })
     }
     
-    func send(sdp rtcSdp: RTCSessionDescription, to person: String) {
+    func send(sdp rtcSdp: RTCSessionDescription, to person: String, completion: @escaping () -> Void) {
         do {
             let dataMessage = try self.encoder.encode(SessionDescription(from: rtcSdp))
             guard let dict = try JSONSerialization.jsonObject(
@@ -110,6 +111,7 @@ class WebRTCClient: NSObject {
                     print("Error send sdp: \(err)")
                 } else {
                     print("sdp sent!!")
+                    completion()
                 }
             }
         } catch {
@@ -138,7 +140,7 @@ class WebRTCClient: NSObject {
             Firestore.firestore()
                 .collection(person)
                 .document("candidate")
-                .setData(["sender": "George"]) { err in
+                .setData(["sender": "Jay"]) { err in
                 if let err = err {
                     print("Error send candidate: \(err)")
                 } else {
@@ -174,6 +176,7 @@ class WebRTCClient: NSObject {
 // MARK: - Close peer connection, clear Firestore, reset variables and re-create new peer connection, so it ready for new session
     func deleteSdpAndCandiadte(for person: String) {
         closePeerConnection()
+        createPeerConnection()
         Firestore.firestore()
             .collection(person)
             .document("sdp")
@@ -240,7 +243,7 @@ extension WebRTCClient: RTCPeerConnectionDelegate {
     
     // will be called, when we call peerConnection.answer()!!
     func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
-        send(candidate: candidate, to: "Jay") //是否只有offer時會call, 還是answer也會？ 感覺answer也要call 較合理
+        send(candidate: candidate, to: "George") //是否只有offer時會call, 還是answer也會？ 感覺answer也要call 較合理
     }
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {

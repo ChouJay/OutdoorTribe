@@ -19,7 +19,6 @@ class MapViewController: UIViewController {
     var currentIndex: Int?
     var products = [Product]()
     var afterFiltedProducts = [Product]()
-    var afterFiltedAndBlockProducts = [Product]()
     var myLocationManager = CLLocationManager()
     var isFilter = false {
         didSet {
@@ -165,6 +164,13 @@ class MapViewController: UIViewController {
     }
     
     func layOutSearchBar() {
+    }
+    
+    func showCallUI(indexPath: IndexPath) {
+        guard let callVC = storyboard?.instantiateViewController(withIdentifier: "CallerViewController") as? CallerViewController else { return }
+        callVC.modalPresentationStyle = .fullScreen
+        callVC.calleeNameLabel.text = afterFiltedProducts[indexPath.row].renter
+        present(callVC, animated: true, completion: nil)
     }
 }
 
@@ -472,12 +478,6 @@ extension MapViewController {
 
 // MARK: - route function delegate
 extension MapViewController: MapRouteDelegate {
-    func showCallUI() {
-        guard let callVC = storyboard?.instantiateViewController(withIdentifier: "EndCallViewController") as? EndCallViewController else { return }
-        callVC.modalPresentationStyle = .fullScreen
-        present(callVC, animated: true, completion: nil)
-    }
-    
     func showRoute(sender: MapCollectionViewCell) {
         mapView.removeOverlays(mapView.overlays)
         let buttonPosition = sender.convert(sender.bounds.origin, to: productCollectionView)
@@ -521,12 +521,27 @@ extension MapViewController: MapRouteDelegate {
     }
 }
 
-// MARK: prepare for segue
+// MARK: - prepare for segue
 extension MapViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let indexPath = sender as? IndexPath,
               let detailViewController = segue.destination as? DetailViewController else { return }
         
         detailViewController.chooseProduct = afterFiltedProducts[indexPath.row]
+    }
+}
+
+// MARK: - call delegate
+extension MapViewController: CallDelegate {
+    func askVcCallOut(cell: UICollectionViewCell) {
+        guard let indexPath = productCollectionView.indexPath(for: cell) else { return }
+        let callee = afterFiltedProducts[indexPath.row].renter
+        WebRTCClient.shared.callee = callee
+        // signal!
+        WebRTCClient.shared.offer { [weak self] sdp in
+            WebRTCClient.shared.send(sdp: sdp, to: callee) { [weak self] in
+                self?.showCallUI(indexPath: indexPath)
+            }
+        }
     }
 }

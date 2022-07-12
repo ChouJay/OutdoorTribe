@@ -54,6 +54,7 @@ extension BookingViewController: UITableViewDataSource {
             cell.lessorNameLabel.text = applyingOrder?.lessor
             cell.productName.text = applyingOrder?.product?.title
             cell.addressLabel.text = applyingOrder?.product?.addressString
+            cell.descriptionTextView.text = applyingOrder?.product?.description
             guard let requiredAmount = applyingOrder?.requiredAmount else { return cell }
             cell.amountLabel.text = String(requiredAmount)
             
