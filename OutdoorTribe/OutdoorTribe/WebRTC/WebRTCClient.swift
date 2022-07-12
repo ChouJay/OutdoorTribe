@@ -13,8 +13,6 @@ import WebRTC
 class WebRTCClient: NSObject {
     static let shared = WebRTCClient(iceServers: Config.defaultIce.webRTCIceServers)
     
-    var caller = ""
-    var callee = ""
     var iceServers: [String]
     var peerConnection: RTCPeerConnection? // why we don't need "?"
    // what is factory?  not get it!

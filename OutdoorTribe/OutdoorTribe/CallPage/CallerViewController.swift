@@ -6,14 +6,18 @@
 //
 
 import UIKit
+import Kingfisher
 
 class CallerViewController: UIViewController {
 
+    var calleeUid = ""
+    
+    @IBOutlet weak var calleePhoto: UIImageView!
     @IBOutlet weak var calleeNameLabel: UILabel!
     @IBOutlet weak var endCallBtn: UIButton!
     
     @IBAction func tapEndCallBtn(_ sender: Any) {
-        WebRTCClient.shared.deleteSdpAndCandiadte(for: "George") //  caller!! delete callee sdp & candidate!
+        WebRTCClient.shared.deleteSdpAndCandiadte(for: calleeUid) //  caller!! delete callee sdp & candidate!
         dismiss(animated: true, completion: nil)
     }
     
@@ -23,15 +27,13 @@ class CallerViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        AccountManager.shared.getUserInfo(by: calleeUid) { [weak self] accountInfoFromServer in
+            self?.calleeNameLabel.text = accountInfoFromServer.name
+            guard let url = URL(string: accountInfoFromServer.photo) else { return }
+            self?.calleePhoto.kf.setImage(with: url)
+        }
     }
-    */
-
 }

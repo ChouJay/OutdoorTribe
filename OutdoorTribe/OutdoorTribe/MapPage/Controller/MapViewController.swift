@@ -166,10 +166,11 @@ class MapViewController: UIViewController {
     func layOutSearchBar() {
     }
     
-    func showCallUI(indexPath: IndexPath) {
+    func showCallUI(indexPath: IndexPath, targetUid: String) {
         guard let callVC = storyboard?.instantiateViewController(withIdentifier: "CallerViewController") as? CallerViewController else { return }
         callVC.modalPresentationStyle = .fullScreen
         callVC.calleeNameLabel.text = afterFiltedProducts[indexPath.row].renter
+        callVC.calleeUid = targetUid
         present(callVC, animated: true, completion: nil)
     }
 }
@@ -535,12 +536,11 @@ extension MapViewController {
 extension MapViewController: CallDelegate {
     func askVcCallOut(cell: UICollectionViewCell) {
         guard let indexPath = productCollectionView.indexPath(for: cell) else { return }
-        let callee = afterFiltedProducts[indexPath.row].renter
-        WebRTCClient.shared.callee = callee
+        let calleeUid = afterFiltedProducts[indexPath.row].renterUid
         // signal!
         WebRTCClient.shared.offer { [weak self] sdp in
-            WebRTCClient.shared.send(sdp: sdp, to: callee) { [weak self] in
-                self?.showCallUI(indexPath: indexPath)
+            WebRTCClient.shared.send(sdp: sdp, to: calleeUid) { [weak self] in
+                self?.showCallUI(indexPath: indexPath, targetUid: calleeUid)
             }
         }
     }

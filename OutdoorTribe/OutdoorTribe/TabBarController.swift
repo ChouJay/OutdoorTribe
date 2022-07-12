@@ -40,9 +40,9 @@ class TabBarController: UITabBarController {
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
         AccountManager.shared.getUserInfo(by: currentUserID) { [weak self] accountFromServer in
             self?.currentUserInfo = accountFromServer
-            print(accountFromServer.name)
-            SignalingClient.shared.listenSdp(from: accountFromServer.name)
-            SignalingClient.shared.listenCandidate(from: accountFromServer.name)
+            
+            SignalingClient.shared.listenSdp(from: currentUserID)
+            SignalingClient.shared.listenCandidate(from: currentUserID)
         }
     }
 
