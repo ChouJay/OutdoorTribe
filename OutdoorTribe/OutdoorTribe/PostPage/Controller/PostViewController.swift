@@ -97,7 +97,7 @@ class PostViewController: UIViewController {
         var endPoint = 0
         var paths = [String]()
         for image in uploadedPhoto {
-            guard let imageData = image.jpegData(compressionQuality: 0.8) else { return }
+            guard let imageData = image.jpegData(compressionQuality: 0.5) else { return }
             let fileRef = storageRef.child(path + String(endPoint))
             group.enter()
             fileRef.putData(imageData, metadata: nil) { storageMetadata, error in
