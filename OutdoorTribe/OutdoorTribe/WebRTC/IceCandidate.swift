@@ -24,4 +24,3 @@ struct IceCandidate: Codable {
         return RTCIceCandidate(sdp: self.sdp, sdpMLineIndex: self.sdpMLineIndex, sdpMid: self.sdpMid)
     }
 }
-

@@ -7,14 +7,18 @@
 
 import UIKit
 
+protocol CallDelegate {
+    func askVcCallOut(cell: UICollectionViewCell)
+}
+
 protocol MapRouteDelegate {
     func showRoute(sender: MapCollectionViewCell)
-    func showCallUI()
 }
 
 class MapCollectionViewCell: UICollectionViewCell {
     
     var routeDelegae: MapRouteDelegate?
+    var callDelegate: CallDelegate?
     
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var timeStackView: UIStackView!
@@ -29,8 +33,7 @@ class MapCollectionViewCell: UICollectionViewCell {
         routeDelegae?.showRoute(sender: self)
     }
     @IBAction func tapCallButton(_ sender: UIButton) {
-        CallManager.shared.startCall(handleName: "Jay")
-        routeDelegae?.showCallUI()
+        callDelegate?.askVcCallOut(cell: self)
     }
     
     override func prepareForReuse() {
@@ -45,6 +48,7 @@ class MapCollectionViewCell: UICollectionViewCell {
     }
       
     func layOutMapCell() {
+        
         self.layer.cornerRadius = 10
         self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOffset = CGSize(width: 0.0, height: -3.0)

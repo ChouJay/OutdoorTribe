@@ -158,7 +158,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                     let familyName = appleIDCredential.fullName?.familyName ?? ""
                     var userName = ""
                     if givenName == "" && familyName == "" {
-                        userName = "Apple User"
+                        userName = "Apple User" // 需要測試! 搭配apple user delete
                     } else {
                         userName = givenName + familyName
                     }

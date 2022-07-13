@@ -7,12 +7,17 @@
 
 import UIKit
 
+protocol LeaseInCallDelegate {
+    func askVcToCall(cell: UITableViewCell)
+}
+
 protocol ReturnOrderDelegate {
     func askVcReturnOrder(cell: LeaseInTableViewCell)
 }
 
 class LeaseInTableViewCell: UITableViewCell {
 
+    var callDelegate: LeaseInCallDelegate?
     var returnOrderDelegate: ReturnOrderDelegate?
     
     @IBOutlet weak var productPhoto: UIImageView!
@@ -27,6 +32,7 @@ class LeaseInTableViewCell: UITableViewCell {
         returnOrderDelegate?.askVcReturnOrder(cell: self)
     }
     @IBAction func tapCallBtn(_ sender: Any) {
+        callDelegate?.askVcToCall(cell: self)
     }
     
     override func prepareForReuse() {

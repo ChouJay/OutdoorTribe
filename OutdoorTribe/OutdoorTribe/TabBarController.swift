@@ -11,6 +11,8 @@ import WebRTC
 
 class TabBarController: UITabBarController {
 
+    let group: DispatchGroup = DispatchGroup()
+    var currentUserInfo: Account?
     var childVc: PostViewController?
     let plusButton = UIButton()
     
@@ -25,20 +27,21 @@ class TabBarController: UITabBarController {
         tabBar.layer.cornerRadius = 10
         self.delegate = self
         SignalingClient.shared.delegate = self
-        SignalingClient.shared.listenSdp(from: "George")
-        SignalingClient.shared.listenCandidate(from: "George")
-        
+
 //        tabBar.layer.shadowColor = UIColor.yellow.cgColor
 //        tabBar.layer.shadowOffset = CGSize(width: 0.0, height: -3.0)
 //        tabBar.layer.shadowRadius = 15
 //        tabBar.layer.shadowOpacity = 1
 //        tabBar.layer.masksToBounds = false
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        guard let currentUserID = Auth.auth().currentUser?.uid else { return }
+            
+            SignalingClient.shared.listenSdp(from: currentUserID)
+            SignalingClient.shared.listenCandidate(from: currentUserID)
+
     }
 
     func setUpPlusButtonUI() {
@@ -57,6 +60,8 @@ class TabBarController: UITabBarController {
         plusButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         plusButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
     }
+    
+    
 }
 
 extension TabBarController: UITabBarControllerDelegate {
@@ -80,33 +85,34 @@ extension TabBarController: UITabBarControllerDelegate {
 
 // SignalClient delegate
 extension TabBarController: SignalClientDelegate {
+    
+    
     func signalClient(_ signalClient: SignalingClient,
                       didReceiveRemoteSdp sdp: RTCSessionDescription,
                       didReceiveSender sender: String?) {
         print("Received remote sdp")
-//        print(WebRTCClient.shared.peerConnection)
-//        WebRTCClient.shared.peerConnection?.setRemoteDescription(sdp, completionHandler: { error in
-//            if error != nil {
-//                print(error)
-//            } else {
-//                print("sdp sender: \(sender)")
-//            }
-//        })
-        if sdp.type.rawValue == 0 {
-            CallManager.shared.reportIncomingCall(uuid: CallManager.shared.uuid, handleName: "Jay") { err in
-                print(err)
+        WebRTCClient.shared.peerConnection?.setRemoteDescription(sdp, completionHandler: { [weak self] error in
+            if error != nil {
+                print(error)
+            } else {
+                print("sdp sender: \(sender)")
+                if sdp.type.rawValue == 0 {
+                    DispatchQueue.main.async {
+                        guard let callVC = self?.storyboard?.instantiateViewController(withIdentifier: "CalleeViewController") as? CalleeViewController else { return }
+                        callVC.modalPresentationStyle = .fullScreen
+                        self?.present(callVC, animated: true, completion: nil)
+                    }
+                } else {
+                    // change caller page's state from calling to connect!!
+                }
             }
-        } else {
-            CallManager.shared.provider.reportOutgoingCall(with: CallManager.shared.uuid, startedConnectingAt: nil)
-        }
+        })
         print("Received sender")
-        
     }
     
     func signalClient(_ signalClient: SignalingClient, didReceiveCandidate candidate: RTCIceCandidate) {
         print("Received remote candidate")
-//        print(WebRTCClient.shared.peerConnection)
-//        WebRTCClient.shared.peerConnection?.add(candidate)
+        WebRTCClient.shared.peerConnection?.add(candidate)
         
     }
     
@@ -117,4 +123,6 @@ extension TabBarController: SignalClientDelegate {
     func signalClientDidDisconnect(_ signalClient: SignalingClient) {
 //        self.signalingConnected = false
     }
+    
+    
 }

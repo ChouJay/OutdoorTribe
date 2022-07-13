@@ -36,6 +36,14 @@ class RentOutViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
+    
+    func showCallUI(indexPath: IndexPath, targetUid: String) {
+        guard let callVC = storyboard?.instantiateViewController(
+            withIdentifier: "CallerViewController") as? CallerViewController else { return }
+        callVC.modalPresentationStyle = .fullScreen
+        callVC.calleeUid = targetUid
+        present(callVC, animated: true, completion: nil)
+    }
 }
 
 // MARK: - table view dataSource
@@ -50,6 +58,7 @@ extension RentOutViewController: UITableViewDataSource {
             for: indexPath) as? RentOutTableViewCell else { fatalError() }
         guard let urlString = rentOrders[indexPath.row].product?.photoUrl.first,
               let url = URL(string: urlString) else { return cell }
+        cell.callDelegate = self
         cell.finishOrderDelegate = self
         cell.productPhoto.kf.setImage(with: url)
         cell.productName.text = rentOrders[indexPath.row].product?.title
@@ -88,5 +97,21 @@ extension RentOutViewController: FinishOrderDelegate {
         guard let indexPath = rentOutTableView.indexPath(for: cell) else { return }
         let orderID = rentOrders[indexPath.row].orderID
         OrderManger.shared.updateStateToFinish(documentId: orderID)
+    }
+}
+
+// MARK: - call delegate
+extension RentOutViewController: RentOutCallDelegate {
+    func askVcToCall(cell: UITableViewCell) {
+        guard let indexPath = rentOutTableView.indexPath(for: cell) else { return }
+        let calleeUid = rentOrders[indexPath.row].lessorUid
+        WebRTCClient.shared.currentUserInfo = userInfo
+        WebRTCClient.shared.calleeUid = calleeUid
+        // signal
+        WebRTCClient.shared.offer { [weak self] sdp in
+            WebRTCClient.shared.send(sdp: sdp, to: calleeUid) { [weak self] in
+                self?.showCallUI(indexPath: indexPath, targetUid: calleeUid)
+            }
+        }
     }
 }

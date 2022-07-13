@@ -224,7 +224,7 @@ extension ChatViewController {
         let path = "chatImages/\(UUID().uuidString).jpg"
         var urlString = ""
         guard let sendedPhoto = sendedPhoto else { return }
-        guard let imageData = sendedPhoto.jpegData(compressionQuality: 0.8) else { return }
+        guard let imageData = sendedPhoto.jpegData(compressionQuality: 0.5) else { return }
         let fileRef = storageRef.child(path)
         group.enter()
         fileRef.putData(imageData, metadata: nil) { storageMetadata, error in

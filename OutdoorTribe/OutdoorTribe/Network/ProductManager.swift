@@ -118,7 +118,7 @@ class ProductManager {
         var endPoint = 0
         var paths = [String]()
         
-//            guard let imageData = image.jpegData(compressionQuality: 0.8) else { return }
+//            guard let imageData = image.jpegData(compressionQuality: 0.5) else { return }
 //            let fileRef = storageRef.child(path + String(endPoint))
 //            let uploadTask = fileRef.putData(imageData, metadata: nil) { storageMetadata, error in
 //                if error == nil && storageMetadata != nil {

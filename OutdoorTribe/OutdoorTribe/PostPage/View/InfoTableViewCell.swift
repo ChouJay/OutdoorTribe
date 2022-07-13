@@ -105,7 +105,8 @@ class InfoTableViewCell: UITableViewCell {
 // MARK: - discard delegate
 extension InfoTableViewCell: DiscardDelegate {
     func askToDiscardInfo() {
-        descriptionTextView.text = ""
+        descriptionTextView.textColor = .lightGray
+        descriptionTextView.text = "Description"
         titleTextField.text = ""
         amountTextField.text = ""
         addressTextField.text = ""
