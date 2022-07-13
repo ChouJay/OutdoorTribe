@@ -15,7 +15,7 @@ class WebRTCClient: NSObject {
     
     var currentUserInfo: Account?
     var calleeUid = ""
-    var callerUid = ""
+    
     var iceServers: [String]
     var peerConnection: RTCPeerConnection? // why we don't need "?"
    // what is factory?  not get it!
