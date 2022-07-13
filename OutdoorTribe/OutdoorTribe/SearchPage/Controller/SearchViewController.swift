@@ -59,6 +59,7 @@ class SearchViewController: UIViewController {
         
         searchTableView.layer.cornerRadius = 15
         layOutHeaderView()
+//        headerView.delegate = self
         
         dateButton.layer.cornerRadius = 20
         
@@ -201,8 +202,6 @@ class SearchViewController: UIViewController {
             let offsetEndDate = endDatePicker.date.addingTimeInterval(28800)
             let availableSet = Set(product.availableDate)
             let filterSet = Set(daysBetweenTwoDate(startDate: offsetStartDate, endDate: offsetEndDate))
-            print(availableSet)
-            print(filterSet)
             if filterSet.isSubset(of: availableSet) {
                 afterFiltedProducts.append(product)
             }
@@ -362,24 +361,50 @@ extension SearchViewController: UICollectionViewDataSource {
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView != mainGalleryView {
-            searchBar.text = ""
-            let keyWord = Classification.shared.differentOutdoorType[indexPath.row]
-            switch isFilter {
-            case false:
-                ProductManager.shared.classifyPostedProduct(keyWord: keyWord) { [weak self ] classifyProducts in
-                    self?.products = classifyProducts
-                    self?.afterFiltedProducts = classifyProducts
-                    self?.searchTableView.reloadData()
+            guard let cell = headerView.cellForItem(at: indexPath) as? HeaderCollectionViewCell else { return }
+            cell.selectedState = !cell.selectedState
+            if cell.selectedState {
+                searchBar.text = ""
+                let keyWord = Classification.shared.differentOutdoorType[indexPath.row]
+                switch isFilter {
+                case false:
+                    ProductManager.shared.classifyPostedProduct(keyWord: keyWord) { [weak self ] classifyProducts in
+                        self?.products = classifyProducts
+                        self?.afterFiltedProducts = classifyProducts
+                        self?.searchTableView.reloadData()
+                    }
+                case true:
+                    ProductManager.shared.classifyPostedProduct(keyWord: keyWord) { [weak self ] classifyProducts in
+                        self?.products = classifyProducts
+                        self?.tapFilterConfirmButton()
+                        self?.searchTableView.reloadData()
+                    }
                 }
-            case true:
-                ProductManager.shared.classifyPostedProduct(keyWord: keyWord) { [weak self ] classifyProducts in
-                    self?.products = classifyProducts
-                    self?.tapFilterConfirmButton()
-                    self?.searchTableView.reloadData()
+            } else {
+                switch isFilter {
+                case false:
+                    ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
+                        self?.products = postedProducts
+                        self?.afterFiltedProducts = postedProducts
+                        self?.searchTableView.reloadData()
+                    }
+                case true:
+                    ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
+                        self?.products = postedProducts
+                        self?.tapFilterConfirmButton()
+                        self?.searchTableView.reloadData()
+                    }
                 }
             }
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        guard let cell = headerView.cellForItem(at: indexPath) as? HeaderCollectionViewCell else { return }
+        print(indexPath)
+        cell.selectedState = false
+    }
+    
     // page control move when gallery scroll
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
@@ -395,25 +420,17 @@ extension SearchViewController: UICollectionViewDelegate {
 extension SearchViewController {
     func layOutHeaderView() {
         let decorateView = UIView()
-        let secondDecorateView = UIView()
         
         view.addSubview(decorateView)
         decorateView.translatesAutoresizingMaskIntoConstraints = false
-        decorateView.heightAnchor.constraint(equalToConstant: 10).isActive = true
-        decorateView.topAnchor.constraint(equalTo: searchTableView.topAnchor, constant: 80).isActive = true
+        decorateView.heightAnchor.constraint(equalToConstant: 5).isActive = true
+        decorateView.topAnchor.constraint(equalTo: searchTableView.topAnchor, constant: 85).isActive = true
         decorateView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32).isActive = true
         decorateView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32).isActive = true
         decorateView.backgroundColor = .black
         decorateView.layer.cornerRadius = 5
-        
-        decorateView.addSubview(secondDecorateView)
-        secondDecorateView.translatesAutoresizingMaskIntoConstraints = false
-        secondDecorateView.heightAnchor.constraint(equalToConstant: 5).isActive = true
-        secondDecorateView.topAnchor.constraint(equalTo: decorateView.topAnchor, constant: 0).isActive = true
-        secondDecorateView.leadingAnchor.constraint(equalTo: decorateView.leadingAnchor, constant: 0).isActive = true
-        secondDecorateView.trailingAnchor.constraint(equalTo: decorateView.trailingAnchor, constant: 0).isActive = true
-        secondDecorateView.backgroundColor = .white
-        
+        decorateView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                
         headerView.collectionViewLayout = createCompositionalLayout()
         headerView.dataSource = self
         headerView.delegate = self
@@ -423,22 +440,21 @@ extension SearchViewController {
         headerView.layer.cornerRadius = 15
         headerView.backgroundColor = .white
         headerView.bounces = false
-//        headerView.backgroundColor = .lightGray
     }
     
     private func createCompositionalLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(80),
-            heightDimension: .absolute(85))
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15)
+//        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15)
         
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(100),
+            widthDimension: .absolute(85),
             heightDimension: .absolute(85))
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
@@ -478,7 +494,7 @@ extension SearchViewController {
     }
 }
 
-// MARk: gallery collection view layout
+// MARK: - gallery collection view layout
 extension SearchViewController {
     private func createGalleryCompositionalLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(

@@ -222,7 +222,6 @@ extension PostViewController: UIImagePickerControllerDelegate, UINavigationContr
         didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.originalImage] as? UIImage {
             uploadedPhoto.append(image)
-            print(uploadedPhoto)
         }
         if let url = info[.mediaURL] as? URL {
             print(url)
