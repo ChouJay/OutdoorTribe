@@ -23,6 +23,7 @@ class CallerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        calleePhoto.layer.cornerRadius = 85
         // Do any additional setup after loading the view.
     }
         

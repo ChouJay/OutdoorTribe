@@ -89,7 +89,6 @@ class WebRTCClient: NSObject {
     // offer : just use webRTC sdk create a sdp -> prepare to send!!
     func offer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void) {
         let constrains = RTCMediaConstraints(mandatoryConstraints: self.mediaConstrains, optionalConstraints: nil)
-        print(peerConnection)
         self.peerConnection?.offer(for: constrains, completionHandler: { sdp, error in
             guard let sdp = sdp else {
                 print(error)
@@ -168,8 +167,6 @@ class WebRTCClient: NSObject {
             self.peerConnection?.setLocalDescription(sdp, completionHandler: { [weak self] error in
                 if error == nil {
                     print("setLocal sdp ok")
-                    print(self?.peerConnection?.localDescription)
-                    print(self?.peerConnection?.remoteDescription)
                     completion(sdp)
                 } else {
                     print(error)
@@ -216,6 +213,41 @@ class WebRTCClient: NSObject {
         peerConnection?.close()
         peerConnection = nil
     }
+    
+    func deleteSdpAndCandiadteByCallee(for selfUid: String) {
+        closePeerConnection()
+        createPeerConnection()
+        Firestore.firestore()
+            .collection(selfUid)
+            .document("sdp")
+            .delete() { err in
+            if let err = err {
+                print("Error removing firestore sdp: \(err)")
+            } else {
+                Firestore.firestore()
+                    .collection(selfUid)
+                    .document("candidate")
+                    .collection("candidates")
+                    .getDocuments(source: .server, completion: { querySnapShot, err in
+                    if err == nil {
+                        guard let querySnapShot = querySnapShot else { return }
+                        for document in querySnapShot.documents {
+                            document.reference.delete()
+                        }
+                        print("Firestore candidate successfully removed!")
+                        Firestore.firestore()
+                            .collection(selfUid)
+                            .document("candidate")
+                            .delete()
+                    } else {
+                            print(err)
+                    }
+                })
+                print("Firestore sdp successfully removed!")
+            }
+        }
+    }
+
 }
 
 // RTCPeerConnectionDeleger

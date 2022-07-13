@@ -104,10 +104,8 @@ class MapViewController: UIViewController {
                         self?.afterFiltedProducts = postedProducts
                     } else {
                         for product in postedProducts {
-                            for blockUser in blockUsers {
-                                if product.renterUid != blockUser.userID {
-                                    self?.afterFiltedProducts.append(product)
-                                }
+                            for blockUser in blockUsers where product.renterUid != blockUser.userID {
+                                self?.afterFiltedProducts.append(product)
                             }
                         }
                     }
@@ -169,7 +167,8 @@ class MapViewController: UIViewController {
     }
     
     func showCallUI(indexPath: IndexPath, targetUid: String) {
-        guard let callVC = storyboard?.instantiateViewController(withIdentifier: "CallerViewController") as? CallerViewController else { return }
+        guard let callVC = storyboard?.instantiateViewController(
+            withIdentifier: "CallerViewController") as? CallerViewController else { return }
         callVC.modalPresentationStyle = .fullScreen
         callVC.calleeUid = targetUid
         present(callVC, animated: true, completion: nil)
@@ -309,10 +308,8 @@ extension MapViewController: UISearchBarDelegate {
                     self?.afterFiltedProducts = postedProducts
                 } else {
                     for product in postedProducts {
-                        for blockUser in blockUsers {
-                            if product.renterUid != blockUser.userID {
-                                self?.afterFiltedProducts.append(product)
-                            }
+                        for blockUser in blockUsers where product.renterUid != blockUser.userID {
+                            self?.afterFiltedProducts.append(product)
                         }
                     }
                 }
@@ -335,7 +332,6 @@ extension MapViewController: UISearchBarDelegate {
     
 // MARK: - date picker function
     func layoutChooseDateUI() {
-        
         startDatePicker.datePickerMode = .date
         startDatePicker.preferredDatePickerStyle = .compact
         startDatePicker.timeZone = .current
@@ -421,10 +417,8 @@ extension MapViewController: UISearchBarDelegate {
                 if blockUsers.count == 0 {
                     afterFiltedProducts.append(product)
                 } else {
-                    for blockUser in blockUsers {
-                        if product.renterUid != blockUser.userID {
-                            afterFiltedProducts.append(product)
-                        }
+                    for blockUser in blockUsers where product.renterUid != blockUser.userID {
+                        afterFiltedProducts.append(product)
                     }
                 }
             }

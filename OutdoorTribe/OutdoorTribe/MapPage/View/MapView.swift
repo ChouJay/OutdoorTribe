@@ -14,8 +14,9 @@ class MapView: MKMapView {
         if !products.isEmpty {
             for product in products {
                 let mark = MKPointAnnotation()
-                mark.coordinate = CLLocationCoordinate2D(latitude: product.address.latitude,
-                                                         longitude: product.address.longitude)
+                mark.coordinate = CLLocationCoordinate2D(
+                    latitude: product.address.latitude,
+                    longitude: product.address.longitude)
                 mark.title = product.title
                 addAnnotation(mark)
             }
