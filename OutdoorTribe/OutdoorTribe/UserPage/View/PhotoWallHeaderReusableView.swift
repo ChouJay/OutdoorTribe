@@ -21,6 +21,8 @@ class PhotoWallHeaderReusableView: UICollectionReusableView {
     @IBAction func tapFollowButton(_ sender: Any) {
         print("tset")
         delegate?.askVcFollowUser()
+        followBtn.isEnabled = false
+        followBtn.alpha = 0.7
     }
     @IBAction func tapBlockBtn(_ sender: Any) {
         delegate?.askVcBlockUser()
