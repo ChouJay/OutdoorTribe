@@ -13,6 +13,7 @@ import FirebaseAuth
 
 class MapViewController: UIViewController {
     
+    var currentUid = ""
     var allCell = [MapCollectionViewCell]()
     var allUserInfo = [Account]()
     var blockUsers = [Account]()
@@ -91,6 +92,7 @@ class MapViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         
         if let currentUserID = Auth.auth().currentUser?.uid {
+            currentUid = currentUserID
             AccountManager.shared.loadUserBlockList(byUserID: currentUserID) { [weak self] accounts in
                 self?.blockUsers = accounts
                 ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
@@ -169,7 +171,6 @@ class MapViewController: UIViewController {
     func showCallUI(indexPath: IndexPath, targetUid: String) {
         guard let callVC = storyboard?.instantiateViewController(withIdentifier: "CallerViewController") as? CallerViewController else { return }
         callVC.modalPresentationStyle = .fullScreen
-        callVC.calleeNameLabel.text = afterFiltedProducts[indexPath.row].renter
         callVC.calleeUid = targetUid
         present(callVC, animated: true, completion: nil)
     }
@@ -186,8 +187,15 @@ extension MapViewController: UICollectionViewDataSource {
         guard let item = collectionView.dequeueReusableCell(
             withReuseIdentifier: "MapCollectionViewCell",
             for: indexPath) as? MapCollectionViewCell else { fatalError() }
+        item.phoneButton.isEnabled = true
+        item.phoneButton.alpha = 1
+        if afterFiltedProducts[indexPath.row].renterUid == currentUid {
+            item.phoneButton.isEnabled = false
+            item.phoneButton.alpha = 0.5
+        }
         item.hideEstimateTimeLabel()
         item.routeDelegae = self
+        item.callDelegate = self
         guard let urlString = afterFiltedProducts[indexPath.row].photoUrl.first,
               let url = URL(string: urlString) else { return item }
         item.photoImageView.kf.setImage(with: url)
@@ -269,10 +277,8 @@ extension MapViewController: UISearchBarDelegate {
                         self?.afterFiltedProducts = postedProducts
                     } else {
                         for product in postedProducts {
-                            for blockUser in blockUsers {
-                                if product.renterUid != blockUser.userID {
-                                    self?.afterFiltedProducts.append(product)
-                                }
+                            for blockUser in blockUsers where product.renterUid != blockUser.userID {
+                                self?.afterFiltedProducts.append(product)
                             }
                         }
                     }
@@ -349,12 +355,7 @@ extension MapViewController: UISearchBarDelegate {
             height: 40)
         print(backgroundView.frame)
         backgroundView.alpha = 0
-//        backgroundView.translatesAutoresizingMaskIntoConstraints = false
-//        backgroundView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
-//        backgroundView.widthAnchor.constraint(equalToConstant: 230).isActive = true
-//        backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-//        backgroundView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
+
         backgroundView.addSubview(buttonForDoingFilter)
         buttonForDoingFilter.addTarget(self, action: #selector(tapFilterConfirmButton), for: .touchUpInside)
         buttonForDoingFilter.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
@@ -504,7 +505,6 @@ extension MapViewController: MapRouteDelegate {
                 guard let directionResponse = response else { return }
                 
                 let route = directionResponse.routes[0]
-                print("estimate: \(route.expectedTravelTime)")
                 let estimateTime = route.expectedTravelTime
                 let routeTime = Int(round(estimateTime / 60))
                 
@@ -535,13 +535,27 @@ extension MapViewController {
 // MARK: - call delegate
 extension MapViewController: CallDelegate {
     func askVcCallOut(cell: UICollectionViewCell) {
-        guard let indexPath = productCollectionView.indexPath(for: cell) else { return }
-        let calleeUid = afterFiltedProducts[indexPath.row].renterUid
-        // signal!
-        WebRTCClient.shared.offer { [weak self] sdp in
-            WebRTCClient.shared.send(sdp: sdp, to: calleeUid) { [weak self] in
-                self?.showCallUI(indexPath: indexPath, targetUid: calleeUid)
+        if let currentUid = Auth.auth().currentUser?.uid {
+            for account in allUserInfo where account.userID == currentUid {
+                guard let indexPath = productCollectionView.indexPath(for: cell) else { return }
+                let calleeUid = afterFiltedProducts[indexPath.row].renterUid
+                WebRTCClient.shared.currentUserInfo = account
+                WebRTCClient.shared.calleeUid = calleeUid
+                // signal!
+                WebRTCClient.shared.offer { [weak self] sdp in
+                    WebRTCClient.shared.send(sdp: sdp, to: calleeUid) { [weak self] in
+                        self?.showCallUI(indexPath: indexPath, targetUid: calleeUid)
+                    }
+                }
             }
+        } else {
+            print("Please login to activate call")
+            let alertController = UIAlertController(title: "Please login to call others!",
+                                                    message: nil,
+                                                    preferredStyle: .alert)
+            let defaultAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            alertController.addAction(defaultAction)
+            self.present(alertController, animated: true, completion: nil)
         }
     }
 }

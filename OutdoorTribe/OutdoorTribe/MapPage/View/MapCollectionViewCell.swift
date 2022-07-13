@@ -33,7 +33,7 @@ class MapCollectionViewCell: UICollectionViewCell {
         routeDelegae?.showRoute(sender: self)
     }
     @IBAction func tapCallButton(_ sender: UIButton) {
-        
+        callDelegate?.askVcCallOut(cell: self)
     }
     
     override func prepareForReuse() {

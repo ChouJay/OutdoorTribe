@@ -11,6 +11,7 @@ import WebRTC
 
 class TabBarController: UITabBarController {
 
+    let group: DispatchGroup = DispatchGroup()
     var currentUserInfo: Account?
     var childVc: PostViewController?
     let plusButton = UIButton()
@@ -27,7 +28,6 @@ class TabBarController: UITabBarController {
         self.delegate = self
         SignalingClient.shared.delegate = self
 
-        
 //        tabBar.layer.shadowColor = UIColor.yellow.cgColor
 //        tabBar.layer.shadowOffset = CGSize(width: 0.0, height: -3.0)
 //        tabBar.layer.shadowRadius = 15
@@ -38,12 +38,10 @@ class TabBarController: UITabBarController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
-        AccountManager.shared.getUserInfo(by: currentUserID) { [weak self] accountFromServer in
-            self?.currentUserInfo = accountFromServer
             
             SignalingClient.shared.listenSdp(from: currentUserID)
             SignalingClient.shared.listenCandidate(from: currentUserID)
-        }
+
     }
 
     func setUpPlusButtonUI() {
@@ -62,6 +60,8 @@ class TabBarController: UITabBarController {
         plusButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         plusButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
     }
+    
+    
 }
 
 extension TabBarController: UITabBarControllerDelegate {
@@ -85,11 +85,12 @@ extension TabBarController: UITabBarControllerDelegate {
 
 // SignalClient delegate
 extension TabBarController: SignalClientDelegate {
+    
+    
     func signalClient(_ signalClient: SignalingClient,
                       didReceiveRemoteSdp sdp: RTCSessionDescription,
                       didReceiveSender sender: String?) {
         print("Received remote sdp")
-        print(WebRTCClient.shared.peerConnection)
         WebRTCClient.shared.peerConnection?.setRemoteDescription(sdp, completionHandler: { [weak self] error in
             if error != nil {
                 print(error)
@@ -111,7 +112,6 @@ extension TabBarController: SignalClientDelegate {
     
     func signalClient(_ signalClient: SignalingClient, didReceiveCandidate candidate: RTCIceCandidate) {
         print("Received remote candidate")
-        print(WebRTCClient.shared.peerConnection)
         WebRTCClient.shared.peerConnection?.add(candidate)
         
     }
@@ -123,4 +123,6 @@ extension TabBarController: SignalClientDelegate {
     func signalClientDidDisconnect(_ signalClient: SignalingClient) {
 //        self.signalingConnected = false
     }
+    
+    
 }

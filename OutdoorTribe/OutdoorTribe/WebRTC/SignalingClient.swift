@@ -30,7 +30,6 @@ class SignalingClient {
     //  orther device listen SDP and Candidate data and add it into the peer connection
     func listenSdp(from person: String) {
         Firestore.firestore().collection(person).document("sdp").addSnapshotListener { documentSnapshot, error in
-            print(WebRTCClient.shared.peerConnection)
             guard let documentSnapshot = documentSnapshot else {
                 print("Error fetching sdp: \(error)")
                 return
@@ -42,6 +41,7 @@ class SignalingClient {
             print("Firestore sdp data: \(data)")
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: data, options: .prettyPrinted)
+                print(jsonData)
                 let sessionDescription = try self.decoder.decode(SessionDescription.self, from: jsonData)
                 self.delegate?.signalClient(self,
                                             didReceiveRemoteSdp: sessionDescription.rtcSessionDescription,

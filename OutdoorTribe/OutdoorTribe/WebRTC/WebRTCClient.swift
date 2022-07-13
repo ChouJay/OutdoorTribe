@@ -13,6 +13,9 @@ import WebRTC
 class WebRTCClient: NSObject {
     static let shared = WebRTCClient(iceServers: Config.defaultIce.webRTCIceServers)
     
+    var currentUserInfo: Account?
+    var calleeUid = ""
+    var callerUid = ""
     var iceServers: [String]
     var peerConnection: RTCPeerConnection? // why we don't need "?"
    // what is factory?  not get it!
@@ -118,6 +121,9 @@ class WebRTCClient: NSObject {
     }
     // After that peer connection auto generate local candidates. You also need to send them to the other person.
     func send(candidate rtcIceCandidate: RTCIceCandidate, to person: String) {
+        guard let currentUserInfo = currentUserInfo else {
+            print("No currentUser, can't send candidate!")
+            return }
         do {
             // what is iceCandidate
             let dataMessage = try self.encoder.encode(IceCandidate(from: rtcIceCandidate))
@@ -138,7 +144,7 @@ class WebRTCClient: NSObject {
             Firestore.firestore()
                 .collection(person)
                 .document("candidate")
-                .setData(["sender": "Jay"]) { err in
+                .setData(currentUserInfo.toDict) { err in
                 if let err = err {
                     print("Error send candidate: \(err)")
                 } else {
@@ -241,7 +247,7 @@ extension WebRTCClient: RTCPeerConnectionDelegate {
     
     // will be called, when we call peerConnection.answer()!!
     func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
-        send(candidate: candidate, to: "George") //是否只有offer時會call, 還是answer也會？ 感覺answer也要call 較合理
+        send(candidate: candidate, to: calleeUid) // 是否只有offer時會call, 還是answer也會？ 感覺answer也要call 較合理
     }
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
