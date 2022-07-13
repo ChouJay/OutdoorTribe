@@ -64,8 +64,6 @@
 		014C831D28646E45006A4EC1 /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C831C28646E45006A4EC1 /* ChatTableViewCell.swift */; };
 		014C83212865BD8B006A4EC1 /* ChatImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C83202865BD8B006A4EC1 /* ChatImageTableViewCell.swift */; };
 		014C832328687AC5006A4EC1 /* MainGalleryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C832228687AC5006A4EC1 /* MainGalleryViewCell.swift */; };
-		014CF10D28756644006E4F4E /* CallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014CF10C28756644006E4F4E /* CallManager.swift */; };
-		014CF10F28756AAA006E4F4E /* ProviderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014CF10E28756AAA006E4F4E /* ProviderDelegate.swift */; };
 		014CF1182877149A006E4F4E /* BlockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014CF1172877149A006E4F4E /* BlockViewController.swift */; };
 		014CF11A287714F1006E4F4E /* BlockTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014CF119287714F1006E4F4E /* BlockTableViewCell.swift */; };
 		0168A077287AA0A000227491 /* CallerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0168A076287AA0A000227491 /* CallerViewController.swift */; };
@@ -158,8 +156,6 @@
 		014C831C28646E45006A4EC1 /* ChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableViewCell.swift; sourceTree = "<group>"; };
 		014C83202865BD8B006A4EC1 /* ChatImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatImageTableViewCell.swift; sourceTree = "<group>"; };
 		014C832228687AC5006A4EC1 /* MainGalleryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGalleryViewCell.swift; sourceTree = "<group>"; };
-		014CF10C28756644006E4F4E /* CallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallManager.swift; sourceTree = "<group>"; };
-		014CF10E28756AAA006E4F4E /* ProviderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDelegate.swift; sourceTree = "<group>"; };
 		014CF1172877149A006E4F4E /* BlockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockViewController.swift; sourceTree = "<group>"; };
 		014CF119287714F1006E4F4E /* BlockTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTableViewCell.swift; sourceTree = "<group>"; };
 		0168A076287AA0A000227491 /* CallerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallerViewController.swift; sourceTree = "<group>"; };
@@ -327,7 +323,6 @@
 			isa = PBXGroup;
 			children = (
 				01985D2B285C60E200BCD866 /* Network */,
-				014CF10B287565FE006E4F4E /* CallKit */,
 				01401F742873400F0024D1E1 /* WebRTC */,
 				0168A075287AA08500227491 /* CallPage */,
 				0139FC7D2869D95B003C3851 /* OutdoorTribe.entitlements */,
@@ -508,15 +503,6 @@
 				014C83202865BD8B006A4EC1 /* ChatImageTableViewCell.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		014CF10B287565FE006E4F4E /* CallKit */ = {
-			isa = PBXGroup;
-			children = (
-				014CF10C28756644006E4F4E /* CallManager.swift */,
-				014CF10E28756AAA006E4F4E /* ProviderDelegate.swift */,
-			);
-			path = CallKit;
 			sourceTree = "<group>";
 		};
 		014CF11228771454006E4F4E /* BlockPage */ = {
@@ -949,7 +935,6 @@
 				01053E8C285B385C0074B125 /* ProductManager.swift in Sources */,
 				0195EB4D285DDCDA0015A12A /* DetailInfoTableViewCell.swift in Sources */,
 				0168A077287AA0A000227491 /* CallerViewController.swift in Sources */,
-				014CF10D28756644006E4F4E /* CallManager.swift in Sources */,
 				0195EB5E285EF58D0015A12A /* NotificatoinViewController.swift in Sources */,
 				01056364287D70B10095A2E7 /* CalleeViewController.swift in Sources */,
 				0195EB6C285F1EC30015A12A /* BookingPhotoTableViewCell.swift in Sources */,
@@ -957,7 +942,6 @@
 				01053E82285B26620074B125 /* TabBarController.swift in Sources */,
 				0139FC7328696FD1003C3851 /* LoginViewController.swift in Sources */,
 				0195EB7C286073040015A12A /* MapView.swift in Sources */,
-				014CF10F28756AAA006E4F4E /* ProviderDelegate.swift in Sources */,
 				0195EB78286049490015A12A /* ColorExtension.swift in Sources */,
 				01053E87285B34680074B125 /* SearchTableViewCell.swift in Sources */,
 				012F24722859A53D00B891C1 /* AppDelegate.swift in Sources */,
