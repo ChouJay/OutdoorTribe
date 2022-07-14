@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseAuth
 import Kingfisher
+import AuthenticationServices
 
 class ProfileViewController: UIViewController {
     let firestoreAuth = Auth.auth()
@@ -105,18 +106,37 @@ class ProfileViewController: UIViewController {
             UIAction(title: "Delete account", handler: { _ in
                 let firebaseAuth = Auth.auth()
                 guard let currentUserID = firebaseAuth.currentUser?.uid else { return }
-                firebaseAuth.currentUser?.delete(completion: { err in
+                firebaseAuth.currentUser?.delete(completion: { [weak self] err in
                     if err == nil {
                         AccountManager.shared.deleteUserAccount(userID: currentUserID)
                         SubscribeManager.shared.deleteOthersSubscriptionWithUser(userID: currentUserID)
                         ProductManager.shared.deleteProductWithUser(userID: currentUserID)
                         OrderManger.shared.deleteOrderByUser(userID: currentUserID)
                         ChatManager.shared.deleteChatRoomByUser(userID: currentUserID)
+                        self?.tabBarController?.selectedIndex = 0
                     } else {
-                        print(err)
+                        guard let err = err else { return }
+                        let error = AuthErrorCode.Code(rawValue: err._code)
+                        if error == .requiresRecentLogin {
+                            let alertController = UIAlertController(title: "Error!",
+                                                                    message: "Known error occur! please logout & signin again, thanks!",
+                                                                    preferredStyle: .alert)
+                            let defaultAction = UIAlertAction(title: "Logout", style: .cancel) { alertAction in
+                                let firebaseAuth = Auth.auth()
+                                do {
+                                    try firebaseAuth.signOut()
+                                } catch {
+                                    print(error)
+                                }
+                                
+                                self?.tabBarController?.selectedIndex = 0
+                            }
+                            alertController.addAction(defaultAction)
+                            self?.present(alertController, animated: true, completion: nil)
+                        }
                     }
                 })
-        })
+            })
         ])
     }
 }

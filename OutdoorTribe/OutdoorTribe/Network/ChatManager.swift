@@ -20,8 +20,6 @@ class ChatManager {
                 for document in querySnapShot.documents {
                     if let chaterOneUid = document.data()["chaterOneUid"] as? String,
                        let chaterTwoUid = document.data()["chaterTwoUid"] as? String {
-                        print(chaterOneUid)
-                        print(chaterTwoUid)
                         if userID == chaterOneUid || userID == chaterTwoUid {
                             document.reference.delete()
                         }
@@ -144,7 +142,6 @@ class ChatManager {
             .whereField("users", arrayContains: userName)
             .getDocuments(source: .server) { querySnapShot, error in
             if error == nil {
-                print(querySnapShot?.count)
                 guard let documents = querySnapShot?.documents else { return }
                 for document in documents {
                     let chatRoom: ChatRoom?

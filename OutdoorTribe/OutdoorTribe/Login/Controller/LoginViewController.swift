@@ -158,7 +158,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                     let familyName = appleIDCredential.fullName?.familyName ?? ""
                     var userName = ""
                     if givenName == "" && familyName == "" {
-                        userName = "Apple User" // 需要測試! 搭配apple user delete
+                        userName = "\(UUID())" // 需要測試! 搭配apple user delete
                     } else {
                         userName = givenName + familyName
                     }
@@ -172,10 +172,11 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                                           ratingCount: 0,
                                           point: 3500,
                                           followerCount: 0)
-                    AccountManager.shared.storeRegistedAccount(account: account) { result in
+                    AccountManager.shared.storeRegistedAccount(account: account) { [weak self] result in
                         switch result {
                         case let .success(string):
                             print(string)
+                            self?.dismiss(animated: true, completion: nil)
                         case let .failure(error):
                             print(error)
                         }
