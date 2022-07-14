@@ -9,8 +9,15 @@ import UIKit
 
 class SignUpViewController: UIViewController {
 
+    @IBOutlet weak var titleLabel: UILabel!
+    
+    @IBOutlet weak var travelSlogan: UILabel!
+    @IBOutlet weak var discoverySlogan: UILabel!
+    @IBOutlet weak var adventureSlogan: UILabel!
+    @IBOutlet weak var andSlogan1: UILabel!
+    @IBOutlet weak var andSlogan2: UILabel!
+    
     @IBOutlet weak var signInBtn: UIButton!
-    @IBOutlet weak var gradientView: UIView!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var nameTextField: UITextField!
@@ -18,7 +25,6 @@ class SignUpViewController: UIViewController {
     @IBAction func tapSignUpBtn(_ sender: Any) {
         if nameTextField.text == "" {
 
-            
         } else {
             guard let emailString = emailTextField.text,
                   let passwordString = passwordTextField.text,
@@ -51,20 +57,17 @@ class SignUpViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        layoutGradientView()
         layoutStuff()
-    }
-    
-    func layoutGradientView() {
-        let gradientLayer = CAGradientLayer()
-        let initialColor = UIColor.white // our initial color
-        let finalColor = initialColor.withAlphaComponent(0.0)
-        gradientLayer.frame = gradientView.bounds
-        gradientLayer.colors = [initialColor.cgColor, finalColor.cgColor]
-        gradientLayer.locations = [0, 1]
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
-        gradientView.layer.addSublayer(gradientLayer)
+        if UIScreen.main.bounds.height < 700 {
+            
+            travelSlogan.isHidden = true
+            discoverySlogan.isHidden = true
+            adventureSlogan.isHidden = true
+            andSlogan1.isHidden = true
+            andSlogan2.isHidden = true
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 10).isActive = true
+            nameTextField.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -270).isActive = true
+        }
     }
     
     func layoutStuff() {
@@ -81,4 +84,3 @@ class SignUpViewController: UIViewController {
         )
     }
 }
-
