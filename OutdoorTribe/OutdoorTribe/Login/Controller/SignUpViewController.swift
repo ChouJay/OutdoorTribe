@@ -24,7 +24,12 @@ class SignUpViewController: UIViewController {
     
     @IBAction func tapSignUpBtn(_ sender: Any) {
         if nameTextField.text == "" {
-
+            let alertController = UIAlertController(title: "Error",
+                                                    message: "Please typing your name!",
+                                                    preferredStyle: .alert)
+            let defaultAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            alertController.addAction(defaultAction)
+            present(alertController, animated: true, completion: nil)
         } else {
             guard let emailString = emailTextField.text,
                   let passwordString = passwordTextField.text,

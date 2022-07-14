@@ -3047,6 +3047,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="mao-tV-LoA"/>
                                 </constraints>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -3056,6 +3057,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="wHA-ML-BKf"/>
                                 </constraints>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -3212,6 +3214,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Z5D-r0-4mg"/>
                                 </constraints>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -3221,6 +3224,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="irg-ZR-0CL"/>
                                 </constraints>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -3230,6 +3234,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="PSy-Qd-Ak7"/>
                                 </constraints>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
