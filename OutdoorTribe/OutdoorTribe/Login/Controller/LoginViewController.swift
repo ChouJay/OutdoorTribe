@@ -22,6 +22,7 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func tapPrivacyPolicyBtn(_ sender: Any) {
+        print("be tap")
         let controller = WebView()
         controller.url = "https://www.privacypolicies.com/live/87961b7a-bce1-4d58-b679-0517b6dec594"
         present(controller, animated: true)

@@ -63,14 +63,16 @@ class SignUpViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         layoutStuff()
+        
+        // prevent layout issue for iphone 8
         if UIScreen.main.bounds.height < 700 {
-            
             travelSlogan.isHidden = true
             discoverySlogan.isHidden = true
             adventureSlogan.isHidden = true
             andSlogan1.isHidden = true
             andSlogan2.isHidden = true
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 10).isActive = true
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
             nameTextField.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -270).isActive = true
         }
     }
