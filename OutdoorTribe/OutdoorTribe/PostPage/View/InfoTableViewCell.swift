@@ -61,6 +61,7 @@ class InfoTableViewCell: UITableViewCell {
         descriptionTextView.layer.cornerRadius = 5
         descriptionTextView.layer.borderWidth = 0.5
         descriptionTextView.layer.borderColor = UIColor.lightGray.cgColor
+        
     }
     
     func setDatePickerValueChange() {

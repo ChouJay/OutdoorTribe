@@ -233,9 +233,9 @@
                                                 </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="Kdb-Qj-nFl" firstAttribute="leading" secondItem="4Pu-vx-on3" secondAttribute="leadingMargin" id="51L-q2-IeZ"/>
-                                                <constraint firstAttribute="trailing" secondItem="0NZ-n3-vie" secondAttribute="trailing" constant="20" symbolic="YES" id="7tr-Xo-iia"/>
-                                                <constraint firstItem="0NZ-n3-vie" firstAttribute="leading" secondItem="4Pu-vx-on3" secondAttribute="leading" constant="20" symbolic="YES" id="9QA-B0-XKV"/>
+                                                <constraint firstItem="Kdb-Qj-nFl" firstAttribute="leading" secondItem="4Pu-vx-on3" secondAttribute="leading" constant="20" id="06P-L3-C7l"/>
+                                                <constraint firstAttribute="trailing" secondItem="0NZ-n3-vie" secondAttribute="trailing" constant="20" id="7tr-Xo-iia"/>
+                                                <constraint firstItem="0NZ-n3-vie" firstAttribute="leading" secondItem="4Pu-vx-on3" secondAttribute="leading" constant="20" id="9QA-B0-XKV"/>
                                                 <constraint firstItem="Uqc-TN-mQU" firstAttribute="leading" secondItem="4Pu-vx-on3" secondAttribute="leading" constant="20" symbolic="YES" id="ILO-Tr-aJc"/>
                                                 <constraint firstItem="Gjh-Mm-8mI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fVn-8r-bDz" secondAttribute="trailing" id="SrY-Np-Avs"/>
                                                 <constraint firstItem="fVn-8r-bDz" firstAttribute="leading" secondItem="4Pu-vx-on3" secondAttribute="leading" constant="20" id="WEa-nx-hVD"/>
@@ -245,7 +245,6 @@
                                                 <constraint firstItem="BvX-ws-AdQ" firstAttribute="leading" secondItem="4Pu-vx-on3" secondAttribute="leading" constant="20" id="cFl-vb-ZN2"/>
                                                 <constraint firstItem="Gjh-Mm-8mI" firstAttribute="top" secondItem="BvX-ws-AdQ" secondAttribute="bottom" constant="20" id="cs9-9A-Wk1"/>
                                                 <constraint firstItem="0NZ-n3-vie" firstAttribute="top" secondItem="4Pu-vx-on3" secondAttribute="top" constant="20" symbolic="YES" id="d7D-ut-h3X"/>
-                                                <constraint firstItem="Kdb-Qj-nFl" firstAttribute="trailing" secondItem="4Pu-vx-on3" secondAttribute="trailingMargin" id="eSm-JQ-d6w"/>
                                                 <constraint firstItem="0tj-KG-T4Z" firstAttribute="centerY" secondItem="BvX-ws-AdQ" secondAttribute="centerY" id="g3e-P9-W6t"/>
                                                 <constraint firstItem="Uqc-TN-mQU" firstAttribute="top" secondItem="fVn-8r-bDz" secondAttribute="bottom" constant="20" id="gxt-ld-0vQ"/>
                                                 <constraint firstAttribute="trailing" secondItem="0tj-KG-T4Z" secondAttribute="trailing" constant="20" id="j88-dn-1n7"/>
@@ -256,7 +255,8 @@
                                                 <constraint firstAttribute="trailing" secondItem="2O9-fO-yKe" secondAttribute="trailing" constant="20" id="n91-Pp-rdX"/>
                                                 <constraint firstItem="Kdb-Qj-nFl" firstAttribute="top" secondItem="2O9-fO-yKe" secondAttribute="bottom" constant="20" id="qUu-FL-x5Q"/>
                                                 <constraint firstAttribute="trailing" secondItem="Gjh-Mm-8mI" secondAttribute="trailing" constant="20" id="tBh-IM-szM"/>
-                                                <constraint firstAttribute="trailing" secondItem="BvX-ws-AdQ" secondAttribute="trailing" constant="20" symbolic="YES" id="zWO-WA-efM"/>
+                                                <constraint firstAttribute="trailing" secondItem="Kdb-Qj-nFl" secondAttribute="trailing" constant="20" id="wgB-Ti-HWE"/>
+                                                <constraint firstAttribute="trailing" secondItem="BvX-ws-AdQ" secondAttribute="trailing" constant="20" id="zWO-WA-efM"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
