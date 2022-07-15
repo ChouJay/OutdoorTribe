@@ -26,6 +26,8 @@ class PhotoWallHeaderReusableView: UICollectionReusableView {
     }
     @IBAction func tapBlockBtn(_ sender: Any) {
         delegate?.askVcBlockUser()
+        blockBtn.isEnabled = false
+        blockBtn.alpha = 0.7
     }
     
 }

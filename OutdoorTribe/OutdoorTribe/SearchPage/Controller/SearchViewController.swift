@@ -97,6 +97,7 @@ class SearchViewController: UIViewController {
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
         AccountManager.shared.loadUserBlockList(byUserID: currentUserID) { [weak self] accounts in
             self?.blockUsers = accounts
+            self?.searchTableView.reloadData()
         }
     }
     

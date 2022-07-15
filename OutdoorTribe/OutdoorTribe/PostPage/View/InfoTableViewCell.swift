@@ -21,14 +21,17 @@ class InfoTableViewCell: UITableViewCell {
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var classificationTextField: UITextField!
-    @IBOutlet weak var startDatePicker: UIDatePicker!
-    @IBOutlet weak var endDatePicker: UIDatePicker!
+    
+    @IBOutlet weak var startDateBtn: UIButton!
+    @IBOutlet weak var endDateBtn: UIButton!
+    
+    
     @IBOutlet weak var pullDownBtn: UIButton!
     @IBOutlet weak var descriptionTextView: UITextView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setDatePickerValueChange()
+//        setDatePickerValueChange()
         setUpPullDownBtn()
         layoutTextView()
         // Initialization code
@@ -40,14 +43,14 @@ class InfoTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    @objc func dateChange(datePicker: UIDatePicker) {
-        passDateDelegate?.passStartDateToVC(chooseDate: datePicker.date)
+    @objc func dateChange() {
+        print("test1")
         // Replace the hour (time) of both dates with 00:00
     }
     
-    @objc func dateChangeForLast(datePicker: UIDatePicker) {
+    @objc func dateChangeForLast() {
         // call delegate func to pass date to VC
-        passDateDelegate?.passEndDateToVC(chooseDate: datePicker.date)
+        print("test2")
     }
     
     func formatDate(date: Date) -> String {
@@ -62,12 +65,19 @@ class InfoTableViewCell: UITableViewCell {
         descriptionTextView.layer.borderWidth = 0.5
         descriptionTextView.layer.borderColor = UIColor.lightGray.cgColor
         
+        startDateBtn.layer.cornerRadius = 5
+        endDateBtn.layer.cornerRadius = 5
+        startDateBtn.layer.borderWidth = 0.5
+        startDateBtn.layer.borderColor = UIColor.lightGray.cgColor
+        endDateBtn.layer.borderWidth = 0.5
+        endDateBtn.layer.borderColor = UIColor.lightGray.cgColor
+        
     }
     
-    func setDatePickerValueChange() {
-        startDatePicker.addTarget(self, action: #selector(dateChange(datePicker:)), for: .valueChanged)
-        endDatePicker.addTarget(self, action: #selector(dateChangeForLast(datePicker:)), for: .valueChanged)
-    }
+//    func setDatePickerValueChange() {
+//        startDateStack.addTarget(self, action: #selector(dateChange), for: .touchUpInside)
+//        endDateStack.addTarget(self, action: #selector(dateChangeForLast), for: .touchUpInside)
+//    }
     
     func setUpPullDownBtn() {
         pullDownBtn.showsMenuAsPrimaryAction = true
@@ -107,12 +117,12 @@ class InfoTableViewCell: UITableViewCell {
 extension InfoTableViewCell: DiscardDelegate {
     func askToDiscardInfo() {
         descriptionTextView.textColor = .lightGray
-        descriptionTextView.text = "Description"
+        descriptionTextView.text = "description"
         titleTextField.text = ""
         amountTextField.text = ""
         addressTextField.text = ""
         classificationTextField.text = ""
-        startDatePicker.date = .now
-        endDatePicker.date = .now
+//        startDatePicker.date = .now
+//        endDatePicker.date = .now
     }
 }
