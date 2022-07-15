@@ -9,11 +9,13 @@ import UIKit
 
 protocol LessorChangeStateDelegate {
     func askVcChangeToPickUpState(_ sender: UIButton)
-    func askVcToCancelLessorOrder(_ sender: UIButton)
+    func askVcToCancelLessorOrder(_ orderID: String)
 }
 
 class BookedForLessorTableViewCell: UITableViewCell {
 
+    var orderID = ""
+    
     @IBOutlet weak var bookedPhoto: UIImageView!
     @IBOutlet weak var pickUpButton: UIButton!
     @IBOutlet weak var lessorCancelBtn: UIButton!
@@ -26,7 +28,7 @@ class BookedForLessorTableViewCell: UITableViewCell {
         changeStateDelegate?.askVcChangeToPickUpState(sender)
     }
     @IBAction func tapLessorCancelBtn(_ sender: UIButton) {
-//        changeStateDelegate?.askVcChangeToDeliverState(sender)
+        changeStateDelegate?.askVcToCancelLessorOrder(orderID)
     }
     
     override func prepareForReuse() {

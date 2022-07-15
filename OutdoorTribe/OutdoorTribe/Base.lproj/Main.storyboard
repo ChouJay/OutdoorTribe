@@ -2913,6 +2913,9 @@
                                                             <state key="normal" title="Cancel">
                                                                 <color key="titleColor" systemColor="systemGroupedBackgroundColor"/>
                                                             </state>
+                                                            <connections>
+                                                                <action selector="tapCancelBtn:" destination="bFB-vW-JQc" eventType="touchUpInside" id="Oq2-dg-qND"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                 </stackView>
