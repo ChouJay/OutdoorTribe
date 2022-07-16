@@ -300,8 +300,46 @@ extension CalendarPickerViewController: UICollectionViewDelegate, UICollectionVi
               let day = cell.day else { return }
         guard day.isSelectable else { return }
         
-        
-        cell.selectedState = true
+        switch selectedCount {
+        case 2:
+            collectionView.visibleCells.forEach { selectedCell in
+                guard let selectedCell = selectedCell as? CalendarCollectionCell else { return }
+                selectedCell.selectedState = false
+                selectedCell.applyDefaultStyle(
+                    isWithinDisplayedMonth: selectedCell.day?.isWithinDisplayedMonth ?? true)
+            }
+            selectedDates = []
+            selectedCount = 0
+            selectedDates.insert(day.date, at: selectedCount)
+            cell.selectedState = true
+            selectedCount += 1
+        case 1:
+            guard let startDate = selectedDates.first else { return}
+            if startDate < day.date {
+                selectedDates.insert(day.date, at: selectedCount)
+                cell.selectedState = true
+                selectedCount += 1
+            } else {
+                collectionView.visibleCells.forEach { selectedCell in
+                    guard let selectedCell = selectedCell as? CalendarCollectionCell else { return }
+                    selectedCell.selectedState = false
+                    selectedCell.applyDefaultStyle(
+                        isWithinDisplayedMonth: selectedCell.day?.isWithinDisplayedMonth ?? true)
+                }
+                selectedDates = []
+                selectedCount = 0
+                selectedDates.insert(day.date, at: selectedCount)
+                cell.selectedState = true
+                selectedCount += 1
+            }
+        case 0:
+            selectedDates.insert(day.date, at: selectedCount)
+            cell.selectedState = true
+            selectedCount += 1
+        default:
+            print("default")
+        }
+        print(selectedDates)
     }
 
     func collectionView(_ collectionView: UICollectionView,

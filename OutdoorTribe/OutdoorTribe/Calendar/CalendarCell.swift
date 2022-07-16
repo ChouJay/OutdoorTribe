@@ -16,7 +16,6 @@ class CalendarCollectionCell: UICollectionViewCell {
             selectionBackgroundView.isHidden = !selectedState
         }
     }
-    var isCellSelectable = true
     
     var selectionBackgroundView: UIView = {
         let view = UIView()
