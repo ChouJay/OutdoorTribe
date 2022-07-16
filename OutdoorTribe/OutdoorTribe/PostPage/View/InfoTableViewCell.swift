@@ -11,6 +11,7 @@ protocol PassDateToPostVCDelegate {
     func passEndDateToVC(chooseDate: Date)
     func passStartDateToVC(chooseDate: Date)
     func passClassificationToVC(text: String)
+    func passDateRangeToVC()
 }
 
 class InfoTableViewCell: UITableViewCell {
@@ -22,9 +23,8 @@ class InfoTableViewCell: UITableViewCell {
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var classificationTextField: UITextField!
     
-    @IBOutlet weak var startDateBtn: UIButton!
-    @IBOutlet weak var endDateBtn: UIButton!
-    
+    @IBOutlet weak var datePickerBtn: UIButton!
+    @IBOutlet weak var dateRangeTextField: UITextField!
     
     @IBOutlet weak var pullDownBtn: UIButton!
     @IBOutlet weak var descriptionTextView: UITextView!
@@ -41,6 +41,11 @@ class InfoTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    
+    @IBAction func tapDateRangePicker(_ sender: Any) {
+        passDateDelegate?.passDateRangeToVC()
     }
     
     @objc func dateChange() {
@@ -65,19 +70,7 @@ class InfoTableViewCell: UITableViewCell {
         descriptionTextView.layer.borderWidth = 0.5
         descriptionTextView.layer.borderColor = UIColor.lightGray.cgColor
         
-        startDateBtn.layer.cornerRadius = 5
-        endDateBtn.layer.cornerRadius = 5
-        startDateBtn.layer.borderWidth = 0.5
-        startDateBtn.layer.borderColor = UIColor.lightGray.cgColor
-        endDateBtn.layer.borderWidth = 0.5
-        endDateBtn.layer.borderColor = UIColor.lightGray.cgColor
-        
     }
-    
-//    func setDatePickerValueChange() {
-//        startDateStack.addTarget(self, action: #selector(dateChange), for: .touchUpInside)
-//        endDateStack.addTarget(self, action: #selector(dateChangeForLast), for: .touchUpInside)
-//    }
     
     func setUpPullDownBtn() {
         pullDownBtn.showsMenuAsPrimaryAction = true
@@ -122,7 +115,5 @@ extension InfoTableViewCell: DiscardDelegate {
         amountTextField.text = ""
         addressTextField.text = ""
         classificationTextField.text = ""
-//        startDatePicker.date = .now
-//        endDatePicker.date = .now
     }
 }

@@ -9,6 +9,15 @@ import Foundation
 import UIKit
 
 class CalendarCollectionCell: UICollectionViewCell {
+    
+    var selectedState = false {
+        didSet {
+            numberLabel.textColor = selectedState ? .white : UIColor.OutdoorTribeColor.mainColor
+            selectionBackgroundView.isHidden = !selectedState
+        }
+    }
+    var isCellSelectable = true
+    
     var selectionBackgroundView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -37,8 +46,11 @@ class CalendarCollectionCell: UICollectionViewCell {
 
     var day: Day? {
         didSet {
-            guard let day = day else { return }
-
+            guard var day = day else { return }
+            if !day.isWithinDisplayedMonth {
+                day.date = Date(timeIntervalSince1970: 1)
+                day.number = String(0)
+            }
             numberLabel.text = day.number
             applyDefaultStyle(isWithinDisplayedMonth: day.isWithinDisplayedMonth)
         }
@@ -102,7 +114,7 @@ extension CalendarCollectionCell {
     
   // 4
     func applyDefaultStyle(isWithinDisplayedMonth: Bool) {
-        numberLabel.textColor = isWithinDisplayedMonth ? .label : .secondaryLabel
-        selectionBackgroundView.isHidden = true
+        numberLabel.textColor = isWithinDisplayedMonth ? UIColor.OutdoorTribeColor.mainColor : .clear
+//        selectionBackgroundView.isHidden = true
     }
 }

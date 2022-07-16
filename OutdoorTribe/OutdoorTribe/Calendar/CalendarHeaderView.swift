@@ -36,6 +36,8 @@ class CalendarPickerHeaderView: UIView {
     
     var dayOfWeekStackView: UIStackView = {
         let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.distribution = .fillEqually
         return stackView
     }()
     
@@ -92,6 +94,8 @@ class CalendarPickerHeaderView: UIView {
 
             dayOfWeekStackView.addArrangedSubview(dayLabel)
         }
+        
+        closeButton.addTarget(self, action: #selector(didTapExitButton), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -119,9 +123,12 @@ class CalendarPickerHeaderView: UIView {
         }
     }
     
+    @objc func didTapExitButton() {
+      exitButtonTappedCompletionHandler()
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
-
         NSLayoutConstraint.activate([
             monthLabel.topAnchor.constraint(equalTo: topAnchor, constant: 15),
             monthLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),

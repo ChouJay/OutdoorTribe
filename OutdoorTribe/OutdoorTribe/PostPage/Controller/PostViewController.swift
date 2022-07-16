@@ -325,6 +325,14 @@ extension PostViewController: UITextFieldDelegate, UITextViewDelegate {
 
 // MARK: - pass date from cell delegate
 extension PostViewController: PassDateToPostVCDelegate {
+    func passDateRangeToVC() {
+        
+        let pickerController = CalendarPickerViewController(
+            todayDate: Date())
+
+        present(pickerController, animated: true, completion: nil)
+    }
+    
     func passClassificationToVC(text: String) {
         product.classification = text
     }

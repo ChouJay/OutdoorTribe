@@ -9,6 +9,11 @@ import Foundation
 import UIKit
 
 class CalendarPickerViewController: UIViewController {
+    
+    var selectedIndexPath = IndexPath(item: 0, section: 0)
+    var selectedDates = [Date]()
+    var selectedCount = 0
+    
   // MARK: Views
     var dimmedBackgroundView: UIView = {
         let view = UIView()
@@ -21,12 +26,13 @@ class CalendarPickerViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        layout.scrollDirection = .vertical
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.isScrollEnabled = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.bounces = true
+        collectionView.isScrollEnabled = true
+        collectionView.alwaysBounceVertical = true
+        collectionView.autoresizesSubviews = false
+        
         return collectionView
     }()
 
@@ -35,11 +41,10 @@ class CalendarPickerViewController: UIViewController {
 // 定義header view的closeBtn的閉包
         self.dismiss(animated: true)
     }
-
     
     lazy var footerView = CalendarPickerFooterView { [weak self] in
         guard let self = self else { return }
-        // confirm Date filter!
+        // confirm Date Range!
         
     }
 
@@ -54,6 +59,8 @@ class CalendarPickerViewController: UIViewController {
     }
 
     private lazy var days = generateDaysInMonth(for: todayDate)
+    private var secondMonthDays = [Day]()
+    private var thirdMonthDays = [Day]()
 
     private var numberOfWeeksInTodayDate: Int {
         calendar.range(of: .weekOfMonth, in: .month, for: todayDate)?.count ?? 0
@@ -98,22 +105,13 @@ class CalendarPickerViewController: UIViewController {
                            dimmedBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                            dimmedBackgroundView.topAnchor.constraint(equalTo: view.topAnchor),
                            dimmedBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-                            ]
+                        ]
 
         constraints.append(contentsOf: [
-      //1
-            dateCollectionView.leadingAnchor.constraint(
-            equalTo: view.readableContentGuide.leadingAnchor),
-            dateCollectionView.trailingAnchor.constraint(
-                equalTo: view.readableContentGuide.trailingAnchor),
-      //2
-            dateCollectionView.centerYAnchor.constraint(
-                equalTo: view.centerYAnchor,
-                constant: 10),
-      //3
-            dateCollectionView.heightAnchor.constraint(
-                equalTo: view.heightAnchor,
-                multiplier: 0.5)
+            dateCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            dateCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            dateCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 10),
+            dateCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3)
         ])
 
         constraints.append(contentsOf: [
@@ -130,21 +128,33 @@ class CalendarPickerViewController: UIViewController {
 
         NSLayoutConstraint.activate(constraints)
 
-        dateCollectionView.register(CalendarCollectionCell.self, forCellWithReuseIdentifier: CalendarCollectionCell.reuseIdentifier)
+        dateCollectionView.register(CalendarCollectionCell.self,
+                                    forCellWithReuseIdentifier: CalendarCollectionCell.reuseIdentifier)
 
         dateCollectionView.dataSource = self
         dateCollectionView.delegate = self
         headerView.todayDate = todayDate
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let nextMonthDay = calendar.date(byAdding: .month, value: 1, to: todayDate),
+              let nextNextMonthDay = calendar.date(byAdding: .month, value: 1, to: nextMonthDay) else { return }
+        secondMonthDays = generateDaysInMonth(for: nextMonthDay)
+        thirdMonthDays = generateDaysInMonth(for: nextNextMonthDay)
+    }
 }
 
 // MARK: - Day Generation
-private extension CalendarPickerViewController {
+extension CalendarPickerViewController {
   // 1
     func monthMetadata(for todayDate: Date) throws -> MonthMetadata {
     // 2
-        guard let numberOfDaysInMonth = calendar.range(of: .day, in: .month, for:     todayDate)?.count,
-              let firstDayOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: todayDate)) else { throw CalendarDataError.metadataGeneration }
+        guard let numberOfDaysInMonth = calendar.range(of: .day, in: .month, for: todayDate)?.count,
+              let firstDayOfMonth = calendar.date(
+                from: calendar.dateComponents([.year, .month], from: todayDate)) else {
+                    throw CalendarDataError.metadataGeneration
+                }
         let firstDayWeekday = calendar.component(.weekday, from: firstDayOfMonth)
 
     return MonthMetadata(
@@ -183,16 +193,13 @@ private extension CalendarPickerViewController {
         }
 
   // 7
-    func generateDay(
-        offsetBy dayOffset: Int,
-        for baseDate: Date,
-        isWithinDisplayedMonth: Bool
-    ) -> Day {
+    func generateDay(offsetBy dayOffset: Int, for baseDate: Date, isWithinDisplayedMonth: Bool) -> Day {
         let date = calendar.date(byAdding: .day, value: dayOffset, to: baseDate) ?? baseDate
 
         return Day(
             date: date,
             number: dateFormatter.string(from: date),
+            isSelectable: isWithinDisplayedMonth,
             isWithinDisplayedMonth: isWithinDisplayedMonth
         )
     }
@@ -202,7 +209,9 @@ private extension CalendarPickerViewController {
         using firstDayOfDisplayedMonth: Date
         ) -> [Day] {
     // 2
-            guard let lastDayInMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1),to: firstDayOfDisplayedMonth) else { return [] }
+            guard let lastDayInMonth = calendar.date(
+                byAdding: DateComponents(month: 1, day: -1),
+                to: firstDayOfDisplayedMonth) else { return [] }
 
     // 3
             let additionalDays = 7 - calendar.component(.weekday, from: lastDayInMonth)
@@ -226,32 +235,78 @@ private extension CalendarPickerViewController {
 
 // MARK: - UICollectionViewDataSource
 extension CalendarPickerViewController: UICollectionViewDataSource {
-  func collectionView(
-    _ collectionView: UICollectionView,
-    numberOfItemsInSection section: Int
-  ) -> Int {
-    days.count
-  }
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        3
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        switch section {
+        case 0:
+            return days.count
+        case 1:
+            return secondMonthDays.count
+        case 2:
+            return thirdMonthDays.count
+        default:
+            return days.count
+        }
+    }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let day = days[indexPath.row]
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CalendarCollectionCell.reuseIdentifier, for: indexPath) as? CalendarCollectionCell else { fatalError() }
-    // swiftlint:disable:previous force_cast
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        switch indexPath.section {
+        case 0:
+            let day = days[indexPath.row]
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: CalendarCollectionCell.reuseIdentifier,
+                for: indexPath) as? CalendarCollectionCell else { fatalError() }
+            cell.selectedState = false
+            cell.day = day
+            return cell
+        case 1:
+            let day = secondMonthDays[indexPath.row]
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: CalendarCollectionCell.reuseIdentifier,
+                for: indexPath) as? CalendarCollectionCell else { fatalError() }
+            cell.selectedState = false
+            cell.day = day
+            return cell
+        case 2:
+            let day = thirdMonthDays[indexPath.row]
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: CalendarCollectionCell.reuseIdentifier,
+                for: indexPath) as? CalendarCollectionCell else { fatalError() }
+            cell.selectedState = false
+            cell.day = day
+            return cell
+        default:
+            let day = days[indexPath.row]
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: CalendarCollectionCell.reuseIdentifier,
+                for: indexPath) as? CalendarCollectionCell else { fatalError() }
 
-        cell.day = day
-        return cell
+            cell.day = day
+            return cell
+            
+        }
     }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-extension CalendarPickerViewController: UICollectionViewDelegateFlowLayout {
+extension CalendarPickerViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        let day = days[indexPath.row]
-
+        guard let cell = collectionView.cellForItem(at: indexPath) as? CalendarCollectionCell,
+              let day = cell.day else { return }
+        guard day.isSelectable else { return }
+        
+        
+        cell.selectedState = true
     }
 
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = Int(collectionView.frame.width / 7)
         let height = Int(collectionView.frame.height) / numberOfWeeksInTodayDate
         return CGSize(width: width, height: height)

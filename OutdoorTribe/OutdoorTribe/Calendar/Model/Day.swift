@@ -9,11 +9,11 @@ import Foundation
 
 struct Day {
   // 1
-  let date: Date
+    var date: Date
   // 2
-  let number: String
+    var number: String
   // 3
-//  let isSelected: Bool
+    let isSelectable: Bool
   // 4
-  let isWithinDisplayedMonth: Bool
+    let isWithinDisplayedMonth: Bool
 }
