@@ -58,24 +58,34 @@ class SearchViewController: UIViewController {
         childVC = CalendarFilterViewController(todayDate: Date())
         guard let childVC = childVC else { return }
         childVC.filterDelegate = self
-        maskView.backgroundColor = .black.withAlphaComponent(0.5)
+        maskView.backgroundColor = .black.withAlphaComponent(0)
         view.addSubview(maskView)
         addChild(childVC)
         view.addSubview(childVC.view)
-        childVC.view.frame = CGRect(x: 50, y: 100, width: 300, height: 415)
-        
+        childVC.view.frame = CGRect(x: dateButton.frame.maxX, y: dateButton.frame.maxY + 10, width: 0, height: 0)
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+            childVC.view.frame = CGRect(x: self.dateButton.frame.maxX, y: self.dateButton.frame.maxY + 10, width: -300, height: 415)
+            self.maskView.backgroundColor = .black.withAlphaComponent(0.5)
+            self.view.layoutIfNeeded()
+        }, completion: nil)
         childVC.didMove(toParent: self)
     }
     
     @objc func removeChildView() {
         guard let childVc = childVC else { return }
         print("remove subview")
-        childVc.removeFromParent()
-        childVc.view.removeFromSuperview()
-        maskView.removeFromSuperview()
-        childVc.didMove(toParent: nil)
-        childVC = nil
-        dateButton.isEnabled = true
+        UIView.animate(withDuration: 0.2) {
+            childVc.view.frame = CGRect(x: self.dateButton.frame.maxX, y: self.dateButton.frame.maxY + 10, width: 0, height: 0)
+            self.maskView.backgroundColor = .black.withAlphaComponent(0)
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+            childVc.removeFromParent()
+            childVc.view.removeFromSuperview()
+            self.maskView.removeFromSuperview()
+            childVc.didMove(toParent: nil)
+            self.childVC = nil
+            self.dateButton.isEnabled = true
+        }
     }
     
     override func viewDidLoad() {
@@ -389,7 +399,7 @@ extension SearchViewController {
         decorateView.topAnchor.constraint(equalTo: searchTableView.topAnchor, constant: 85).isActive = true
         decorateView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32).isActive = true
         decorateView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32).isActive = true
-        decorateView.backgroundColor = .black
+        decorateView.backgroundColor = UIColor.OutdoorTribeColor.mainColor
         decorateView.layer.cornerRadius = 5
         decorateView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
                 
