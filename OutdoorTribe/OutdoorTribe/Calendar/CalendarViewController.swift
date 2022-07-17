@@ -26,15 +26,14 @@ class CalendarPickerViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        layout.headerReferenceSize = CGSize(width: UIScreen.main
-                                                    .bounds.width - 40, height: 85)
+        layout.sectionHeadersPinToVisibleBounds = true
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isScrollEnabled = true
         collectionView.alwaysBounceVertical = true
         collectionView.autoresizesSubviews = false
-        
+
         return collectionView
     }()
 
@@ -122,7 +121,7 @@ class CalendarPickerViewController: UIViewController {
             headerView.leadingAnchor.constraint(equalTo: dateCollectionView.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: dateCollectionView.trailingAnchor),
             headerView.bottomAnchor.constraint(equalTo: dateCollectionView.topAnchor),
-            headerView.heightAnchor.constraint(equalToConstant: 85),
+            headerView.heightAnchor.constraint(equalToConstant: 50),
       
             footerView.leadingAnchor.constraint(equalTo: dateCollectionView.leadingAnchor),
             footerView.trailingAnchor.constraint(equalTo: dateCollectionView.trailingAnchor),
@@ -137,7 +136,8 @@ class CalendarPickerViewController: UIViewController {
 
         dateCollectionView.dataSource = self
         dateCollectionView.delegate = self
-        headerView.todayDate = todayDate
+        dateCollectionView.backgroundColor = .white
+        headerView.backgroundColor = .white
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -146,7 +146,6 @@ class CalendarPickerViewController: UIViewController {
               let nextNextMonthDay = calendar.date(byAdding: .month, value: 1, to: nextMonthDay) else { return }
         secondMonthDays = generateDaysInMonth(for: nextMonthDay)
         thirdMonthDays = generateDaysInMonth(for: nextNextMonthDay)
-        headerView.monthLabel.text = "Choose the date range"
     }
 }
 
@@ -296,11 +295,28 @@ extension CalendarPickerViewController: UICollectionViewDataSource {
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
         guard let sectionHeaderView = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
             withReuseIdentifier: CalendarSectionHeaderView.reuseIdentifier,
             for: indexPath) as? CalendarSectionHeaderView else { fatalError() }
+        switch indexPath.section {
+        case 0:
+            sectionHeaderView.todayDate = todayDate
+        case 1:
+            guard let nextMonthDay = calendar.date(byAdding: .month, value: 1, to: todayDate)
+            else { return sectionHeaderView }
+            sectionHeaderView.todayDate = nextMonthDay
+            
+        case 2:
+            guard let nextNextMonthDay = calendar.date(byAdding: .month, value: 2, to: todayDate)
+            else { return sectionHeaderView }
+            sectionHeaderView.todayDate = nextNextMonthDay
+        default:
+            sectionHeaderView.todayDate = todayDate
+        }
         
         return sectionHeaderView
     }
@@ -362,5 +378,9 @@ extension CalendarPickerViewController: UICollectionViewDelegate, UICollectionVi
         let width = Int(collectionView.frame.width / 7)
         let height = Int(collectionView.frame.height) / numberOfWeeksInTodayDate
         return CGSize(width: width, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    return CGSize(width: collectionView.frame.width, height: 60)
     }
 }

@@ -15,8 +15,9 @@ class CalendarPickerHeaderView: UIView {
     var monthLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 26, weight: .bold)
-        label.text = "Month"
+        label.font = .systemFont(ofSize: 24, weight: .bold)
+        label.text = "Choose the date range"
+        label.textColor = UIColor.OutdoorTribeColor.mainColor
         return label
     }()
     
@@ -45,7 +46,7 @@ class CalendarPickerHeaderView: UIView {
     var separatorView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.label.withAlphaComponent(0.2)
+        view.backgroundColor = .white
         return view
     }()
     
@@ -83,7 +84,6 @@ class CalendarPickerHeaderView: UIView {
 
         addSubview(monthLabel)
         addSubview(closeButton)
-        addSubview(dayOfWeekStackView)
         addSubview(separatorView)
 
         for dayNumber in 1...7 {
@@ -131,18 +131,13 @@ class CalendarPickerHeaderView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         NSLayoutConstraint.activate([
-            monthLabel.topAnchor.constraint(equalTo: topAnchor, constant: 15),
-            monthLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
-            monthLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: 5),
+            monthLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            monthLabel.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 7),
 
-            closeButton.centerYAnchor.constraint(equalTo: monthLabel.centerYAnchor),
+            closeButton.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             closeButton.heightAnchor.constraint(equalToConstant: 28),
             closeButton.widthAnchor.constraint(equalToConstant: 28),
-            closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
-
-            dayOfWeekStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            dayOfWeekStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            dayOfWeekStackView.bottomAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: -5),
+            closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
 
             separatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
             separatorView.trailingAnchor.constraint(equalTo: trailingAnchor),

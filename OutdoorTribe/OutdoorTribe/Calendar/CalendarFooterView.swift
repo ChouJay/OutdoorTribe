@@ -19,11 +19,11 @@ class CalendarPickerFooterView: UIView {
     var confirmButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
+        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
         button.titleLabel?.textAlignment = .center
         button.setTitle("Confirm", for: .normal)
         button.titleLabel?.textColor = .label
-
+        button.backgroundColor = UIColor.OutdoorTribeColor.mainColor
         button.addTarget(self, action: #selector(didTapConfirmButton), for: .touchUpInside)
         return button
     }()
@@ -46,6 +46,7 @@ class CalendarPickerFooterView: UIView {
         
         addSubview(separatorView)
         addSubview(confirmButton)
+        clipsToBounds = true
     }
 
     required init?(coder: NSCoder) {
@@ -54,7 +55,7 @@ class CalendarPickerFooterView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
+    
         let fontPointSize: CGFloat = 17
 
         NSLayoutConstraint.activate([
@@ -63,11 +64,11 @@ class CalendarPickerFooterView: UIView {
             separatorView.topAnchor.constraint(equalTo: topAnchor),
             separatorView.heightAnchor.constraint(equalToConstant: 1),
 
-            confirmButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            confirmButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-
-            confirmButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            confirmButton.centerYAnchor.constraint(equalTo: centerYAnchor)
+            confirmButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+            confirmButton.topAnchor.constraint(equalTo: topAnchor),
+            confirmButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
+            confirmButton.bottomAnchor.constraint(equalTo: bottomAnchor)
+            
         ])
     }
 

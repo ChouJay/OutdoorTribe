@@ -59,6 +59,7 @@ class CalendarCollectionCell: UICollectionViewCell {
         super.init(frame: frame)
         contentView.addSubview(selectionBackgroundView)
         contentView.addSubview(numberLabel)
+        backgroundColor = .white
     }
 
     required init?(coder: NSCoder) {
