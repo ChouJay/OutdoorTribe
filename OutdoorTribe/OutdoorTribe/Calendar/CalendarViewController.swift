@@ -26,6 +26,8 @@ class CalendarPickerViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
+        layout.headerReferenceSize = CGSize(width: UIScreen.main
+                                                    .bounds.width - 40, height: 85)
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -94,6 +96,8 @@ class CalendarPickerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        dateCollectionView.register(CalendarSectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CalendarSectionHeaderView.reuseIdentifier)
+        
         dateCollectionView.backgroundColor = .systemGroupedBackground
       
         view.addSubview(dimmedBackgroundView)
@@ -142,6 +146,7 @@ class CalendarPickerViewController: UIViewController {
               let nextNextMonthDay = calendar.date(byAdding: .month, value: 1, to: nextMonthDay) else { return }
         secondMonthDays = generateDaysInMonth(for: nextMonthDay)
         thirdMonthDays = generateDaysInMonth(for: nextNextMonthDay)
+        headerView.monthLabel.text = "Choose the date range"
     }
 }
 
@@ -289,6 +294,15 @@ extension CalendarPickerViewController: UICollectionViewDataSource {
             return cell
             
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let sectionHeaderView = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: CalendarSectionHeaderView.reuseIdentifier,
+            for: indexPath) as? CalendarSectionHeaderView else { fatalError() }
+        
+        return sectionHeaderView
     }
 }
 

@@ -9,6 +9,9 @@ import Foundation
 import UIKit
 
 class CalendarPickerHeaderView: UIView {
+    
+    static let reuseIdentifier =  String(describing: CalendarCollectionCell.self)
+    
     var monthLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -28,8 +31,6 @@ class CalendarPickerHeaderView: UIView {
         button.tintColor = .secondaryLabel
         button.contentMode = .scaleAspectFill
         button.isUserInteractionEnabled = true
-        button.isAccessibilityElement = true
-        button.accessibilityLabel = "Close Picker"
           
         return button
     }()
@@ -63,7 +64,7 @@ class CalendarPickerHeaderView: UIView {
     }
 
     var exitButtonTappedCompletionHandler: (() -> Void)
-    
+        
     init(exitButtonTappedCompletionHandler: @escaping (() -> Void)) {
         self.exitButtonTappedCompletionHandler = exitButtonTappedCompletionHandler
 
