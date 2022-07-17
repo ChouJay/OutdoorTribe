@@ -356,8 +356,8 @@
                                                         <constraint firstAttribute="width" secondItem="Yrv-cG-frQ" secondAttribute="height" multiplier="1:0.8" id="JDD-jl-myF"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gaB-cD-seU">
-                                                    <rect key="frame" x="30" y="320" width="52.5" height="22.5"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gaB-cD-seU">
+                                                    <rect key="frame" x="30" y="320" width="354" height="22.5"/>
                                                     <fontDescription key="fontDescription" name="Arial-BoldMT" family="Arial" pointSize="20"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -398,6 +398,7 @@
                                                 <constraint firstItem="S9P-wn-QyD" firstAttribute="top" secondItem="gaB-cD-seU" secondAttribute="bottom" constant="12" id="3ae-rJ-L6e"/>
                                                 <constraint firstItem="Yrv-cG-frQ" firstAttribute="centerX" secondItem="EjY-Z2-PbG" secondAttribute="centerX" id="5jD-Gl-UHU"/>
                                                 <constraint firstAttribute="bottom" secondItem="Kub-AB-ZAK" secondAttribute="bottom" constant="12" id="BDn-V1-7wY"/>
+                                                <constraint firstAttribute="trailing" secondItem="gaB-cD-seU" secondAttribute="trailing" constant="30" id="CTS-WF-ZAb"/>
                                                 <constraint firstItem="Kub-AB-ZAK" firstAttribute="leading" secondItem="EjY-Z2-PbG" secondAttribute="leading" constant="30" id="LnX-I9-IEV"/>
                                                 <constraint firstItem="gaB-cD-seU" firstAttribute="top" secondItem="Yrv-cG-frQ" secondAttribute="bottom" constant="8" symbolic="YES" id="VMd-hS-LjA"/>
                                                 <constraint firstItem="Yrv-cG-frQ" firstAttribute="top" secondItem="EjY-Z2-PbG" secondAttribute="top" constant="32" id="WW3-cc-wna"/>

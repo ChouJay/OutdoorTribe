@@ -8,11 +8,23 @@
 import Foundation
 import UIKit
 
+protocol PassDateRangeToPostVCDelegate {
+    func passDateRange(dateRange: [Date])
+}
+
 class CalendarPickerViewController: UIViewController {
     
+    var passDateDelegate: PassDateRangeToPostVCDelegate?
     var selectedIndexPath = IndexPath(item: 0, section: 0)
     var selectedDates = [Date]()
-    var selectedCount = 0
+    var selectedCount = 0 {
+        didSet {
+            if selectedCount == 2 {
+                footerView.confirmButton.isEnabled = true
+                footerView.confirmButton.alpha = 1
+            }
+        }
+    }
     
   // MARK: Views
     var dimmedBackgroundView: UIView = {
@@ -46,7 +58,8 @@ class CalendarPickerViewController: UIViewController {
     lazy var footerView = CalendarPickerFooterView { [weak self] in
         guard let self = self else { return }
         // confirm Date Range!
-        
+        self.passDateDelegate?.passDateRange(dateRange: self.selectedDates)
+        self.dismiss(animated: true)
     }
 
   // MARK: Calendar Data Values
@@ -95,7 +108,9 @@ class CalendarPickerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        dateCollectionView.register(CalendarSectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CalendarSectionHeaderView.reuseIdentifier)
+        dateCollectionView.register(CalendarSectionHeaderView.self,
+                                    forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                    withReuseIdentifier: CalendarSectionHeaderView.reuseIdentifier)
         
         dateCollectionView.backgroundColor = .systemGroupedBackground
       
@@ -111,10 +126,10 @@ class CalendarPickerViewController: UIViewController {
                         ]
 
         constraints.append(contentsOf: [
-            dateCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            dateCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            dateCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            dateCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             dateCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 10),
-            dateCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3)
+            dateCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4)
         ])
 
         constraints.append(contentsOf: [
@@ -146,6 +161,7 @@ class CalendarPickerViewController: UIViewController {
               let nextNextMonthDay = calendar.date(byAdding: .month, value: 1, to: nextMonthDay) else { return }
         secondMonthDays = generateDaysInMonth(for: nextMonthDay)
         thirdMonthDays = generateDaysInMonth(for: nextNextMonthDay)
+        
     }
 }
 

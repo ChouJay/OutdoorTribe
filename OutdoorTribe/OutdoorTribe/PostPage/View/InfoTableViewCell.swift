@@ -48,15 +48,15 @@ class InfoTableViewCell: UITableViewCell {
         passDateDelegate?.passDateRangeToVC()
     }
     
-    @objc func dateChange() {
-        print("test1")
-        // Replace the hour (time) of both dates with 00:00
-    }
-    
-    @objc func dateChangeForLast() {
-        // call delegate func to pass date to VC
-        print("test2")
-    }
+//    @objc func dateChange() {
+//        print("test1")
+//        // Replace the hour (time) of both dates with 00:00
+//    }
+//    
+//    @objc func dateChangeForLast() {
+//        // call delegate func to pass date to VC
+//        print("test2")
+//    }
     
     func formatDate(date: Date) -> String {
         let formatter = DateFormatter()
@@ -107,7 +107,18 @@ class InfoTableViewCell: UITableViewCell {
 }
 
 // MARK: - discard delegate
-extension InfoTableViewCell: DiscardDelegate {
+extension InfoTableViewCell: AskInfoCellDelegate {
+    func askToShowDateRange(dateRange: [Date]) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.locale = Locale.autoupdatingCurrent
+        dateFormatter.setLocalizedDateFormatFromTemplate("yyyy/MM/dd")
+        
+        let beginDateString = dateFormatter.string(from: dateRange.first ?? Date())
+        let endDateString = dateFormatter.string(from: dateRange.last ?? Date())
+        dateRangeTextField.text = " \(beginDateString)" + " - " + "\(endDateString)"
+    }
+    
     func askToDiscardInfo() {
         descriptionTextView.textColor = .lightGray
         descriptionTextView.text = "description"
@@ -115,5 +126,8 @@ extension InfoTableViewCell: DiscardDelegate {
         amountTextField.text = ""
         addressTextField.text = ""
         classificationTextField.text = ""
+        dateRangeTextField.text = ""
     }
+    
+    
 }

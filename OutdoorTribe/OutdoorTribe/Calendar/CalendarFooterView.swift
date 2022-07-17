@@ -16,7 +16,7 @@ class CalendarPickerFooterView: UIView {
         return view
     }()
 
-    var confirmButton: UIButton = {
+    lazy var confirmButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
@@ -25,6 +25,8 @@ class CalendarPickerFooterView: UIView {
         button.titleLabel?.textColor = .label
         button.backgroundColor = UIColor.OutdoorTribeColor.mainColor
         button.addTarget(self, action: #selector(didTapConfirmButton), for: .touchUpInside)
+        button.isEnabled = false
+        button.alpha = 0.5
         return button
     }()
     
