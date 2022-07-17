@@ -13,7 +13,6 @@ import IQKeyboardManagerSwift
 
 class SearchViewController: UIViewController {
     
-    
     let maskView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
     var childVC: CalendarFilterViewController?
     var products = [Product]()
@@ -64,6 +63,7 @@ class SearchViewController: UIViewController {
         addChild(childVC)
         view.addSubview(childVC.view)
         childVC.view.frame = CGRect(x: 50, y: 100, width: 300, height: 415)
+        
         childVC.didMove(toParent: self)
     }
     
@@ -80,7 +80,7 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         AccountManager.shared.getAllUserInfo { [weak self] userInfosFromServer in
             self?.allUserInfo = userInfosFromServer
         }
@@ -89,7 +89,6 @@ class SearchViewController: UIViewController {
         
         searchTableView.layer.cornerRadius = 15
         layOutHeaderView()
-//        headerView.delegate = self
         
         dateButton.layer.cornerRadius = 20
         
@@ -157,67 +156,6 @@ class SearchViewController: UIViewController {
     }
     
 // MARK: - date picker function
-//    func layoutChooseDateUI() {
-//
-//        backgroundView.backgroundColor = .white
-//        backgroundView.layer.cornerRadius = 10
-//        print(dateButton.frame)
-//        view.addSubview(backgroundView)
-//        backgroundView.frame = CGRect(
-//            x: dateButton.frame.origin.x + dateButton.frame.width,
-//            y: dateButton.frame.origin.y + dateButton.frame.height + 10,
-//            width: 0,
-//            height: 40)
-//        print(backgroundView.frame)
-//        backgroundView.alpha = 0
-//
-//        backgroundView.addSubview(buttonForDoingFilter)
-//        buttonForDoingFilter.addTarget(self, action: #selector(tapFilterConfirmButton), for: .touchUpInside)
-//        buttonForDoingFilter.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-//        buttonForDoingFilter.tintColor = .darkGray
-//        buttonForDoingFilter.translatesAutoresizingMaskIntoConstraints = false
-//        buttonForDoingFilter.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
-//        buttonForDoingFilter.widthAnchor.constraint(equalToConstant: 40).isActive = true
-//        buttonForDoingFilter.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor).isActive = true
-//        buttonForDoingFilter.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
-//
-//        backgroundView.addSubview(buttonForStopFilter)
-//        buttonForStopFilter.addTarget(self, action: #selector(tapFilterStopButton), for: .touchUpInside)
-//        buttonForStopFilter.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-//        buttonForStopFilter.tintColor = .darkGray
-//        buttonForStopFilter.translatesAutoresizingMaskIntoConstraints = false
-//        buttonForStopFilter.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
-//        buttonForStopFilter.widthAnchor.constraint(equalToConstant: 40).isActive = true
-//        buttonForStopFilter.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor).isActive = true
-//        buttonForStopFilter.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
-//
-//        let dashLabel = UILabel()
-//        dashLabel.text = "-"
-//        dashLabel.textAlignment = .center
-//
-//        let hStack = UIStackView()
-//        for subView in subViews {
-//            hStack.addArrangedSubview(subView)
-//        }
-//        hStack.axis = .horizontal
-//        hStack.distribution = .fillProportionally
-//        backgroundView.addSubview(hStack)
-//
-//        hStack.translatesAutoresizingMaskIntoConstraints = false
-//        hStack.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
-//        hStack.leadingAnchor.constraint(equalTo: buttonForStopFilter.trailingAnchor).isActive = true
-//        hStack.trailingAnchor.constraint(equalTo: buttonForDoingFilter.leadingAnchor).isActive = true
-//        hStack.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
-//
-//        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
-//            self.backgroundView.frame = CGRect(
-//                x: self.dateButton.frame.origin.x + self.dateButton.frame.width - 230,
-//                y: self.dateButton.frame.origin.y + self.dateButton.frame.height + 10,
-//                width: 230,
-//                height: 40)
-//            self.backgroundView.alpha = 1
-//        }, completion: nil)
-//    }
     
     @objc func tapFilterConfirmButton() {
         afterFiltedProducts = []
@@ -240,7 +178,6 @@ class SearchViewController: UIViewController {
     }
     
     @objc func tapFilterStopButton() {
-
         isFilter = false
         searchTableView.reloadData()
     }
