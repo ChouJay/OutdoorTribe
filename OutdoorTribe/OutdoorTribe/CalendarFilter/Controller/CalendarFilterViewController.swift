@@ -62,10 +62,9 @@ class CalendarFilterViewController: UIViewController {
     lazy var headerView = CalendarFilterHeaderView { [weak self] in
         guard let self = self else { return }
 // 定義header view的closeBtn的閉包
-        self.dismiss(animated: true)
     }
     
-    lazy var footerView = CalendarPickerFooterView { [weak self] in
+    lazy var footerView = CalendarFilterFooterView { [weak self] in
         guard let self = self else { return }
         // confirm Date Range!
         self.filterDelegate?.askVcToStartFilter(dateRange: self.selectedDates)
@@ -133,10 +132,9 @@ class CalendarFilterViewController: UIViewController {
 
         var constraints = [dateCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                            dateCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                           dateCollectionView.topAnchor.constraint(equalTo: view.topAnchor),
-                           dateCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+                           dateCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 55),
+                           dateCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -60)
                         ]
-
 
         constraints.append(contentsOf: [
             headerView.leadingAnchor.constraint(equalTo: dateCollectionView.leadingAnchor),

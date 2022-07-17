@@ -32,12 +32,12 @@ class SearchViewController: UIViewController {
     var buttonForDoingFilter = UIButton()
     var buttonForStopFilter = UIButton()
     var backgroundView = UIView()
-    var startDatePicker = UIDatePicker()
-    var endDatePicker = UIDatePicker()
     var headerView = UICollectionView(
         frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 200),
         collectionViewLayout: UICollectionViewLayout())
     var pageController = UIPageControl()
+    var startDate = Date()
+    var endDate = Date()
     
     @IBOutlet weak var searchBarBackgroundView: UIView!
     @IBOutlet weak var dateButton: UIButton!
@@ -49,10 +49,11 @@ class SearchViewController: UIViewController {
         childVC = CalendarFilterViewController(todayDate: Date())
         guard let childVC = childVC else { return }
         childVC.filterDelegate = self
+        maskView.backgroundColor = .black.withAlphaComponent(0.5)
         view.addSubview(maskView)
         addChild(childVC)
         view.addSubview(childVC.view)
-        childVC.view.frame = CGRect(x: 50, y: 100, width: 300, height: 300)
+        childVC.view.frame = CGRect(x: 50, y: 100, width: 300, height: 415)
         childVC.didMove(toParent: self)
     }
     
@@ -69,8 +70,6 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(removeChildView))
-        maskView.addGestureRecognizer(tapGesture)
         
         AccountManager.shared.getAllUserInfo { [weak self] userInfosFromServer in
             self?.allUserInfo = userInfosFromServer
@@ -122,6 +121,14 @@ class SearchViewController: UIViewController {
         }
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first
+        if touch?.view != childVC?.view {
+            removeChildView()
+            tapFilterStopButton()
+        }
+    }
+    
 // MARK: - page control related
     func layoutPageController() {
         pageController.addTarget(self, action: #selector(controlGallery(pageControl:)), for: .valueChanged)
@@ -140,88 +147,76 @@ class SearchViewController: UIViewController {
     }
     
 // MARK: - date picker function
-    func layoutChooseDateUI() {
-        startDatePicker.datePickerMode = .date
-        startDatePicker.preferredDatePickerStyle = .compact
-        startDatePicker.timeZone = .current
-
-        endDatePicker.datePickerMode = .date
-        endDatePicker.preferredDatePickerStyle = .compact
-        endDatePicker.timeZone = .current
-        
-        backgroundView.backgroundColor = .white
-        backgroundView.layer.cornerRadius = 10
-        print(dateButton.frame)
-        view.addSubview(backgroundView)
-        backgroundView.frame = CGRect(
-            x: dateButton.frame.origin.x + dateButton.frame.width,
-            y: dateButton.frame.origin.y + dateButton.frame.height + 10,
-            width: 0,
-            height: 40)
-        print(backgroundView.frame)
-        backgroundView.alpha = 0
-
-        backgroundView.addSubview(buttonForDoingFilter)
-        buttonForDoingFilter.addTarget(self, action: #selector(tapFilterConfirmButton), for: .touchUpInside)
-        buttonForDoingFilter.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-        buttonForDoingFilter.tintColor = .darkGray
-        buttonForDoingFilter.translatesAutoresizingMaskIntoConstraints = false
-        buttonForDoingFilter.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
-        buttonForDoingFilter.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        buttonForDoingFilter.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor).isActive = true
-        buttonForDoingFilter.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
-        
-        backgroundView.addSubview(buttonForStopFilter)
-        buttonForStopFilter.addTarget(self, action: #selector(tapFilterStopButton), for: .touchUpInside)
-        buttonForStopFilter.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-        buttonForStopFilter.tintColor = .darkGray
-        buttonForStopFilter.translatesAutoresizingMaskIntoConstraints = false
-        buttonForStopFilter.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
-        buttonForStopFilter.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        buttonForStopFilter.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor).isActive = true
-        buttonForStopFilter.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
-        
-        let dashLabel = UILabel()
-        dashLabel.text = "-"
-        dashLabel.textAlignment = .center
-        
-        let hStack = UIStackView()
-        let subViews = [startDatePicker, dashLabel, endDatePicker]
-        for subView in subViews {
-            hStack.addArrangedSubview(subView)
-        }
-        hStack.axis = .horizontal
-        hStack.distribution = .fillProportionally
-        backgroundView.addSubview(hStack)
-        
-        hStack.translatesAutoresizingMaskIntoConstraints = false
-        hStack.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
-        hStack.leadingAnchor.constraint(equalTo: buttonForStopFilter.trailingAnchor).isActive = true
-        hStack.trailingAnchor.constraint(equalTo: buttonForDoingFilter.leadingAnchor).isActive = true
-        hStack.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
-        
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
-            self.backgroundView.frame = CGRect(
-                x: self.dateButton.frame.origin.x + self.dateButton.frame.width - 230,
-                y: self.dateButton.frame.origin.y + self.dateButton.frame.height + 10,
-                width: 230,
-                height: 40)
-            self.backgroundView.alpha = 1
-        }, completion: nil)
-    }
+//    func layoutChooseDateUI() {
+//
+//        backgroundView.backgroundColor = .white
+//        backgroundView.layer.cornerRadius = 10
+//        print(dateButton.frame)
+//        view.addSubview(backgroundView)
+//        backgroundView.frame = CGRect(
+//            x: dateButton.frame.origin.x + dateButton.frame.width,
+//            y: dateButton.frame.origin.y + dateButton.frame.height + 10,
+//            width: 0,
+//            height: 40)
+//        print(backgroundView.frame)
+//        backgroundView.alpha = 0
+//
+//        backgroundView.addSubview(buttonForDoingFilter)
+//        buttonForDoingFilter.addTarget(self, action: #selector(tapFilterConfirmButton), for: .touchUpInside)
+//        buttonForDoingFilter.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+//        buttonForDoingFilter.tintColor = .darkGray
+//        buttonForDoingFilter.translatesAutoresizingMaskIntoConstraints = false
+//        buttonForDoingFilter.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
+//        buttonForDoingFilter.widthAnchor.constraint(equalToConstant: 40).isActive = true
+//        buttonForDoingFilter.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor).isActive = true
+//        buttonForDoingFilter.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
+//
+//        backgroundView.addSubview(buttonForStopFilter)
+//        buttonForStopFilter.addTarget(self, action: #selector(tapFilterStopButton), for: .touchUpInside)
+//        buttonForStopFilter.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+//        buttonForStopFilter.tintColor = .darkGray
+//        buttonForStopFilter.translatesAutoresizingMaskIntoConstraints = false
+//        buttonForStopFilter.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
+//        buttonForStopFilter.widthAnchor.constraint(equalToConstant: 40).isActive = true
+//        buttonForStopFilter.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor).isActive = true
+//        buttonForStopFilter.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
+//
+//        let dashLabel = UILabel()
+//        dashLabel.text = "-"
+//        dashLabel.textAlignment = .center
+//
+//        let hStack = UIStackView()
+//        for subView in subViews {
+//            hStack.addArrangedSubview(subView)
+//        }
+//        hStack.axis = .horizontal
+//        hStack.distribution = .fillProportionally
+//        backgroundView.addSubview(hStack)
+//
+//        hStack.translatesAutoresizingMaskIntoConstraints = false
+//        hStack.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
+//        hStack.leadingAnchor.constraint(equalTo: buttonForStopFilter.trailingAnchor).isActive = true
+//        hStack.trailingAnchor.constraint(equalTo: buttonForDoingFilter.leadingAnchor).isActive = true
+//        hStack.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
+//
+//        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+//            self.backgroundView.frame = CGRect(
+//                x: self.dateButton.frame.origin.x + self.dateButton.frame.width - 230,
+//                y: self.dateButton.frame.origin.y + self.dateButton.frame.height + 10,
+//                width: 230,
+//                height: 40)
+//            self.backgroundView.alpha = 1
+//        }, completion: nil)
+//    }
     
     @objc func tapFilterConfirmButton() {
         afterFiltedProducts = []
-        dateButton.isEnabled = true
-        buttonForDoingFilter.isHidden = true
-        backgroundView.removeFromSuperview()
-        for subview in backgroundView.subviews {
-            subview.removeFromSuperview()
-        }
         
         for product in products {
-            let offsetStartDate = startDatePicker.date.addingTimeInterval(28800)
-            let offsetEndDate = endDatePicker.date.addingTimeInterval(28800)
+            let offsetStartDate = startDate.addingTimeInterval(28800)
+            print(offsetStartDate)
+            let offsetEndDate = endDate.addingTimeInterval(28800)
+            print(offsetEndDate)
             let availableSet = Set(product.availableDate)
             let filterSet = Set(daysBetweenTwoDate(startDate: offsetStartDate, endDate: offsetEndDate))
             if filterSet.isSubset(of: availableSet) {
@@ -233,11 +228,7 @@ class SearchViewController: UIViewController {
     }
     
     @objc func tapFilterStopButton() {
-        dateButton.isEnabled = true
-        backgroundView.removeFromSuperview()
-        for subview in backgroundView.subviews {
-            subview.removeFromSuperview()
-        }
+
         isFilter = false
         searchTableView.reloadData()
     }
@@ -541,5 +532,10 @@ extension SearchViewController {
 extension SearchViewController: AskVcToFilterByDateDelegate {
     func askVcToStartFilter(dateRange: [Date]) {
         removeChildView()
+        guard let startDateOfRange = dateRange.first,
+              let endDateOfRnage = dateRange.last else { return }
+        startDate = startDateOfRange
+        endDate = endDateOfRnage
+        tapFilterConfirmButton()
     }
 }

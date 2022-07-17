@@ -75,6 +75,7 @@ class CalendarFilterFooterView: UIView {
     }
 
     @objc func didTapConfirmButton() {
+        print("tap")
         didTapConfirmCompletionHandler()
     }
 }

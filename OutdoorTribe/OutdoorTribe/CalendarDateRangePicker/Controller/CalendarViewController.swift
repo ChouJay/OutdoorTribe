@@ -18,7 +18,27 @@ protocol PassDateRangeToPostVCDelegate {
 
 class CalendarPickerViewController: UIViewController {
     
-    var rentAvailableDate: [Date]?
+    let dateFormatter2: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.locale = Locale.autoupdatingCurrent
+        dateFormatter.setLocalizedDateFormatFromTemplate("MM/dd")
+        return dateFormatter
+    }()
+    
+    var dateStringArray = [String]()
+    
+    var rentAvailableDate: [Date]? {
+        didSet {
+            dateStringArray = []
+            guard let rentAvailableDate = rentAvailableDate else { return }
+            for date in rentAvailableDate {
+                let dateString = dateFormatter2.string(from: date)
+                print(dateString)
+                dateStringArray.append(dateString)
+            }
+        }
+    }
     
     var passDateToDetailVCDelegate: PassDateRangeToDetailVCDelegate?
     var passDateDelegate: PassDateRangeToPostVCDelegate?
@@ -224,9 +244,8 @@ extension CalendarPickerViewController {
         let date = calendar.date(byAdding: .day, value: dayOffset, to: baseDate) ?? baseDate
         if let rentAvailableDate = rentAvailableDate {
             // 判斷日期是否在可租借的區間
-            let availableSet = Set(rentAvailableDate)
-            let set: Set = [date.addingTimeInterval(28800)]
-            let isSubsetOfAvailableSet = set.isSubset(of: availableSet)
+            let dateString = dateFormatter2.string(from: date)
+            let isSubsetOfAvailableSet = dateStringArray.contains(dateString)
             // 判斷日期是否大於今天
             let isDateNotPass = date.addingTimeInterval(86400) >= Date()
             
