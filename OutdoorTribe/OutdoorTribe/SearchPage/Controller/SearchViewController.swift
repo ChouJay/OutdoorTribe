@@ -12,6 +12,8 @@ import FirebaseAuth
 import IQKeyboardManagerSwift
 
 class SearchViewController: UIViewController {
+    let maskView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+    var childVC: CalendarFilterViewController?
     var products = [Product]()
     var afterFiltedProducts = [Product]()
     var afterFiltedAndBlockProducts = [Product]()
@@ -27,7 +29,6 @@ class SearchViewController: UIViewController {
             }
         }
     }
-    @IBOutlet weak var searchBarBackgroundView: UIView!
     var buttonForDoingFilter = UIButton()
     var buttonForStopFilter = UIButton()
     var backgroundView = UIView()
@@ -38,18 +39,38 @@ class SearchViewController: UIViewController {
         collectionViewLayout: UICollectionViewLayout())
     var pageController = UIPageControl()
     
+    @IBOutlet weak var searchBarBackgroundView: UIView!
     @IBOutlet weak var dateButton: UIButton!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var searchTableView: UITableView!
     @IBOutlet weak var mainGalleryView: UICollectionView!
     @IBAction func tapDatePicker(_ sender: UIButton) {
         dateButton.isEnabled = false
-        layoutChooseDateUI()
-        buttonForDoingFilter.isHidden = false
+        childVC = CalendarFilterViewController(todayDate: Date())
+        guard let childVC = childVC else { return }
+        childVC.filterDelegate = self
+        view.addSubview(maskView)
+        addChild(childVC)
+        view.addSubview(childVC.view)
+        childVC.view.frame = CGRect(x: 50, y: 100, width: 300, height: 300)
+        childVC.didMove(toParent: self)
+    }
+    
+    @objc func removeChildView() {
+        guard let childVc = childVC else { return }
+        print("remove subview")
+        childVc.removeFromParent()
+        childVc.view.removeFromSuperview()
+        maskView.removeFromSuperview()
+        childVc.didMove(toParent: nil)
+        childVC = nil
+        dateButton.isEnabled = true
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(removeChildView))
+        maskView.addGestureRecognizer(tapGesture)
         
         AccountManager.shared.getAllUserInfo { [weak self] userInfosFromServer in
             self?.allUserInfo = userInfosFromServer
@@ -513,5 +534,12 @@ extension SearchViewController {
         section.orthogonalScrollingBehavior = .groupPaging
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
+    }
+}
+
+// MARK: - date filter delegate
+extension SearchViewController: AskVcToFilterByDateDelegate {
+    func askVcToStartFilter(dateRange: [Date]) {
+        removeChildView()
     }
 }
