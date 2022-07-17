@@ -12,6 +12,8 @@ import FirebaseAuth
 import IQKeyboardManagerSwift
 
 class SearchViewController: UIViewController {
+    
+    
     let maskView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
     var childVC: CalendarFilterViewController?
     var products = [Product]()
@@ -38,6 +40,14 @@ class SearchViewController: UIViewController {
     var pageController = UIPageControl()
     var startDate = Date()
     var endDate = Date()
+    
+    let dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.locale = Locale.autoupdatingCurrent
+        dateFormatter.setLocalizedDateFormatFromTemplate("MM/dd")
+        return dateFormatter
+    }()
     
     @IBOutlet weak var searchBarBackgroundView: UIView!
     @IBOutlet weak var dateButton: UIButton!
@@ -211,14 +221,16 @@ class SearchViewController: UIViewController {
     
     @objc func tapFilterConfirmButton() {
         afterFiltedProducts = []
-        
+        let offsetStartDate = startDate.addingTimeInterval(28800)
+        let offsetEndDate = endDate.addingTimeInterval(28800)
+        let filterSet = Set(daysBetweenTwoDate(startDate: offsetStartDate, endDate: offsetEndDate))
         for product in products {
-            let offsetStartDate = startDate.addingTimeInterval(28800)
-            print(offsetStartDate)
-            let offsetEndDate = endDate.addingTimeInterval(28800)
-            print(offsetEndDate)
-            let availableSet = Set(product.availableDate)
-            let filterSet = Set(daysBetweenTwoDate(startDate: offsetStartDate, endDate: offsetEndDate))
+            var availableDateStrings = [String]()
+            for date in product.availableDate {
+                let dateString = dateFormatter.string(from: date)
+                availableDateStrings.append(dateString)
+            }
+            let availableSet = Set(availableDateStrings)
             if filterSet.isSubset(of: availableSet) {
                 afterFiltedProducts.append(product)
             }
@@ -460,7 +472,6 @@ extension SearchViewController {
             widthDimension: .fractionalWidth(1),
             heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15)
         
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .absolute(85),
@@ -479,11 +490,11 @@ extension SearchViewController {
 
 // MARK: - func to get every days between two date
 extension SearchViewController {
-    func daysBetweenTwoDate(startDate: Date, endDate: Date) -> [Date] {
-        var dayInterval = [Date]()
+    func daysBetweenTwoDate(startDate: Date, endDate: Date) -> [String] {
+        var dateStringArray = [String]()
         var calendar = Calendar.current
         calendar.timeZone = TimeZone(identifier: "UTC")!
-        guard startDate <= endDate else { return dayInterval }
+        guard startDate <= endDate else { return dateStringArray }
         guard let standardStartDate = calendar.date(
                 bySettingHour: 0,
                 minute: 0,
@@ -493,17 +504,18 @@ extension SearchViewController {
                 bySettingHour: 0,
                 minute: 0,
                 second: 0,
-                of: endDate) else { return dayInterval }
+                of: endDate) else { return dateStringArray }
         let component = calendar.dateComponents([.day], from: standardStartDate, to: standardEndDate)
-        guard let days = component.day else { return dayInterval }
+        guard let days = component.day else { return dateStringArray }
         for round in 0...days {
             guard let dateBeAdded = calendar.date(
                 byAdding: .day,
                 value: round,
-                to: standardStartDate) else { return dayInterval }
-            dayInterval.append(dateBeAdded)
+                to: standardStartDate) else { return dateStringArray }
+            let dateString = dateFormatter.string(from: dateBeAdded)
+            dateStringArray.append(dateString)
         }
-        return dayInterval
+        return dateStringArray
     }
 }
 
