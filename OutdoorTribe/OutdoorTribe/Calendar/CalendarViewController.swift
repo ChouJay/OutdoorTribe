@@ -8,12 +8,19 @@
 import Foundation
 import UIKit
 
+protocol PassDateRangeToDetailVCDelegate {
+    func passDateRangeToDetailVC(dateRange: [Date])
+}
+
 protocol PassDateRangeToPostVCDelegate {
     func passDateRange(dateRange: [Date])
 }
 
 class CalendarPickerViewController: UIViewController {
     
+    var rentAvailableDate: [Date]?
+    
+    var passDateToDetailVCDelegate: PassDateRangeToDetailVCDelegate?
     var passDateDelegate: PassDateRangeToPostVCDelegate?
     var selectedIndexPath = IndexPath(item: 0, section: 0)
     var selectedDates = [Date]()
@@ -59,6 +66,7 @@ class CalendarPickerViewController: UIViewController {
         guard let self = self else { return }
         // confirm Date Range!
         self.passDateDelegate?.passDateRange(dateRange: self.selectedDates)
+        self.passDateToDetailVCDelegate?.passDateRangeToDetailVC(dateRange: self.selectedDates)
         self.dismiss(animated: true)
     }
 
@@ -68,7 +76,6 @@ class CalendarPickerViewController: UIViewController {
         didSet {
             days = generateDaysInMonth(for: todayDate)
             dateCollectionView.reloadData()
-            headerView.todayDate = todayDate
         }
     }
 
@@ -215,13 +222,31 @@ extension CalendarPickerViewController {
   // 7
     func generateDay(offsetBy dayOffset: Int, for baseDate: Date, isWithinDisplayedMonth: Bool) -> Day {
         let date = calendar.date(byAdding: .day, value: dayOffset, to: baseDate) ?? baseDate
+        if let rentAvailableDate = rentAvailableDate {
+            // 判斷日期是否在可租借的區間
+            let availableSet = Set(rentAvailableDate)
+            let set: Set = [date.addingTimeInterval(28800)]
+            let isSubsetOfAvailableSet = set.isSubset(of: availableSet)
+            // 判斷日期是否大於今天
+            let isDateNotPass = date.addingTimeInterval(86400) >= Date()
+            
+            return Day(
+                date: date,
+                number: dateFormatter.string(from: date),
+                isSelectable: isWithinDisplayedMonth && isSubsetOfAvailableSet && isDateNotPass,
+                isWithinDisplayedMonth: isWithinDisplayedMonth
+            )
+        } else {
+            // 判斷日期是否大於今天
+            let isDateNotPass = date.addingTimeInterval(86400) >= Date()
 
-        return Day(
-            date: date,
-            number: dateFormatter.string(from: date),
-            isSelectable: isWithinDisplayedMonth,
-            isWithinDisplayedMonth: isWithinDisplayedMonth
-        )
+            return Day(
+                date: date,
+                number: dateFormatter.string(from: date),
+                isSelectable: isWithinDisplayedMonth && isDateNotPass,
+                isWithinDisplayedMonth: isWithinDisplayedMonth
+            )
+        }
     }
 
   // 1
@@ -282,6 +307,10 @@ extension CalendarPickerViewController: UICollectionViewDataSource {
                 for: indexPath) as? CalendarCollectionCell else { fatalError() }
             cell.selectedState = false
             cell.day = day
+            for selectedDate in selectedDates where cell.day?.date == selectedDate {
+                cell.selectedState = true
+            }
+            
             return cell
         case 1:
             let day = secondMonthDays[indexPath.row]
@@ -290,6 +319,9 @@ extension CalendarPickerViewController: UICollectionViewDataSource {
                 for: indexPath) as? CalendarCollectionCell else { fatalError() }
             cell.selectedState = false
             cell.day = day
+            for selectedDate in selectedDates where cell.day?.date == selectedDate {
+                cell.selectedState = true
+            }
             return cell
         case 2:
             let day = thirdMonthDays[indexPath.row]
@@ -298,6 +330,9 @@ extension CalendarPickerViewController: UICollectionViewDataSource {
                 for: indexPath) as? CalendarCollectionCell else { fatalError() }
             cell.selectedState = false
             cell.day = day
+            for selectedDate in selectedDates where cell.day?.date == selectedDate {
+                cell.selectedState = true
+            }
             return cell
         default:
             let day = days[indexPath.row]
@@ -341,7 +376,6 @@ extension CalendarPickerViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegateFlowLayout
 extension CalendarPickerViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let day = days[indexPath.row]
         guard let cell = collectionView.cellForItem(at: indexPath) as? CalendarCollectionCell,
               let day = cell.day else { return }
         guard day.isSelectable else { return }

@@ -11,7 +11,14 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseAuth
 
+protocol AskDetailInfoCellDelegate {
+    func askDetailCellToShowDateRange(dateRange: [Date])
+}
+
 class DetailViewController: UIViewController {
+    
+    var askDetailInfoCellDelegate: AskDetailInfoCellDelegate?
+    
     let firestoreAuth = Auth.auth()
     var pageController = UIPageControl()
     var renterAccount: Account?
@@ -184,6 +191,7 @@ extension DetailViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "DetailInfoTableViewCell",
                 for: indexPath) as? DetailInfoTableViewCell else { fatalError() }
+            askDetailInfoCellDelegate = cell
             cell.delegate = self
             guard let productName = chooseProduct?.title,
                   let addressString = chooseProduct?.addressString,
@@ -208,14 +216,23 @@ extension DetailViewController: UITableViewDataSource {
 }
 
 // MARK: - get date from info cell
-extension DetailViewController: PassDateToVcDelegate {
-    func getEndDate(_ datePicker: UIDatePicker) {
-        endDate = datePicker.date.addingTimeInterval(28800)
+extension DetailViewController: askDetailVCPresentDateRangeDelegate {
+    func askDetailVCPresentDateRangePicker() {
+        let pickerController = CalendarPickerViewController(
+            todayDate: Date())
+        guard let availableDate = chooseProduct?.availableDate else { return }
+        pickerController.rentAvailableDate = availableDate
+        pickerController.passDateToDetailVCDelegate = self
+        present(pickerController, animated: true, completion: nil)
     }
-    
-    func getStartDate(_ datePicker: UIDatePicker) {
-        startDate = datePicker.date.addingTimeInterval(28800)
-    }
+
+//    func getEndDate(_ datePicker: UIDatePicker) {
+//        endDate = datePicker.date.addingTimeInterval(28800)
+//    }
+//
+//    func getStartDate(_ datePicker: UIDatePicker) {
+//        startDate = datePicker.date.addingTimeInterval(28800)
+//    }
 }
 
 // MARK: - date relate function
@@ -244,5 +261,15 @@ extension DetailViewController {
         }
         order.leaseTerm = leaseTerm
         print(leaseTerm)
+    }
+}
+
+// MARK: - date range picker delegate
+extension DetailViewController: PassDateRangeToDetailVCDelegate {
+    func passDateRangeToDetailVC(dateRange: [Date]) {
+        askDetailInfoCellDelegate?.askDetailCellToShowDateRange(dateRange: dateRange)
+        startDate = dateRange.first ?? Date()
+        endDate = dateRange.last ?? Date()
+        daysBetweenTwoDate()
     }
 }

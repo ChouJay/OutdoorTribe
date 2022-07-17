@@ -7,23 +7,24 @@
 
 import UIKit
 
-protocol PassDateToVcDelegate {
-    func getStartDate(_ datePicker: UIDatePicker)
-    func getEndDate(_ datePicker: UIDatePicker)
+protocol askDetailVCPresentDateRangeDelegate {
+    func askDetailVCPresentDateRangePicker()
 }
 
 class DetailInfoTableViewCell: UITableViewCell {
 
-    var delegate: PassDateToVcDelegate?
+    var delegate: askDetailVCPresentDateRangeDelegate?
     
     @IBOutlet weak var nameLabel: UILabel!
 //    @IBOutlet weak var rentLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var amountTextField: UITextField!
-
-    @IBOutlet weak var startDatePicker: UIDatePicker!
-    @IBOutlet weak var endDatePicker: UIDatePicker!
+    @IBOutlet weak var dateRangeTextField: UITextField!
     @IBOutlet weak var descriptionTextView: UITextView!
+    
+    @IBAction func tapDateRangeBtn(_ sender: Any) {
+        delegate?.askDetailVCPresentDateRangePicker()
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,20 +37,20 @@ class DetailInfoTableViewCell: UITableViewCell {
     }
     
     func setRentLimitedPeriod(head: Date, tail: Date) {
-        startDatePicker.minimumDate = head
-        startDatePicker.maximumDate = tail
-        endDatePicker.minimumDate = head
-        endDatePicker.maximumDate = tail
-        startDatePicker.addTarget(self, action: #selector(startDateChange), for: .allEditingEvents)
-        endDatePicker.addTarget(self, action: #selector(endDateChange), for: .allEditingEvents)
+        
     }
-    
-    @objc func startDateChange() {
-        delegate?.getStartDate(startDatePicker)
-    }
-    
-    @objc func endDateChange() {
-        delegate?.getEndDate(endDatePicker)
-    }
+}
 
+// MARK: - be asked to show date range delegate
+extension DetailInfoTableViewCell: AskDetailInfoCellDelegate {
+    func askDetailCellToShowDateRange(dateRange: [Date]) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.locale = Locale.autoupdatingCurrent
+        dateFormatter.setLocalizedDateFormatFromTemplate("yyyy/MM/dd")
+        
+        let beginDateString = dateFormatter.string(from: dateRange.first ?? Date())
+        let endDateString = dateFormatter.string(from: dateRange.last ?? Date())
+        dateRangeTextField.text = " \(beginDateString)" + " - " + "\(endDateString)"
+    }
 }

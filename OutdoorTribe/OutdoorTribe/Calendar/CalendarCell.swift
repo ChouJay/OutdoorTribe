@@ -48,7 +48,7 @@ class CalendarCollectionCell: UICollectionViewCell {
             guard var day = day else { return }
             if !day.isWithinDisplayedMonth {
                 day.date = Date(timeIntervalSince1970: 1)
-                day.number = String(0)
+                day.number = String("")
             }
             numberLabel.text = day.number
             applyDefaultStyle(isWithinDisplayedMonth: day.isWithinDisplayedMonth)
@@ -114,7 +114,8 @@ extension CalendarCollectionCell {
     
   // 4
     func applyDefaultStyle(isWithinDisplayedMonth: Bool) {
-        numberLabel.textColor = isWithinDisplayedMonth ? UIColor.OutdoorTribeColor.mainColor : .clear
-//        selectionBackgroundView.isHidden = true
+        guard let isSelectable = day?.isSelectable else { return }
+//        numberLabel.textColor = isWithinDisplayedMonth ? UIColor.OutdoorTribeColor.mainColor : .clear
+        numberLabel.textColor = isSelectable ? UIColor.OutdoorTribeColor.mainColor : .lightGray
     }
 }
