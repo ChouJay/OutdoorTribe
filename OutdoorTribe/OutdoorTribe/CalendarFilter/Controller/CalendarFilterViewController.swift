@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+// swiftlint:disable cyclomatic_complexity
 protocol AskVcToFilterByDateDelegate {
     func askVcToStartFilter(dateRange: [Date])
 }
@@ -305,15 +306,21 @@ extension CalendarFilterViewController: UICollectionViewDataSource {
             cell.selectedState = false
             cell.isInRange = false
             cell.day = day
+            
             for selectedDate in selectedDates where cell.day?.date == selectedDate && day.isWithinDisplayedMonth {
                 cell.selectedState = true
             }
-            
+
             if selectedDates.count == 2 {
                 guard let startDate = selectedDates.first,
                       let endDate = selectedDates.last else { return cell}
-                if startDate < day.date && day.date < endDate && day.isWithinDisplayedMonth {
+                if startDate <= day.date && day.date <= endDate && day.isWithinDisplayedMonth {
                     cell.isInRange = true
+                    if day.date == startDate {
+                        cell.rangeLeftView.isHidden = true
+                    } else if day.date == endDate {
+                        cell.rangeRightView.isHidden = true
+                    }
                 }
             }
         
@@ -333,8 +340,13 @@ extension CalendarFilterViewController: UICollectionViewDataSource {
             if selectedDates.count == 2 {
                 guard let startDate = selectedDates.first,
                       let endDate = selectedDates.last else { return cell}
-                if startDate < day.date && day.date < endDate && day.isWithinDisplayedMonth {
+                if startDate <= day.date && day.date <= endDate && day.isWithinDisplayedMonth {
                     cell.isInRange = true
+                    if day.date == startDate {
+                        cell.rangeLeftView.isHidden = true
+                    } else if day.date == endDate {
+                        cell.rangeRightView.isHidden = true
+                    }
                 }
             }
             
@@ -354,8 +366,13 @@ extension CalendarFilterViewController: UICollectionViewDataSource {
             if selectedDates.count == 2 {
                 guard let startDate = selectedDates.first,
                       let endDate = selectedDates.last else { return cell}
-                if startDate < day.date && day.date < endDate && day.isWithinDisplayedMonth {
+                if startDate <= day.date && day.date <= endDate && day.isWithinDisplayedMonth {
                     cell.isInRange = true
+                    if day.date == startDate {
+                        cell.rangeLeftView.isHidden = true
+                    } else if day.date == endDate {
+                        cell.rangeRightView.isHidden = true
+                    }
                 }
             }
             
@@ -464,3 +481,5 @@ extension CalendarFilterViewController: UICollectionViewDelegate, UICollectionVi
     return CGSize(width: collectionView.frame.width, height: 60)
     }
 }
+
+// swiftlint:enable cyclomatic_complexity

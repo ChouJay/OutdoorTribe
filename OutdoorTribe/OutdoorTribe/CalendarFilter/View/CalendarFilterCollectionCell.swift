@@ -10,10 +10,19 @@ import UIKit
 
 class CalendarFilterCollectionCell: UICollectionViewCell {
     
-    var rangeView: UIView = {
+    
+    var rangeLeftView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.OutdoorTribeColor.mainColor.withAlphaComponent(0.3)
+        view.backgroundColor = UIColor.OutdoorTribeColor.mainColor.withAlphaComponent(0.2)
+        view.isHidden = true
+        return view
+    }()
+    
+    var rangeRightView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.OutdoorTribeColor.mainColor.withAlphaComponent(0.2)
         view.isHidden = true
         return view
     }()
@@ -28,9 +37,11 @@ class CalendarFilterCollectionCell: UICollectionViewCell {
     var isInRange = false {
         didSet {
             if isInRange {
-                rangeView.isHidden = !isInRange
+                rangeLeftView.isHidden = !isInRange
+                rangeRightView.isHidden = !isInRange
             } else {
-                rangeView.isHidden = !isInRange
+                rangeLeftView.isHidden = !isInRange
+                rangeRightView.isHidden = !isInRange
             }
         }
     }
@@ -75,7 +86,8 @@ class CalendarFilterCollectionCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(rangeView)
+        contentView.addSubview(rangeLeftView)
+        contentView.addSubview(rangeRightView)
         contentView.addSubview(selectionBackgroundView)
         contentView.addSubview(numberLabel)
         backgroundColor = .white
@@ -96,10 +108,15 @@ class CalendarFilterCollectionCell: UICollectionViewCell {
     // 2
         NSLayoutConstraint.activate([
             
-            rangeView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            rangeView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            rangeView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            rangeView.heightAnchor.constraint(equalToConstant: 45),
+            rangeLeftView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            rangeLeftView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            rangeLeftView.trailingAnchor.constraint(equalTo: centerXAnchor),
+            rangeLeftView.heightAnchor.constraint(equalToConstant: 45),
+            
+            rangeRightView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            rangeRightView.leadingAnchor.constraint(equalTo: centerXAnchor),
+            rangeRightView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            rangeRightView.heightAnchor.constraint(equalToConstant: 45),
             
             numberLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             numberLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
