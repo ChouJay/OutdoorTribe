@@ -9,6 +9,7 @@ import UIKit
 
 protocol askDetailVCPresentDateRangeDelegate {
     func askDetailVCPresentDateRangePicker()
+    func passAmountToVC(requireAmount: String)
 }
 
 class DetailInfoTableViewCell: UITableViewCell {
@@ -28,6 +29,7 @@ class DetailInfoTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        setTextFieldDelegate()
         // Initialization code
     }
 
@@ -36,8 +38,8 @@ class DetailInfoTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func setRentLimitedPeriod(head: Date, tail: Date) {
-        
+    func setTextFieldDelegate() {
+        amountTextField.delegate = self
     }
 }
 
@@ -54,3 +56,12 @@ extension DetailInfoTableViewCell: AskDetailInfoCellDelegate {
         dateRangeTextField.text = " \(beginDateString)" + " - " + "\(endDateString)"
     }
 }
+
+// MARK: textField Delegate
+extension DetailInfoTableViewCell: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        delegate?.passAmountToVC(requireAmount: amountTextField.text ?? "0")
+    }
+}
+
+

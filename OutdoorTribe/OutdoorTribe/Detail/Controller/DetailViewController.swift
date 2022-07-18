@@ -199,11 +199,6 @@ extension DetailViewController: UITableViewDataSource {
             cell.nameLabel.text = productName
             cell.addressLabel.text = addressString
             cell.descriptionTextView.text = chooseProduct?.description ?? ""
-//            cell.rentLabel.text = String(rent)
-            guard let startDate = chooseProduct?.availableDate.first,
-                  let endDate = chooseProduct?.availableDate.last else { return cell }
-            cell.setRentLimitedPeriod(head: startDate,
-                                      tail: endDate)
             return cell
 
         default:
@@ -217,6 +212,10 @@ extension DetailViewController: UITableViewDataSource {
 
 // MARK: - get date from info cell
 extension DetailViewController: askDetailVCPresentDateRangeDelegate {
+    func passAmountToVC(requireAmount: String) {
+        order.requiredAmount = Int(requireAmount) ?? 0
+    }
+    
     func askDetailVCPresentDateRangePicker() {
         let pickerController = CalendarPickerViewController(
             todayDate: Date())
@@ -225,14 +224,6 @@ extension DetailViewController: askDetailVCPresentDateRangeDelegate {
         pickerController.passDateToDetailVCDelegate = self
         present(pickerController, animated: true, completion: nil)
     }
-
-//    func getEndDate(_ datePicker: UIDatePicker) {
-//        endDate = datePicker.date.addingTimeInterval(28800)
-//    }
-//
-//    func getStartDate(_ datePicker: UIDatePicker) {
-//        startDate = datePicker.date.addingTimeInterval(28800)
-//    }
 }
 
 // MARK: - date relate function
@@ -245,11 +236,11 @@ extension DetailViewController {
         guard let standardStartDate = calendar.date(bySettingHour: 0,
                                               minute: 0,
                                               second: 0,
-                                              of: startDate),
+                                                    of: startDate.addingTimeInterval(28800)),
               let standardEndDate = calendar.date(bySettingHour: 0,
                                                   minute: 0,
                                                   second: 0,
-                                                  of: endDate) else { return }
+                                                  of: endDate.addingTimeInterval(28800)) else { return }
         let components = calendar.dateComponents([.day],
                                                  from: standardStartDate,
                                                  to: standardEndDate)

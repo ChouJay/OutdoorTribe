@@ -254,7 +254,7 @@ extension SearchViewController {
               let detailViewController = segue.destination as? DetailViewController,
               let indexPath = searchTableView.indexPath(for: searchTableViewCell)
         else { return }
-        detailViewController.chooseProduct = products[indexPath.row]
+        detailViewController.chooseProduct = afterFiltedProducts[indexPath.row]
         
     }
 }
