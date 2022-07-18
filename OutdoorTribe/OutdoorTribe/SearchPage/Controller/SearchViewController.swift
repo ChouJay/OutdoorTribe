@@ -64,7 +64,7 @@ class SearchViewController: UIViewController {
         view.addSubview(childVC.view)
         childVC.view.frame = CGRect(x: dateButton.frame.maxX, y: dateButton.frame.maxY + 10, width: 0, height: 0)
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
-            childVC.view.frame = CGRect(x: self.dateButton.frame.maxX, y: self.dateButton.frame.maxY + 10, width: -300, height: 415)
+            childVC.view.frame = CGRect(x: self.dateButton.frame.maxX, y: self.dateButton.frame.maxY + 10, width: -315, height: 415)
             self.maskView.backgroundColor = .black.withAlphaComponent(0.5)
             self.view.layoutIfNeeded()
         }, completion: nil)
