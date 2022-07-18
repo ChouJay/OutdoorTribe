@@ -8,6 +8,8 @@
 import Foundation
 import UIKit
 
+// swiftlint:disable cyclomatic_complexity
+
 protocol PassDateRangeToDetailVCDelegate {
     func passDateRangeToDetailVC(dateRange: [Date])
 }
@@ -325,9 +327,24 @@ extension CalendarPickerViewController: UICollectionViewDataSource {
                 withReuseIdentifier: CalendarCollectionCell.reuseIdentifier,
                 for: indexPath) as? CalendarCollectionCell else { fatalError() }
             cell.selectedState = false
+            cell.isInRange = false
             cell.day = day
-            for selectedDate in selectedDates where cell.day?.date == selectedDate {
+            
+            for selectedDate in selectedDates where cell.day?.date == selectedDate && day.isWithinDisplayedMonth {
                 cell.selectedState = true
+            }
+
+            if selectedDates.count == 2 {
+                guard let startDate = selectedDates.first,
+                      let endDate = selectedDates.last else { return cell}
+                if startDate <= day.date && day.date <= endDate && day.isWithinDisplayedMonth {
+                    cell.isInRange = true
+                    if day.date == startDate {
+                        cell.rangeLeftView.isHidden = true
+                    } else if day.date == endDate {
+                        cell.rangeRightView.isHidden = true
+                    }
+                }
             }
             
             return cell
@@ -337,9 +354,27 @@ extension CalendarPickerViewController: UICollectionViewDataSource {
                 withReuseIdentifier: CalendarCollectionCell.reuseIdentifier,
                 for: indexPath) as? CalendarCollectionCell else { fatalError() }
             cell.selectedState = false
+            cell.isInRange = false
             cell.day = day
-            for selectedDate in selectedDates where cell.day?.date == selectedDate {
+            
+            for selectedDate in selectedDates where cell.day?.date == selectedDate && day.isWithinDisplayedMonth {
                 cell.selectedState = true
+            }
+
+            if selectedDates.count == 2 {
+                guard let startDate = selectedDates.first,
+                      let endDate = selectedDates.last else { return cell}
+                print(startDate)
+                print(endDate)
+                print(day.date)
+                if startDate <= day.date && day.date <= endDate && day.isWithinDisplayedMonth {
+                    cell.isInRange = true
+                    if day.date == startDate {
+                        cell.rangeLeftView.isHidden = true
+                    } else if day.date == endDate {
+                        cell.rangeRightView.isHidden = true
+                    }
+                }
             }
             return cell
         case 2:
@@ -348,9 +383,24 @@ extension CalendarPickerViewController: UICollectionViewDataSource {
                 withReuseIdentifier: CalendarCollectionCell.reuseIdentifier,
                 for: indexPath) as? CalendarCollectionCell else { fatalError() }
             cell.selectedState = false
+            cell.isInRange = false
             cell.day = day
-            for selectedDate in selectedDates where cell.day?.date == selectedDate {
+            
+            for selectedDate in selectedDates where cell.day?.date == selectedDate && day.isWithinDisplayedMonth {
                 cell.selectedState = true
+            }
+
+            if selectedDates.count == 2 {
+                guard let startDate = selectedDates.first,
+                      let endDate = selectedDates.last else { return cell}
+                if startDate <= day.date && day.date <= endDate && day.isWithinDisplayedMonth {
+                    cell.isInRange = true
+                    if day.date == startDate {
+                        cell.rangeLeftView.isHidden = true
+                    } else if day.date == endDate {
+                        cell.rangeRightView.isHidden = true
+                    }
+                }
             }
             return cell
         default:
@@ -403,6 +453,7 @@ extension CalendarPickerViewController: UICollectionViewDelegate, UICollectionVi
         case 2:
             collectionView.visibleCells.forEach { selectedCell in
                 guard let selectedCell = selectedCell as? CalendarCollectionCell else { return }
+                selectedCell.isInRange = false
                 selectedCell.selectedState = false
                 selectedCell.applyDefaultStyle(
                     isWithinDisplayedMonth: selectedCell.day?.isWithinDisplayedMonth ?? true)
@@ -417,6 +468,7 @@ extension CalendarPickerViewController: UICollectionViewDelegate, UICollectionVi
             if startDate < day.date {
                 selectedDates.insert(day.date, at: selectedCount)
                 cell.selectedState = true
+                collectionView.reloadData()
                 selectedCount += 1
             } else {
                 collectionView.visibleCells.forEach { selectedCell in
@@ -453,3 +505,4 @@ extension CalendarPickerViewController: UICollectionViewDelegate, UICollectionVi
     return CGSize(width: collectionView.frame.width, height: 60)
     }
 }
+// swiftlint:disable cyclomatic_complexity

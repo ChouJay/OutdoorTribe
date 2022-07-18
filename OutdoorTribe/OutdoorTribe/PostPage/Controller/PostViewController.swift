@@ -331,7 +331,7 @@ extension PostViewController: PassDateToPostVCDelegate {
         let pickerController = CalendarPickerViewController(
             todayDate: Date())
         pickerController.passDateDelegate = self
-        present(pickerController, animated: true, completion: nil)
+        tabBarController?.present(pickerController, animated: true, completion: nil)
     }
     
     func passClassificationToVC(text: String) {

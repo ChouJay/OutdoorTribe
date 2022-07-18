@@ -10,7 +10,6 @@ import UIKit
 
 class CalendarFilterCollectionCell: UICollectionViewCell {
     
-    
     var rangeLeftView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false

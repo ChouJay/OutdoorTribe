@@ -10,6 +10,34 @@ import UIKit
 
 class CalendarCollectionCell: UICollectionViewCell {
     
+    var rangeLeftView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.OutdoorTribeColor.mainColor.withAlphaComponent(0.2)
+        view.isHidden = true
+        return view
+    }()
+    
+    var rangeRightView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.OutdoorTribeColor.mainColor.withAlphaComponent(0.2)
+        view.isHidden = true
+        return view
+    }()
+    
+    var isInRange = false {
+        didSet {
+            if isInRange {
+                rangeLeftView.isHidden = !isInRange
+                rangeRightView.isHidden = !isInRange
+            } else {
+                rangeLeftView.isHidden = !isInRange
+                rangeRightView.isHidden = !isInRange
+            }
+        }
+    }
+
     var selectedState = false {
         didSet {
             numberLabel.textColor = selectedState ? .white : UIColor.OutdoorTribeColor.mainColor
@@ -57,6 +85,8 @@ class CalendarCollectionCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        contentView.addSubview(rangeLeftView)
+        contentView.addSubview(rangeRightView)
         contentView.addSubview(selectionBackgroundView)
         contentView.addSubview(numberLabel)
         backgroundColor = .white
@@ -81,16 +111,27 @@ class CalendarCollectionCell: UICollectionViewCell {
 
     // 2
         NSLayoutConstraint.activate([
+            
+            rangeLeftView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            rangeLeftView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            rangeLeftView.trailingAnchor.constraint(equalTo: centerXAnchor),
+            rangeLeftView.heightAnchor.constraint(equalToConstant: 45),
+            
+            rangeRightView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            rangeRightView.leadingAnchor.constraint(equalTo: centerXAnchor),
+            rangeRightView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            rangeRightView.heightAnchor.constraint(equalToConstant: 45),
+            
             numberLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             numberLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 
             selectionBackgroundView.centerYAnchor.constraint(equalTo: numberLabel.centerYAnchor),
             selectionBackgroundView.centerXAnchor.constraint(equalTo: numberLabel.centerXAnchor),
-            selectionBackgroundView.widthAnchor.constraint(equalToConstant: size),
+            selectionBackgroundView.widthAnchor.constraint(equalToConstant: 45),
             selectionBackgroundView.heightAnchor.constraint(equalTo: selectionBackgroundView.widthAnchor)
         ])
 
-        selectionBackgroundView.layer.cornerRadius = size / 2
+        selectionBackgroundView.layer.cornerRadius = 45 / 2
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
