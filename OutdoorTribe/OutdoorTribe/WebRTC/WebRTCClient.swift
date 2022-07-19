@@ -13,6 +13,9 @@ import WebRTC
 class WebRTCClient: NSObject {
     static let shared = WebRTCClient(iceServers: Config.defaultIce.webRTCIceServers)
     
+    var currentUserInfo: Account?
+    var calleeUid = ""
+    
     var iceServers: [String]
     var peerConnection: RTCPeerConnection? // why we don't need "?"
    // what is factory?  not get it!
@@ -32,8 +35,7 @@ class WebRTCClient: NSObject {
     init(iceServers: [String]) {
         self.iceServers = iceServers
         super.init() // why we need this?
-        rtcAudioSession.useManualAudio = true
-        rtcAudioSession.isAudioEnabled = false
+        createPeerConnection()
     }
 // MARK: - peerConnection
     func createPeerConnection() {
@@ -87,7 +89,6 @@ class WebRTCClient: NSObject {
     // offer : just use webRTC sdk create a sdp -> prepare to send!!
     func offer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void) {
         let constrains = RTCMediaConstraints(mandatoryConstraints: self.mediaConstrains, optionalConstraints: nil)
-        print(peerConnection)
         self.peerConnection?.offer(for: constrains, completionHandler: { sdp, error in
             guard let sdp = sdp else {
                 print(error)
@@ -99,7 +100,7 @@ class WebRTCClient: NSObject {
         })
     }
     
-    func send(sdp rtcSdp: RTCSessionDescription, to person: String) {
+    func send(sdp rtcSdp: RTCSessionDescription, to person: String, completion: @escaping () -> Void) {
         do {
             let dataMessage = try self.encoder.encode(SessionDescription(from: rtcSdp))
             guard let dict = try JSONSerialization.jsonObject(
@@ -110,6 +111,7 @@ class WebRTCClient: NSObject {
                     print("Error send sdp: \(err)")
                 } else {
                     print("sdp sent!!")
+                    completion()
                 }
             }
         } catch {
@@ -118,6 +120,9 @@ class WebRTCClient: NSObject {
     }
     // After that peer connection auto generate local candidates. You also need to send them to the other person.
     func send(candidate rtcIceCandidate: RTCIceCandidate, to person: String) {
+        guard let currentUserInfo = currentUserInfo else {
+            print("No currentUser, can't send candidate!")
+            return }
         do {
             // what is iceCandidate
             let dataMessage = try self.encoder.encode(IceCandidate(from: rtcIceCandidate))
@@ -138,7 +143,7 @@ class WebRTCClient: NSObject {
             Firestore.firestore()
                 .collection(person)
                 .document("candidate")
-                .setData(["sender": "George"]) { err in
+                .setData(currentUserInfo.toDict) { err in
                 if let err = err {
                     print("Error send candidate: \(err)")
                 } else {
@@ -162,8 +167,6 @@ class WebRTCClient: NSObject {
             self.peerConnection?.setLocalDescription(sdp, completionHandler: { [weak self] error in
                 if error == nil {
                     print("setLocal sdp ok")
-                    print(self?.peerConnection?.localDescription)
-                    print(self?.peerConnection?.remoteDescription)
                     completion(sdp)
                 } else {
                     print(error)
@@ -174,6 +177,7 @@ class WebRTCClient: NSObject {
 // MARK: - Close peer connection, clear Firestore, reset variables and re-create new peer connection, so it ready for new session
     func deleteSdpAndCandiadte(for person: String) {
         closePeerConnection()
+        createPeerConnection()
         Firestore.firestore()
             .collection(person)
             .document("sdp")
@@ -209,6 +213,41 @@ class WebRTCClient: NSObject {
         peerConnection?.close()
         peerConnection = nil
     }
+    
+    func deleteSdpAndCandiadteByCallee(for selfUid: String) {
+        closePeerConnection()
+        createPeerConnection()
+        Firestore.firestore()
+            .collection(selfUid)
+            .document("sdp")
+            .delete() { err in
+            if let err = err {
+                print("Error removing firestore sdp: \(err)")
+            } else {
+                Firestore.firestore()
+                    .collection(selfUid)
+                    .document("candidate")
+                    .collection("candidates")
+                    .getDocuments(source: .server, completion: { querySnapShot, err in
+                    if err == nil {
+                        guard let querySnapShot = querySnapShot else { return }
+                        for document in querySnapShot.documents {
+                            document.reference.delete()
+                        }
+                        print("Firestore candidate successfully removed!")
+                        Firestore.firestore()
+                            .collection(selfUid)
+                            .document("candidate")
+                            .delete()
+                    } else {
+                            print(err)
+                    }
+                })
+                print("Firestore sdp successfully removed!")
+            }
+        }
+    }
+
 }
 
 // RTCPeerConnectionDeleger
@@ -240,7 +279,7 @@ extension WebRTCClient: RTCPeerConnectionDelegate {
     
     // will be called, when we call peerConnection.answer()!!
     func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
-        send(candidate: candidate, to: "Jay") //是否只有offer時會call, 還是answer也會？ 感覺answer也要call 較合理
+        send(candidate: candidate, to: calleeUid) // 是否只有offer時會call, 還是answer也會？ 感覺answer也要call 較合理
     }
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {

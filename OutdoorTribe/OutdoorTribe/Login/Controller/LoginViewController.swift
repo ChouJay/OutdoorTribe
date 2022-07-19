@@ -11,12 +11,21 @@ import AuthenticationServices
 
 class LoginViewController: UIViewController {
     
+    @IBOutlet weak var logoView: UIImageView!
+    @IBOutlet weak var gradientView: UIView!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
-    
+    @IBOutlet weak var registerStackView: UIStackView!
     @IBAction func tapDismissButton(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func tapPrivacyPolicyBtn(_ sender: Any) {
+        print("be tap")
+        let controller = WebView()
+        controller.url = "https://www.privacypolicies.com/live/87961b7a-bce1-4d58-b679-0517b6dec594"
+        present(controller, animated: true)
     }
     
     @IBAction func tapLoginBtn(_ sender: Any) {
@@ -39,16 +48,41 @@ class LoginViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loginButton.layer.cornerRadius = 7
+        layoutGradientView()
+        changeTextFirldPlaceholderColor(textField: emailTextField, placeholderString: "Email")
+        changeTextFirldPlaceholderColor(textField: passwordTextField, placeholderString: "Password")
+        
+        // prevent layout issue in iphone 8
+        if UIScreen.main.bounds.height < 700 {
+            logoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 30).isActive = true
+            registerStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -270).isActive = true
+        }
+    }
+    
+    func changeTextFirldPlaceholderColor(textField: UITextField, placeholderString: String) {
+        textField.attributedPlaceholder = NSAttributedString(
+            string: placeholderString,
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.white]
+        )
+    }
+    
     func layoutAppleSignInButton() {
         let appleSignInBtn = ASAuthorizationAppleIDButton(
             authorizationButtonType: .signIn,
             authorizationButtonStyle: .black)
         view.addSubview(appleSignInBtn)
-        appleSignInBtn.layer.cornerRadius = 15
+//        appleSignInBtn.layer.cornerRadius = 15
         appleSignInBtn.addTarget(self, action: #selector(signInWithApple), for: .touchUpInside)
         
         appleSignInBtn.translatesAutoresizingMaskIntoConstraints = false
-        appleSignInBtn.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 85).isActive = true
+        if UIScreen.main.bounds.height < 700 {
+            appleSignInBtn.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -70).isActive = true
+        } else {
+            appleSignInBtn.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
+        }
         appleSignInBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
         appleSignInBtn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
         appleSignInBtn.heightAnchor.constraint(equalToConstant: 50).isActive = true
@@ -79,7 +113,18 @@ class LoginViewController: UIViewController {
         
         return request
     }
-
+    
+    func layoutGradientView() {
+        let gradientLayer = CAGradientLayer()
+        let initialColor = UIColor.white // our initial color
+        let finalColor = initialColor.withAlphaComponent(0.0)
+        gradientLayer.frame = gradientView.bounds
+        gradientLayer.colors = [initialColor.cgColor, finalColor.cgColor]
+        gradientLayer.locations = [0, 1]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
+        gradientView.layer.addSublayer(gradientLayer)
+    }
     
     // Adapted from https://auth0.com/docs/api-auth/tutorials/nonce#generate-a-cryptographically-random-nonce
     private func randomNonceString(length: Int = 32) -> String {
@@ -152,7 +197,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                     let familyName = appleIDCredential.fullName?.familyName ?? ""
                     var userName = ""
                     if givenName == "" && familyName == "" {
-                        userName = "Apple User"
+                        userName = "\(UUID())" // 需要測試! 搭配apple user delete
                     } else {
                         userName = givenName + familyName
                     }
@@ -166,10 +211,11 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                                           ratingCount: 0,
                                           point: 3500,
                                           followerCount: 0)
-                    AccountManager.shared.storeRegistedAccount(account: account) { result in
+                    AccountManager.shared.storeRegistedAccount(account: account) { [weak self] result in
                         switch result {
                         case let .success(string):
                             print(string)
+                            self?.dismiss(animated: true, completion: nil)
                         case let .failure(error):
                             print(error)
                         }

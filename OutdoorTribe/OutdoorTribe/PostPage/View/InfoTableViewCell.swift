@@ -11,6 +11,7 @@ protocol PassDateToPostVCDelegate {
     func passEndDateToVC(chooseDate: Date)
     func passStartDateToVC(chooseDate: Date)
     func passClassificationToVC(text: String)
+    func passDateRangeToVC()
 }
 
 class InfoTableViewCell: UITableViewCell {
@@ -21,14 +22,16 @@ class InfoTableViewCell: UITableViewCell {
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var classificationTextField: UITextField!
-    @IBOutlet weak var startDatePicker: UIDatePicker!
-    @IBOutlet weak var endDatePicker: UIDatePicker!
+    
+    @IBOutlet weak var datePickerBtn: UIButton!
+    @IBOutlet weak var dateRangeTextField: UITextField!
+    
     @IBOutlet weak var pullDownBtn: UIButton!
     @IBOutlet weak var descriptionTextView: UITextView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setDatePickerValueChange()
+//        setDatePickerValueChange()
         setUpPullDownBtn()
         layoutTextView()
         // Initialization code
@@ -40,15 +43,20 @@ class InfoTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    @objc func dateChange(datePicker: UIDatePicker) {
-        passDateDelegate?.passStartDateToVC(chooseDate: datePicker.date)
-        // Replace the hour (time) of both dates with 00:00
+    
+    @IBAction func tapDateRangePicker(_ sender: Any) {
+        passDateDelegate?.passDateRangeToVC()
     }
     
-    @objc func dateChangeForLast(datePicker: UIDatePicker) {
-        // call delegate func to pass date to VC
-        passDateDelegate?.passEndDateToVC(chooseDate: datePicker.date)
-    }
+//    @objc func dateChange() {
+//        print("test1")
+//        // Replace the hour (time) of both dates with 00:00
+//    }
+//    
+//    @objc func dateChangeForLast() {
+//        // call delegate func to pass date to VC
+//        print("test2")
+//    }
     
     func formatDate(date: Date) -> String {
         let formatter = DateFormatter()
@@ -61,11 +69,7 @@ class InfoTableViewCell: UITableViewCell {
         descriptionTextView.layer.cornerRadius = 5
         descriptionTextView.layer.borderWidth = 0.5
         descriptionTextView.layer.borderColor = UIColor.lightGray.cgColor
-    }
-    
-    func setDatePickerValueChange() {
-        startDatePicker.addTarget(self, action: #selector(dateChange(datePicker:)), for: .valueChanged)
-        endDatePicker.addTarget(self, action: #selector(dateChangeForLast(datePicker:)), for: .valueChanged)
+        
     }
     
     func setUpPullDownBtn() {
@@ -103,14 +107,27 @@ class InfoTableViewCell: UITableViewCell {
 }
 
 // MARK: - discard delegate
-extension InfoTableViewCell: DiscardDelegate {
+extension InfoTableViewCell: AskInfoCellDelegate {
+    func askToShowDateRange(dateRange: [Date]) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.locale = Locale.autoupdatingCurrent
+        dateFormatter.setLocalizedDateFormatFromTemplate("yyyy/MM/dd")
+        
+        let beginDateString = dateFormatter.string(from: dateRange.first ?? Date())
+        let endDateString = dateFormatter.string(from: dateRange.last ?? Date())
+        dateRangeTextField.text = " \(beginDateString)" + " - " + "\(endDateString)"
+    }
+    
     func askToDiscardInfo() {
-        descriptionTextView.text = ""
+        descriptionTextView.textColor = .lightGray
+        descriptionTextView.text = "description"
         titleTextField.text = ""
         amountTextField.text = ""
         addressTextField.text = ""
         classificationTextField.text = ""
-        startDatePicker.date = .now
-        endDatePicker.date = .now
+        dateRangeTextField.text = ""
     }
+    
+    
 }

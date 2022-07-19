@@ -50,6 +50,7 @@ extension BookedStageViewController: UITableViewDataSource {
                 withIdentifier: "BookedForRenterTableViewCell",
                 for: indexPath) as? BookedForRenterTableViewCell else { fatalError() }
             cell.changeStateDelegate = self
+            cell.orderID = bookedStateOrders[indexPath.row].orderID
             guard let urlString = bookedStateOrders[indexPath.row].product?.photoUrl.first,
                   let url = URL(string: urlString) else { return cell }
             if bookedStateOrders[indexPath.row].orderState == 1 {
@@ -68,6 +69,7 @@ extension BookedStageViewController: UITableViewDataSource {
                 withIdentifier: "BookedForLessorTableViewCell",
                 for: indexPath) as? BookedForLessorTableViewCell else { fatalError() }
             cell.changeStateDelegate = self
+            cell.orderID = bookedStateOrders[indexPath.row].orderID
             guard let urlString = bookedStateOrders[indexPath.row].product?.photoUrl.first,
                   let url = URL(string: urlString) else { return cell }
             
@@ -89,7 +91,8 @@ extension BookedStageViewController: UITableViewDataSource {
 
 // MARK: - change state delegate
 extension BookedStageViewController: LessorChangeStateDelegate {
-    func askVcToCancelLessorOrder(_ sender: UIButton) {
+    func askVcToCancelLessorOrder(_ orderID: String) {
+        OrderManger.shared.deleteOrderByCancelBtn(orderID)
         print("cancel btn test")
     }
     
@@ -102,7 +105,8 @@ extension BookedStageViewController: LessorChangeStateDelegate {
 }
 
 extension BookedStageViewController: RenterChangeStateDelegate {
-    func askVcToCancelRenterOrder(_ sender: UIButton) {
+    func askVcToCancelRenterOrder(_ orderID: String) {
+        OrderManger.shared.deleteOrderByCancelBtn(orderID)
         print("cancel btn renter test")
     }
     

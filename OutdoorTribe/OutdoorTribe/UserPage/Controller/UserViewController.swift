@@ -10,18 +10,17 @@ import FirebaseAuth
 import Kingfisher
 
 class UserViewController: UIViewController {
+    let firebaseAuth = Auth.auth()
     var posterUid = ""
     var othersAccount: Account?
     var allUserProducts = [Product]()
+    var currentUserSubscriptions = [Account]()
     var currentUserID = ""
     
     @IBOutlet weak var productCollectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let firebaseAuth = Auth.auth()
-        guard let userID = firebaseAuth.currentUser?.uid else { return }
-        currentUserID = userID
         
         productCollectionView.register(
             UINib(nibName: "PhotoWallHeaderReusableView", bundle: nil),
@@ -29,6 +28,9 @@ class UserViewController: UIViewController {
             withReuseIdentifier: "photoWall")
         productCollectionView.collectionViewLayout = createCompositionalLayout()
         productCollectionView.dataSource = self
+        
+        guard let userID = firebaseAuth.currentUser?.uid else { return }
+        currentUserID = userID
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,6 +39,12 @@ class UserViewController: UIViewController {
         AccountManager.shared.getUserPost(byUserID: posterUid) { [weak self] productsFromServer in
             self?.allUserProducts = productsFromServer
             self?.productCollectionView.reloadData()
+        }
+        
+        if firebaseAuth.currentUser?.uid != nil {
+            SubscribeManager.shared.loadingSubscriber(currentUserID: currentUserID) { [weak self] accountsFromServer in
+                self?.currentUserSubscriptions = accountsFromServer
+            }
         }
     }
     
@@ -89,25 +97,6 @@ class UserViewController: UIViewController {
                 fatalError()
             }
         }
-        
-//        let itemSize = NSCollectionLayoutSize(
-//            widthDimension: .fractionalWidth(1/3),
-//            heightDimension: .fractionalHeight(1))
-//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 3)
-//
-//        let groupSize = NSCollectionLayoutSize(
-//            widthDimension: .fractionalWidth(1),
-//            heightDimension: .fractionalWidth(1/3))
-//        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-//
-//        let section = NSCollectionLayoutSection(group: group)
-//        section.interGroupSpacing = 3
-//        section.contentInsets = NSDirectionalEdgeInsets(top: 3, leading: 3, bottom: 3, trailing: 0)
-//        section.orthogonalScrollingBehavior = .none
-//
-//        let layout = UICollectionViewCompositionalLayout(section: section)
-//        return layout
     }
 }
 
@@ -156,7 +145,6 @@ extension UserViewController: UICollectionViewDataSource {
             let url = URL(string: urlString)
             item.postImage.kf.setImage(with: url)
             return item
-
         }
     }
     
@@ -167,16 +155,28 @@ extension UserViewController: UICollectionViewDataSource {
             ofKind: kind,
             withReuseIdentifier: "photoWall",
             for: indexPath) as? PhotoWallHeaderReusableView else { fatalError() }
-        if currentUserID == posterUid {
+        
+        if currentUserID == "" {
             headerView.blockBtn.isEnabled = false
             headerView.followBtn.isEnabled = false
             headerView.blockBtn.alpha = 0.5
             headerView.followBtn.alpha = 0.5
         } else {
-            headerView.blockBtn.isEnabled = true
-            headerView.followBtn.isEnabled = true
-            headerView.blockBtn.alpha = 1
-            headerView.followBtn.alpha = 1
+            if currentUserID == posterUid {
+                headerView.blockBtn.isEnabled = false
+                headerView.followBtn.isEnabled = false
+                headerView.blockBtn.alpha = 0.5
+                headerView.followBtn.alpha = 0.5
+            } else {
+                headerView.followBtn.isEnabled = true
+                headerView.followBtn.alpha = 1
+                for account in currentUserSubscriptions where account.userID == othersAccount?.userID {
+                    headerView.followBtn.isEnabled = false
+                    headerView.followBtn.alpha = 0.5
+                }
+                headerView.blockBtn.isEnabled = true
+                headerView.blockBtn.alpha = 1
+            }
         }
         headerView.delegate = self
         headerView.followBtn.layer.cornerRadius = 5

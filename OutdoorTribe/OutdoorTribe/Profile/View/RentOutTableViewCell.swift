@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol RentOutCallDelegate {
+    func askVcToCall(cell: UITableViewCell)
+}
+
 protocol FinishOrderDelegate {
     func askVcFinishOrder(cell: RentOutTableViewCell)
 }
@@ -14,6 +18,7 @@ protocol FinishOrderDelegate {
 class RentOutTableViewCell: UITableViewCell {
 
     var finishOrderDelegate: FinishOrderDelegate?
+    var callDelegate: RentOutCallDelegate?
     
     @IBOutlet weak var rentOutCallBtn: UIButton!
     @IBOutlet weak var productName: UILabel!
@@ -27,6 +32,7 @@ class RentOutTableViewCell: UITableViewCell {
     }
     
     @IBAction func tapCallBtn(_ sender: Any) {
+        callDelegate?.askVcToCall(cell: self)
     }
     
     override func prepareForReuse() {

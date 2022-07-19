@@ -24,7 +24,7 @@ class AdvertisingWall {
     static let shared = AdvertisingWall()
     
     var differentPicture = [
-    "campingPhoto",
+    "Group",
     "divingPhoto",
     "skiingPhoto"
     ]

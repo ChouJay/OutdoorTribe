@@ -12,8 +12,9 @@ import FirebaseStorage
 import FirebaseFirestore
 import FirebaseAuth
 
-protocol DiscardDelegate {
+protocol AskInfoCellDelegate {
     func askToDiscardInfo()
+    func askToShowDateRange(dateRange: [Date])
 }
 
 class PostViewController: UIViewController {
@@ -37,7 +38,7 @@ class PostViewController: UIViewController {
     var startDate = Date()
     var endDate = Date()
     var avaliableTerm = [Date]()
-    var discardDelegate: DiscardDelegate?
+    var toInfoCellDelegate: AskInfoCellDelegate?
     
     @IBOutlet weak var discardBtn: UIButton!
     @IBOutlet weak var postBtn: UIButton!
@@ -48,13 +49,13 @@ class PostViewController: UIViewController {
         uploadPhoto()
         uploadedPhoto = []
         dismiss(animated: true)
-        discardDelegate?.askToDiscardInfo()
+        toInfoCellDelegate?.askToDiscardInfo()
         postTableView.reloadData()
     }
     
     @IBAction func tapDiscard(_ sender: Any) {
         uploadedPhoto = []
-        discardDelegate?.askToDiscardInfo()
+        toInfoCellDelegate?.askToDiscardInfo()
         postTableView.reloadData()
     }
     
@@ -97,7 +98,7 @@ class PostViewController: UIViewController {
         var endPoint = 0
         var paths = [String]()
         for image in uploadedPhoto {
-            guard let imageData = image.jpegData(compressionQuality: 0.8) else { return }
+            guard let imageData = image.jpegData(compressionQuality: 0.5) else { return }
             let fileRef = storageRef.child(path + String(endPoint))
             group.enter()
             fileRef.putData(imageData, metadata: nil) { storageMetadata, error in
@@ -149,7 +150,7 @@ extension PostViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "InfoTableViewCell",
                 for: indexPath) as? InfoTableViewCell else { fatalError() }
-            discardDelegate = cell
+            toInfoCellDelegate = cell
             cell.descriptionTextView.delegate = self
             cell.titleTextField.delegate = self
             cell.addressTextField.delegate = self
@@ -222,7 +223,6 @@ extension PostViewController: UIImagePickerControllerDelegate, UINavigationContr
         didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.originalImage] as? UIImage {
             uploadedPhoto.append(image)
-            print(uploadedPhoto)
         }
         if let url = info[.mediaURL] as? URL {
             print(url)
@@ -326,6 +326,14 @@ extension PostViewController: UITextFieldDelegate, UITextViewDelegate {
 
 // MARK: - pass date from cell delegate
 extension PostViewController: PassDateToPostVCDelegate {
+    func passDateRangeToVC() {
+        
+        let pickerController = CalendarPickerViewController(
+            todayDate: Date())
+        pickerController.passDateDelegate = self
+        tabBarController?.present(pickerController, animated: true, completion: nil)
+    }
+    
     func passClassificationToVC(text: String) {
         product.classification = text
     }
@@ -333,12 +341,22 @@ extension PostViewController: PassDateToPostVCDelegate {
     func passStartDateToVC(chooseDate: Date) {
         startDate = chooseDate
         print(startDate)
-        daysBetweenTwoDate()
+//        daysBetweenTwoDate()
     }
     
     func passEndDateToVC(chooseDate: Date) {
         endDate = chooseDate
         print(endDate)
+//        daysBetweenTwoDate()
+    }
+}
+
+// MARK: - Date range delegate
+extension PostViewController: PassDateRangeToPostVCDelegate {
+    func passDateRange(dateRange: [Date]) {
+        toInfoCellDelegate?.askToShowDateRange(dateRange: dateRange)
+        startDate = dateRange.first ?? Date()
+        endDate = dateRange.last ?? Date()
         daysBetweenTwoDate()
     }
 }

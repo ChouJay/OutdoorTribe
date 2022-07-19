@@ -9,10 +9,12 @@ import UIKit
 
 protocol RenterChangeStateDelegate {
     func askVcChangeToDeliveredState(_ sender: UIButton)
-    func askVcToCancelRenterOrder(_ sender: UIButton)
+    func askVcToCancelRenterOrder(_ orderID: String)
 }
 
 class BookedForRenterTableViewCell: UITableViewCell {
+    
+    var orderID = ""
     
     @IBOutlet weak var deliverBtn: UIButton!
     @IBOutlet weak var cancelBtn: UIButton!
@@ -26,6 +28,7 @@ class BookedForRenterTableViewCell: UITableViewCell {
         changeStateDelegate?.askVcChangeToDeliveredState(sender)
     }
     @IBAction func tapCancelBtn(_ sender: Any) {
+        changeStateDelegate?.askVcToCancelRenterOrder(orderID)
     }
     
     override func prepareForReuse() {
