@@ -10,6 +10,7 @@ import FirebaseAuth
 import Kingfisher
 
 class UserViewController: UIViewController {
+    let firebaseAuth = Auth.auth()
     var posterUid = ""
     var othersAccount: Account?
     var allUserProducts = [Product]()
@@ -20,9 +21,6 @@ class UserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let firebaseAuth = Auth.auth()
-        guard let userID = firebaseAuth.currentUser?.uid else { return }
-        currentUserID = userID
         
         productCollectionView.register(
             UINib(nibName: "PhotoWallHeaderReusableView", bundle: nil),
@@ -30,6 +28,9 @@ class UserViewController: UIViewController {
             withReuseIdentifier: "photoWall")
         productCollectionView.collectionViewLayout = createCompositionalLayout()
         productCollectionView.dataSource = self
+        
+        guard let userID = firebaseAuth.currentUser?.uid else { return }
+        currentUserID = userID
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,10 +41,11 @@ class UserViewController: UIViewController {
             self?.productCollectionView.reloadData()
         }
         
-        SubscribeManager.shared.loadingSubscriber(currentUserID: currentUserID) { [weak self] accountsFromServer in
-            self?.currentUserSubscriptions = accountsFromServer
+        if firebaseAuth.currentUser?.uid != nil {
+            SubscribeManager.shared.loadingSubscriber(currentUserID: currentUserID) { [weak self] accountsFromServer in
+                self?.currentUserSubscriptions = accountsFromServer
+            }
         }
-        
     }
     
     private func createCompositionalLayout() -> UICollectionViewLayout {
@@ -143,7 +145,6 @@ extension UserViewController: UICollectionViewDataSource {
             let url = URL(string: urlString)
             item.postImage.kf.setImage(with: url)
             return item
-
         }
     }
     
@@ -154,20 +155,28 @@ extension UserViewController: UICollectionViewDataSource {
             ofKind: kind,
             withReuseIdentifier: "photoWall",
             for: indexPath) as? PhotoWallHeaderReusableView else { fatalError() }
-        if currentUserID == posterUid {
+        
+        if currentUserID == "" {
             headerView.blockBtn.isEnabled = false
             headerView.followBtn.isEnabled = false
             headerView.blockBtn.alpha = 0.5
             headerView.followBtn.alpha = 0.5
         } else {
-            headerView.followBtn.isEnabled = true
-            headerView.followBtn.alpha = 1
-            for account in currentUserSubscriptions where account.userID == othersAccount?.userID {
+            if currentUserID == posterUid {
+                headerView.blockBtn.isEnabled = false
                 headerView.followBtn.isEnabled = false
+                headerView.blockBtn.alpha = 0.5
                 headerView.followBtn.alpha = 0.5
+            } else {
+                headerView.followBtn.isEnabled = true
+                headerView.followBtn.alpha = 1
+                for account in currentUserSubscriptions where account.userID == othersAccount?.userID {
+                    headerView.followBtn.isEnabled = false
+                    headerView.followBtn.alpha = 0.5
+                }
+                headerView.blockBtn.isEnabled = true
+                headerView.blockBtn.alpha = 1
             }
-            headerView.blockBtn.isEnabled = true
-            headerView.blockBtn.alpha = 1
         }
         headerView.delegate = self
         headerView.followBtn.layer.cornerRadius = 5

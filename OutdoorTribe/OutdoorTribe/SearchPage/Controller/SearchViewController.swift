@@ -12,6 +12,9 @@ import FirebaseAuth
 import IQKeyboardManagerSwift
 
 class SearchViewController: UIViewController {
+    
+    let maskView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+    var childVC: CalendarFilterViewController?
     var products = [Product]()
     var afterFiltedProducts = [Product]()
     var afterFiltedAndBlockProducts = [Product]()
@@ -27,30 +30,67 @@ class SearchViewController: UIViewController {
             }
         }
     }
-    @IBOutlet weak var searchBarBackgroundView: UIView!
     var buttonForDoingFilter = UIButton()
     var buttonForStopFilter = UIButton()
     var backgroundView = UIView()
-    var startDatePicker = UIDatePicker()
-    var endDatePicker = UIDatePicker()
     var headerView = UICollectionView(
         frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 200),
         collectionViewLayout: UICollectionViewLayout())
     var pageController = UIPageControl()
+    var startDate = Date()
+    var endDate = Date()
     
+    let dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.locale = Locale.autoupdatingCurrent
+        dateFormatter.setLocalizedDateFormatFromTemplate("MM/dd")
+        return dateFormatter
+    }()
+    
+    @IBOutlet weak var searchBarBackgroundView: UIView!
     @IBOutlet weak var dateButton: UIButton!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var searchTableView: UITableView!
     @IBOutlet weak var mainGalleryView: UICollectionView!
     @IBAction func tapDatePicker(_ sender: UIButton) {
         dateButton.isEnabled = false
-        layoutChooseDateUI()
-        buttonForDoingFilter.isHidden = false
+        childVC = CalendarFilterViewController(todayDate: Date())
+        guard let childVC = childVC else { return }
+        childVC.filterDelegate = self
+        maskView.backgroundColor = .black.withAlphaComponent(0)
+        view.addSubview(maskView)
+        addChild(childVC)
+        view.addSubview(childVC.view)
+        childVC.view.frame = CGRect(x: dateButton.frame.maxX, y: dateButton.frame.maxY + 10, width: 0, height: 0)
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+            childVC.view.frame = CGRect(x: self.dateButton.frame.maxX, y: self.dateButton.frame.maxY + 10, width: -315, height: 415)
+            self.maskView.backgroundColor = .black.withAlphaComponent(0.5)
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+        childVC.didMove(toParent: self)
+    }
+    
+    @objc func removeChildView() {
+        guard let childVc = childVC else { return }
+        print("remove subview")
+        UIView.animate(withDuration: 0.2) {
+            childVc.view.frame = CGRect(x: self.dateButton.frame.maxX, y: self.dateButton.frame.maxY + 10, width: 0, height: 0)
+            self.maskView.backgroundColor = .black.withAlphaComponent(0)
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+            childVc.removeFromParent()
+            childVc.view.removeFromSuperview()
+            self.maskView.removeFromSuperview()
+            childVc.didMove(toParent: nil)
+            self.childVC = nil
+            self.dateButton.isEnabled = true
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         AccountManager.shared.getAllUserInfo { [weak self] userInfosFromServer in
             self?.allUserInfo = userInfosFromServer
         }
@@ -96,6 +136,15 @@ class SearchViewController: UIViewController {
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
         AccountManager.shared.loadUserBlockList(byUserID: currentUserID) { [weak self] accounts in
             self?.blockUsers = accounts
+            self?.searchTableView.reloadData()
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first
+        if touch?.view != childVC?.view {
+            removeChildView()
+            tapFilterStopButton()
         }
     }
     
@@ -117,92 +166,19 @@ class SearchViewController: UIViewController {
     }
     
 // MARK: - date picker function
-    func layoutChooseDateUI() {
-        startDatePicker.datePickerMode = .date
-        startDatePicker.preferredDatePickerStyle = .compact
-        startDatePicker.timeZone = .current
-
-        endDatePicker.datePickerMode = .date
-        endDatePicker.preferredDatePickerStyle = .compact
-        endDatePicker.timeZone = .current
-        
-        backgroundView.backgroundColor = .white
-        backgroundView.layer.cornerRadius = 10
-        print(dateButton.frame)
-        view.addSubview(backgroundView)
-        backgroundView.frame = CGRect(
-            x: dateButton.frame.origin.x + dateButton.frame.width,
-            y: dateButton.frame.origin.y + dateButton.frame.height + 10,
-            width: 0,
-            height: 40)
-        print(backgroundView.frame)
-        backgroundView.alpha = 0
-
-        backgroundView.addSubview(buttonForDoingFilter)
-        buttonForDoingFilter.addTarget(self, action: #selector(tapFilterConfirmButton), for: .touchUpInside)
-        buttonForDoingFilter.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-        buttonForDoingFilter.tintColor = .darkGray
-        buttonForDoingFilter.translatesAutoresizingMaskIntoConstraints = false
-        buttonForDoingFilter.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
-        buttonForDoingFilter.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        buttonForDoingFilter.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor).isActive = true
-        buttonForDoingFilter.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
-        
-        backgroundView.addSubview(buttonForStopFilter)
-        buttonForStopFilter.addTarget(self, action: #selector(tapFilterStopButton), for: .touchUpInside)
-        buttonForStopFilter.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-        buttonForStopFilter.tintColor = .darkGray
-        buttonForStopFilter.translatesAutoresizingMaskIntoConstraints = false
-        buttonForStopFilter.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
-        buttonForStopFilter.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        buttonForStopFilter.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor).isActive = true
-        buttonForStopFilter.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
-        
-        let dashLabel = UILabel()
-        dashLabel.text = "-"
-        dashLabel.textAlignment = .center
-        
-        let hStack = UIStackView()
-        let subViews = [startDatePicker, dashLabel, endDatePicker]
-        for subView in subViews {
-            hStack.addArrangedSubview(subView)
-        }
-        hStack.axis = .horizontal
-        hStack.distribution = .fillProportionally
-        backgroundView.addSubview(hStack)
-        
-        hStack.translatesAutoresizingMaskIntoConstraints = false
-        hStack.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
-        hStack.leadingAnchor.constraint(equalTo: buttonForStopFilter.trailingAnchor).isActive = true
-        hStack.trailingAnchor.constraint(equalTo: buttonForDoingFilter.leadingAnchor).isActive = true
-        hStack.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
-        
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
-            self.backgroundView.frame = CGRect(
-                x: self.dateButton.frame.origin.x + self.dateButton.frame.width - 230,
-                y: self.dateButton.frame.origin.y + self.dateButton.frame.height + 10,
-                width: 230,
-                height: 40)
-            self.backgroundView.alpha = 1
-        }, completion: nil)
-    }
     
     @objc func tapFilterConfirmButton() {
         afterFiltedProducts = []
-        dateButton.isEnabled = true
-        buttonForDoingFilter.isHidden = true
-        backgroundView.removeFromSuperview()
-        for subview in backgroundView.subviews {
-            subview.removeFromSuperview()
-        }
-        
+        let offsetStartDate = startDate.addingTimeInterval(28800)
+        let offsetEndDate = endDate.addingTimeInterval(28800)
+        let filterSet = Set(daysBetweenTwoDate(startDate: offsetStartDate, endDate: offsetEndDate))
         for product in products {
-            let offsetStartDate = startDatePicker.date.addingTimeInterval(28800)
-            let offsetEndDate = endDatePicker.date.addingTimeInterval(28800)
-            let availableSet = Set(product.availableDate)
-            let filterSet = Set(daysBetweenTwoDate(startDate: offsetStartDate, endDate: offsetEndDate))
-            print(availableSet)
-            print(filterSet)
+            var availableDateStrings = [String]()
+            for date in product.availableDate {
+                let dateString = dateFormatter.string(from: date)
+                availableDateStrings.append(dateString)
+            }
+            let availableSet = Set(availableDateStrings)
             if filterSet.isSubset(of: availableSet) {
                 afterFiltedProducts.append(product)
             }
@@ -212,11 +188,6 @@ class SearchViewController: UIViewController {
     }
     
     @objc func tapFilterStopButton() {
-        dateButton.isEnabled = true
-        backgroundView.removeFromSuperview()
-        for subview in backgroundView.subviews {
-            subview.removeFromSuperview()
-        }
         isFilter = false
         searchTableView.reloadData()
     }
@@ -283,7 +254,7 @@ extension SearchViewController {
               let detailViewController = segue.destination as? DetailViewController,
               let indexPath = searchTableView.indexPath(for: searchTableViewCell)
         else { return }
-        detailViewController.chooseProduct = products[indexPath.row]
+        detailViewController.chooseProduct = afterFiltedProducts[indexPath.row]
         
     }
 }
@@ -362,24 +333,50 @@ extension SearchViewController: UICollectionViewDataSource {
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView != mainGalleryView {
-            searchBar.text = ""
-            let keyWord = Classification.shared.differentOutdoorType[indexPath.row]
-            switch isFilter {
-            case false:
-                ProductManager.shared.classifyPostedProduct(keyWord: keyWord) { [weak self ] classifyProducts in
-                    self?.products = classifyProducts
-                    self?.afterFiltedProducts = classifyProducts
-                    self?.searchTableView.reloadData()
+            guard let cell = headerView.cellForItem(at: indexPath) as? HeaderCollectionViewCell else { return }
+            cell.selectedState = !cell.selectedState
+            if cell.selectedState {
+                searchBar.text = ""
+                let keyWord = Classification.shared.differentOutdoorType[indexPath.row]
+                switch isFilter {
+                case false:
+                    ProductManager.shared.classifyPostedProduct(keyWord: keyWord) { [weak self ] classifyProducts in
+                        self?.products = classifyProducts
+                        self?.afterFiltedProducts = classifyProducts
+                        self?.searchTableView.reloadData()
+                    }
+                case true:
+                    ProductManager.shared.classifyPostedProduct(keyWord: keyWord) { [weak self ] classifyProducts in
+                        self?.products = classifyProducts
+                        self?.tapFilterConfirmButton()
+                        self?.searchTableView.reloadData()
+                    }
                 }
-            case true:
-                ProductManager.shared.classifyPostedProduct(keyWord: keyWord) { [weak self ] classifyProducts in
-                    self?.products = classifyProducts
-                    self?.tapFilterConfirmButton()
-                    self?.searchTableView.reloadData()
+            } else {
+                switch isFilter {
+                case false:
+                    ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
+                        self?.products = postedProducts
+                        self?.afterFiltedProducts = postedProducts
+                        self?.searchTableView.reloadData()
+                    }
+                case true:
+                    ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
+                        self?.products = postedProducts
+                        self?.tapFilterConfirmButton()
+                        self?.searchTableView.reloadData()
+                    }
                 }
             }
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        guard let cell = headerView.cellForItem(at: indexPath) as? HeaderCollectionViewCell else { return }
+        print(indexPath)
+        cell.selectedState = false
+    }
+    
     // page control move when gallery scroll
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
@@ -395,25 +392,17 @@ extension SearchViewController: UICollectionViewDelegate {
 extension SearchViewController {
     func layOutHeaderView() {
         let decorateView = UIView()
-        let secondDecorateView = UIView()
         
         view.addSubview(decorateView)
         decorateView.translatesAutoresizingMaskIntoConstraints = false
-        decorateView.heightAnchor.constraint(equalToConstant: 10).isActive = true
-        decorateView.topAnchor.constraint(equalTo: searchTableView.topAnchor, constant: 80).isActive = true
+        decorateView.heightAnchor.constraint(equalToConstant: 5).isActive = true
+        decorateView.topAnchor.constraint(equalTo: searchTableView.topAnchor, constant: 85).isActive = true
         decorateView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32).isActive = true
         decorateView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32).isActive = true
-        decorateView.backgroundColor = .black
+        decorateView.backgroundColor = UIColor.OutdoorTribeColor.mainColor
         decorateView.layer.cornerRadius = 5
-        
-        decorateView.addSubview(secondDecorateView)
-        secondDecorateView.translatesAutoresizingMaskIntoConstraints = false
-        secondDecorateView.heightAnchor.constraint(equalToConstant: 5).isActive = true
-        secondDecorateView.topAnchor.constraint(equalTo: decorateView.topAnchor, constant: 0).isActive = true
-        secondDecorateView.leadingAnchor.constraint(equalTo: decorateView.leadingAnchor, constant: 0).isActive = true
-        secondDecorateView.trailingAnchor.constraint(equalTo: decorateView.trailingAnchor, constant: 0).isActive = true
-        secondDecorateView.backgroundColor = .white
-        
+        decorateView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                
         headerView.collectionViewLayout = createCompositionalLayout()
         headerView.dataSource = self
         headerView.delegate = self
@@ -423,22 +412,20 @@ extension SearchViewController {
         headerView.layer.cornerRadius = 15
         headerView.backgroundColor = .white
         headerView.bounces = false
-//        headerView.backgroundColor = .lightGray
     }
     
     private func createCompositionalLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(80),
-            heightDimension: .absolute(85))
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15)
         
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(100),
+            widthDimension: .absolute(85),
             heightDimension: .absolute(85))
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
@@ -450,11 +437,11 @@ extension SearchViewController {
 
 // MARK: - func to get every days between two date
 extension SearchViewController {
-    func daysBetweenTwoDate(startDate: Date, endDate: Date) -> [Date] {
-        var dayInterval = [Date]()
+    func daysBetweenTwoDate(startDate: Date, endDate: Date) -> [String] {
+        var dateStringArray = [String]()
         var calendar = Calendar.current
         calendar.timeZone = TimeZone(identifier: "UTC")!
-        guard startDate <= endDate else { return dayInterval }
+        guard startDate <= endDate else { return dateStringArray }
         guard let standardStartDate = calendar.date(
                 bySettingHour: 0,
                 minute: 0,
@@ -464,21 +451,22 @@ extension SearchViewController {
                 bySettingHour: 0,
                 minute: 0,
                 second: 0,
-                of: endDate) else { return dayInterval }
+                of: endDate) else { return dateStringArray }
         let component = calendar.dateComponents([.day], from: standardStartDate, to: standardEndDate)
-        guard let days = component.day else { return dayInterval }
+        guard let days = component.day else { return dateStringArray }
         for round in 0...days {
             guard let dateBeAdded = calendar.date(
                 byAdding: .day,
                 value: round,
-                to: standardStartDate) else { return dayInterval }
-            dayInterval.append(dateBeAdded)
+                to: standardStartDate) else { return dateStringArray }
+            let dateString = dateFormatter.string(from: dateBeAdded)
+            dateStringArray.append(dateString)
         }
-        return dayInterval
+        return dateStringArray
     }
 }
 
-// MARk: gallery collection view layout
+// MARK: - gallery collection view layout
 extension SearchViewController {
     private func createGalleryCompositionalLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
@@ -496,5 +484,17 @@ extension SearchViewController {
         section.orthogonalScrollingBehavior = .groupPaging
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
+    }
+}
+
+// MARK: - date filter delegate
+extension SearchViewController: AskVcToFilterByDateDelegate {
+    func askVcToStartFilter(dateRange: [Date]) {
+        removeChildView()
+        guard let startDateOfRange = dateRange.first,
+              let endDateOfRnage = dateRange.last else { return }
+        startDate = startDateOfRange
+        endDate = endDateOfRnage
+        tapFilterConfirmButton()
     }
 }

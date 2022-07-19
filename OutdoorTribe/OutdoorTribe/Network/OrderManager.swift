@@ -11,6 +11,11 @@ import FirebaseFirestore
 class OrderManger {
     static let shared = OrderManger()
     
+    func deleteOrderByCancelBtn(_ orderID: String) {
+        let firestoreDb = Firestore.firestore()
+        firestoreDb.collection("orders").document(orderID).delete()
+    }
+    
     func deleteOrderByUser(userID: String) {
         let firestoreDb = Firestore.firestore()
         firestoreDb.collection("orders").getDocuments(source: .server) { querySnapShot, err in
