@@ -220,7 +220,7 @@ extension DetailViewController: askDetailVCPresentDateRangeDelegate {
         let pickerController = CalendarPickerViewController(
             todayDate: Date())
         guard let availableDate = chooseProduct?.availableDate else { return }
-        pickerController.rentAvailableDate = availableDate
+        pickerController.rentAvailableDates = availableDate
         pickerController.passDateToDetailVCDelegate = self
         present(pickerController, animated: true, completion: nil)
     }

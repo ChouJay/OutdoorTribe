@@ -9,18 +9,16 @@ import Foundation
 import UIKit
 
 // swiftlint:disable cyclomatic_complexity
-
-protocol PassDateRangeToDetailVCDelegate {
+protocol PassDateRangeToDetailVCDelegate: AnyObject {
     func passDateRangeToDetailVC(dateRange: [Date])
 }
 
 protocol PassDateRangeToPostVCDelegate {
-    func passDateRange(dateRange: [Date])
+    func passDateRangeToPostVC(dateRange: [Date])
 }
 
 class CalendarPickerViewController: UIViewController {
-    
-    let dateFormatter2: DateFormatter = {
+    let dateFormatterForSet: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = Calendar(identifier: .gregorian)
         dateFormatter.locale = Locale.autoupdatingCurrent
@@ -28,22 +26,21 @@ class CalendarPickerViewController: UIViewController {
         return dateFormatter
     }()
     
-    var dateStringArray = [String]()
+    var rentAvailableDateStrings = [String]()
     
-    var rentAvailableDate: [Date]? {
+    var rentAvailableDates: [Date]? {
         didSet {
-            dateStringArray = []
-            guard let rentAvailableDate = rentAvailableDate else { return }
-            for date in rentAvailableDate {
-                let dateString = dateFormatter2.string(from: date)
-                print(dateString)
-                dateStringArray.append(dateString)
+            rentAvailableDateStrings = []
+            guard let rentAvailableDates = rentAvailableDates else { return }
+            for date in rentAvailableDates {
+                let dateString = dateFormatterForSet.string(from: date)
+                rentAvailableDateStrings.append(dateString)
             }
         }
     }
     
     var passDateToDetailVCDelegate: PassDateRangeToDetailVCDelegate?
-    var passDateDelegate: PassDateRangeToPostVCDelegate?
+    var passDateToPostVCDelegate: PassDateRangeToPostVCDelegate?
     var selectedIndexPath = IndexPath(item: 0, section: 0)
     var selectedDates = [Date]()
     var selectedCount = 0 {
@@ -87,13 +84,12 @@ class CalendarPickerViewController: UIViewController {
     lazy var footerView = CalendarPickerFooterView { [weak self] in
         guard let self = self else { return }
         // confirm Date Range!
-        self.passDateDelegate?.passDateRange(dateRange: self.selectedDates)
+        self.passDateToPostVCDelegate?.passDateRangeToPostVC(dateRange: self.selectedDates)
         self.passDateToDetailVCDelegate?.passDateRangeToDetailVC(dateRange: self.selectedDates)
         self.dismiss(animated: true)
     }
 
   // MARK: Calendar Data Values
-
     private var todayDate: Date {
         didSet {
             days = generateDaysInMonth(for: todayDate)
@@ -140,8 +136,12 @@ class CalendarPickerViewController: UIViewController {
         dateCollectionView.register(CalendarSectionHeaderView.self,
                                     forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                     withReuseIdentifier: CalendarSectionHeaderView.reuseIdentifier)
-        
-        dateCollectionView.backgroundColor = .systemGroupedBackground
+        dateCollectionView.register(CalendarCollectionCell.self,
+                                    forCellWithReuseIdentifier: CalendarCollectionCell.reuseIdentifier)
+
+        dateCollectionView.dataSource = self
+        dateCollectionView.delegate = self
+        dateCollectionView.backgroundColor = .white
       
         view.addSubview(dimmedBackgroundView)
         view.addSubview(dateCollectionView)
@@ -174,13 +174,7 @@ class CalendarPickerViewController: UIViewController {
         ])
 
         NSLayoutConstraint.activate(constraints)
-
-        dateCollectionView.register(CalendarCollectionCell.self,
-                                    forCellWithReuseIdentifier: CalendarCollectionCell.reuseIdentifier)
-
-        dateCollectionView.dataSource = self
-        dateCollectionView.delegate = self
-        dateCollectionView.backgroundColor = .white
+        
         headerView.backgroundColor = .white
     }
     
@@ -190,109 +184,83 @@ class CalendarPickerViewController: UIViewController {
               let nextNextMonthDay = calendar.date(byAdding: .month, value: 1, to: nextMonthDay) else { return }
         secondMonthDays = generateDaysInMonth(for: nextMonthDay)
         thirdMonthDays = generateDaysInMonth(for: nextNextMonthDay)
-        
     }
 }
 
 // MARK: - Day Generation
 extension CalendarPickerViewController {
-  // 1
-    func monthMetadata(for todayDate: Date) throws -> MonthMetadata {
-    // 2
-        guard let numberOfDaysInMonth = calendar.range(of: .day, in: .month, for: todayDate)?.count,
-              let firstDayOfMonth = calendar.date(
-                from: calendar.dateComponents([.year, .month], from: todayDate)) else {
+    func getMonthMetadata(for todayDate: Date) throws -> MonthMetadata {
+        guard let numberOfDaysInMonth = calendar.range(of: .day,
+                                                       in: .month,
+                                                       for: todayDate)?.count,
+              let firstDayOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: todayDate)) else {
                     throw CalendarDataError.metadataGeneration
                 }
         let firstDayWeekday = calendar.component(.weekday, from: firstDayOfMonth)
 
-    return MonthMetadata(
-        numberOfDays: numberOfDaysInMonth,
-        firstDay: firstDayOfMonth,
-        firstDayWeekday: firstDayWeekday)
+    return MonthMetadata(numberOfDays: numberOfDaysInMonth,
+                         firstDay: firstDayOfMonth,
+                         firstDayWeekday: firstDayWeekday)
     }
 
-  // 1
     func generateDaysInMonth(for todayDate: Date) -> [Day] {
-    // 2
-        guard let metadata = try? monthMetadata(for: todayDate) else {
+        guard let monthMetadata = try? getMonthMetadata(for: todayDate) else {
             preconditionFailure("An error occurred when generating the metadata for \(todayDate)")
         }
-        
-        let numberOfDaysInMonth = metadata.numberOfDays  // 本月共幾天
-        let offsetInInitialRow = metadata.firstDayWeekday // 本月第一天所在的工作天
-        let firstDayOfMonth = metadata.firstDay // 本月的第一天
+        let numberOfDaysInMonth = monthMetadata.numberOfDays  // 本月共幾天
+        let offsetInInitialRow = monthMetadata.firstDayWeekday // 本月第一天所在的工作天
+        let firstDayOfMonth = monthMetadata.firstDay // 本月的第一天
 
-    // 3
-        var days: [Day] = (1..<(numberOfDaysInMonth + offsetInInitialRow))
-            .map { day in
-        // 4
-                let isWithinDisplayedMonth = day >= offsetInInitialRow // 大於本月第一天所在的工作天者 為此月範圍!
-        // 5
-                let dayOffset = isWithinDisplayedMonth ? day - offsetInInitialRow : -(offsetInInitialRow - day)
-        // 6
-                return generateDay(
-                    offsetBy: dayOffset,
-                    for: firstDayOfMonth,
-                    isWithinDisplayedMonth: isWithinDisplayedMonth)
-            }
-            days += generateStartOfNextMonth(using: firstDayOfMonth)
-
-            return days
+        var days: [Day] = (1..<(numberOfDaysInMonth + offsetInInitialRow)).map { day in
+            let isWithinDisplayedMonth = day >= offsetInInitialRow // 大於本月第一天所在的工作天者 為此月範圍!
+            let dayOffset = isWithinDisplayedMonth ? day - offsetInInitialRow : -(offsetInInitialRow - day)
+            
+            return generateDay( offsetBy: dayOffset,
+                                for: firstDayOfMonth,
+                                isWithinDisplayedMonth: isWithinDisplayedMonth)
         }
+        days += createStartDaysOfNextMonthToFillRestItem(using: firstDayOfMonth)
 
-  // 7
+        return days
+    }
+
     func generateDay(offsetBy dayOffset: Int, for baseDate: Date, isWithinDisplayedMonth: Bool) -> Day {
         let date = calendar.date(byAdding: .day, value: dayOffset, to: baseDate) ?? baseDate
-        if let rentAvailableDate = rentAvailableDate {
+        if rentAvailableDates != nil { // can improve read avility
             // 判斷日期是否在可租借的區間
-            let dateString = dateFormatter2.string(from: date)
-            let isSubsetOfAvailableSet = dateStringArray.contains(dateString)
+            let dateString = dateFormatterForSet.string(from: date)
+            let isSubsetOfAvailableSet = rentAvailableDateStrings.contains(dateString)
             // 判斷日期是否大於今天
-            let isDateNotPass = date.addingTimeInterval(86400) >= Date()
+            let isDateNotPassed = date.addingTimeInterval(86400) >= Date()
             
-            return Day(
-                date: date,
-                number: dateFormatter.string(from: date),
-                isSelectable: isWithinDisplayedMonth && isSubsetOfAvailableSet && isDateNotPass,
-                isWithinDisplayedMonth: isWithinDisplayedMonth
-            )
+            return Day(date: date,
+                       number: dateFormatter.string(from: date),
+                       isSelectable: isWithinDisplayedMonth && isSubsetOfAvailableSet && isDateNotPassed,
+                       isWithinDisplayedMonth: isWithinDisplayedMonth)
         } else {
             // 判斷日期是否大於今天
             let isDateNotPass = date.addingTimeInterval(86400) >= Date()
-
-            return Day(
-                date: date,
-                number: dateFormatter.string(from: date),
-                isSelectable: isWithinDisplayedMonth && isDateNotPass,
-                isWithinDisplayedMonth: isWithinDisplayedMonth
-            )
+            
+            return Day(date: date,
+                       number: dateFormatter.string(from: date),
+                       isSelectable: isWithinDisplayedMonth && isDateNotPass,
+                       isWithinDisplayedMonth: isWithinDisplayedMonth)
         }
     }
-
-  // 1
-    func generateStartOfNextMonth(
-        using firstDayOfDisplayedMonth: Date
-        ) -> [Day] {
-    // 2
-            guard let lastDayInMonth = calendar.date(
-                byAdding: DateComponents(month: 1, day: -1),
-                to: firstDayOfDisplayedMonth) else { return [] }
-
-    // 3
-            let additionalDays = 7 - calendar.component(.weekday, from: lastDayInMonth)
-            guard additionalDays > 0 else { return [] }
-
-    // 4
-            let days: [Day] = (1...additionalDays)
-                .map {
-                    generateDay(
-                        offsetBy: $0,
-                        for: lastDayInMonth,
-                        isWithinDisplayedMonth: false)
-                }
-            return days
+    
+    func createStartDaysOfNextMonthToFillRestItem(using firstDayOfDisplayedMonth: Date) -> [Day] {
+        // get the last weekday of this month!
+        guard let lastDayInThisMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1),
+                                                 to: firstDayOfDisplayedMonth) else { return [] }
+        let additionalDays = 7 - calendar.component(.weekday, from: lastDayInThisMonth)
+        guard additionalDays > 0 else { return [] }
+        
+        // fill this month collection item by additional days
+        let days: [Day] = (1...additionalDays).map {
+            generateDay(offsetBy: $0, for: lastDayInThisMonth, isWithinDisplayedMonth: false)
         }
+        return days
+    }
 
     enum CalendarDataError: Error {
         case metadataGeneration

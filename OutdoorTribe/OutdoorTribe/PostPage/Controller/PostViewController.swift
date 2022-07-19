@@ -330,7 +330,7 @@ extension PostViewController: PassDateToPostVCDelegate {
         
         let pickerController = CalendarPickerViewController(
             todayDate: Date())
-        pickerController.passDateDelegate = self
+        pickerController.passDateToPostVCDelegate = self
         tabBarController?.present(pickerController, animated: true, completion: nil)
     }
     
@@ -353,7 +353,7 @@ extension PostViewController: PassDateToPostVCDelegate {
 
 // MARK: - Date range delegate
 extension PostViewController: PassDateRangeToPostVCDelegate {
-    func passDateRange(dateRange: [Date]) {
+    func passDateRangeToPostVC(dateRange: [Date]) {
         toInfoCellDelegate?.askToShowDateRange(dateRange: dateRange)
         startDate = dateRange.first ?? Date()
         endDate = dateRange.last ?? Date()

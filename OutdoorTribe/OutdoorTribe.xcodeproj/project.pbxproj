@@ -105,6 +105,7 @@
 		0199C6492881967800E407DA /* CalendarCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0199C6482881967800E407DA /* CalendarCollectionCell.swift */; };
 		0199C64C2881EFB700E407DA /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0199C64B2881EFB700E407DA /* Day.swift */; };
 		0199C64E2881F63400E407DA /* MonthMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0199C64D2881F63400E407DA /* MonthMetaData.swift */; };
+		019C14F52886A89A00ABF7B9 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019C14F42886A89A00ABF7B9 /* UIView+Extension.swift */; };
 		177B893A40A68DC70E138D2E /* Pods_OutdoorTribe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95D0DCBF4CDC9823D271F726 /* Pods_OutdoorTribe.framework */; };
 /* End PBXBuildFile section */
 
@@ -210,6 +211,7 @@
 		0199C6482881967800E407DA /* CalendarCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionCell.swift; sourceTree = "<group>"; };
 		0199C64B2881EFB700E407DA /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		0199C64D2881F63400E407DA /* MonthMetaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthMetaData.swift; sourceTree = "<group>"; };
+		019C14F42886A89A00ABF7B9 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		03BFA277AF998FD004DB4812 /* Pods-OutdoorTribe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OutdoorTribe.release.xcconfig"; path = "Target Support Files/Pods-OutdoorTribe/Pods-OutdoorTribe.release.xcconfig"; sourceTree = "<group>"; };
 		95D0DCBF4CDC9823D271F726 /* Pods_OutdoorTribe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OutdoorTribe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3F1B1CC52159B95FEA1F04E /* Pods-OutdoorTribe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OutdoorTribe.debug.xcconfig"; path = "Target Support Files/Pods-OutdoorTribe/Pods-OutdoorTribe.debug.xcconfig"; sourceTree = "<group>"; };
@@ -348,6 +350,7 @@
 		012F24702859A53D00B891C1 /* OutdoorTribe */ = {
 			isa = PBXGroup;
 			children = (
+				019C14F32886A87700ABF7B9 /* Extension */,
 				0193B1A82884039A00A60704 /* CalendarFilter */,
 				0199C6412881961F00E407DA /* CalendarDateRangePicker */,
 				01985D2B285C60E200BCD866 /* Network */,
@@ -355,7 +358,6 @@
 				0168A075287AA08500227491 /* CallPage */,
 				0139FC7D2869D95B003C3851 /* OutdoorTribe.entitlements */,
 				012F24712859A53D00B891C1 /* AppDelegate.swift */,
-				01056365287F00E10095A2E7 /* UIColor+Extension.swift */,
 				012F24732859A53D00B891C1 /* SceneDelegate.swift */,
 				01053E81285B26620074B125 /* TabBarController.swift */,
 				014CF11228771454006E4F4E /* BlockPage */,
@@ -800,6 +802,15 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		019C14F32886A87700ABF7B9 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				01056365287F00E10095A2E7 /* UIColor+Extension.swift */,
+				019C14F42886A89A00ABF7B9 /* UIView+Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		7C3C22C040AACC32FC3FBC61 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1025,6 +1036,7 @@
 				014C83212865BD8B006A4EC1 /* ChatImageTableViewCell.swift in Sources */,
 				01401F6F287297130024D1E1 /* EditPostViewController.swift in Sources */,
 				01401F73287299780024D1E1 /* EditPostCollectionViewCell.swift in Sources */,
+				019C14F52886A89A00ABF7B9 /* UIView+Extension.swift in Sources */,
 				012CCEF5286C566900BFFE1A /* RenterTableViewCell.swift in Sources */,
 				0195EB60285EF5EC0015A12A /* ApplyTableViewCell.swift in Sources */,
 				01053E7B2859EA1B0074B125 /* ImageTableViewCell.swift in Sources */,
