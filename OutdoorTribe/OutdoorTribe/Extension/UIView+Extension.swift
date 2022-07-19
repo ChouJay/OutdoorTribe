@@ -80,7 +80,9 @@ extension UIView {
     
     func addConstraintsToFillView(_ view: UIView) {
         translatesAutoresizingMaskIntoConstraints = false
-        anchor(top: view.topAnchor, leading: view.leadingAnchor,
-               bottom: view.bottomAnchor, trailing: view.trailingAnchor)
+        anchor(top: view.topAnchor,
+               leading: view.leadingAnchor,
+               bottom: view.bottomAnchor,
+               trailing: view.trailingAnchor)
     }
 }

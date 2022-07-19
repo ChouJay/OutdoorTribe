@@ -147,35 +147,29 @@ class CalendarPickerViewController: UIViewController {
         view.addSubview(dateCollectionView)
         view.addSubview(headerView)
         view.addSubview(footerView)
-
-        var constraints = [dimmedBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                           dimmedBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                           dimmedBackgroundView.topAnchor.constraint(equalTo: view.topAnchor),
-                           dimmedBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-                        ]
-
-        constraints.append(contentsOf: [
-            dateCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            dateCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            dateCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 10),
-            dateCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4)
-        ])
-
-        constraints.append(contentsOf: [
-            headerView.leadingAnchor.constraint(equalTo: dateCollectionView.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: dateCollectionView.trailingAnchor),
-            headerView.bottomAnchor.constraint(equalTo: dateCollectionView.topAnchor),
-            headerView.heightAnchor.constraint(equalToConstant: 50),
-      
-            footerView.leadingAnchor.constraint(equalTo: dateCollectionView.leadingAnchor),
-            footerView.trailingAnchor.constraint(equalTo: dateCollectionView.trailingAnchor),
-            footerView.topAnchor.constraint(equalTo: dateCollectionView.bottomAnchor),
-            footerView.heightAnchor.constraint(equalToConstant: 60)
-        ])
-
-        NSLayoutConstraint.activate(constraints)
         
-        headerView.backgroundColor = .white
+        dimmedBackgroundView.addConstraintsToFillView(view)
+        
+        dateCollectionView.anchor(leading: view.leadingAnchor,
+                                  trailing: view.trailingAnchor,
+                                  paddingLeading: 30,
+                                  paddingTrailing: 30)
+        
+        headerView.anchor(leading: dateCollectionView.leadingAnchor,
+                          bottom: dateCollectionView.topAnchor,
+                          trailing: dateCollectionView.trailingAnchor,
+                          height: 50)
+        
+        footerView.anchor(top: dateCollectionView.bottomAnchor,
+                          leading: dateCollectionView.leadingAnchor,
+                          trailing: dateCollectionView.trailingAnchor,
+                          height: 60)
+
+        let constraints = [dateCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor,
+                                                                        constant: 10),
+                           dateCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor,
+                                                                      multiplier: 0.4)]
+        NSLayoutConstraint.activate(constraints)
     }
     
     override func viewWillAppear(_ animated: Bool) {
