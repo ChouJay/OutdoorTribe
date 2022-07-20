@@ -121,7 +121,6 @@ class PostViewController: UIViewController {
         group.notify(queue: DispatchQueue.main) { [weak self] in
             guard paths.isEmpty == false else { return }
             self?.product.photoUrl = paths
-            print(self?.product.photoUrl)
             let firebaseAuth = Auth.auth()
             guard let product = self?.product,
                   let currentUser = firebaseAuth.currentUser else { return }

@@ -110,23 +110,41 @@ class ProductManager {
         fireStoreDb.collection("userPosts").document(user.uid).collection("products").document().setData(withProduct.toDict)
     }
     
-    func upload() {
-        let firstoreDb = Firestore.firestore()
+    func upload(uploadedPhotos: [UIImage], productFromVC: Product) {
+        let group: DispatchGroup = DispatchGroup()
         let storage = Storage.storage()
         let storageRef = storage.reference()
         let path = "images/\(UUID().uuidString).jpg"
         var endPoint = 0
         var paths = [String]()
+        for image in uploadedPhotos {
+            guard let imageData = image.jpegData(compressionQuality: 0.5) else { return }
+            let fileRef = storageRef.child(path + String(endPoint))
+            group.enter()
+            fileRef.putData(imageData, metadata: nil) { storageMetadata, error in
+                if error == nil && storageMetadata != nil {
+                    fileRef.downloadURL { url, error in
+                        guard let downloadUrl = url else {
+                            print(error)
+                            return
+                        }
+                        let urlString = downloadUrl.absoluteString
+                        paths.append(urlString)
+                        group.leave()
+                    }
+                }
+            }
+            endPoint += 1
+        }
         
-//            guard let imageData = image.jpegData(compressionQuality: 0.5) else { return }
-//            let fileRef = storageRef.child(path + String(endPoint))
-//            let uploadTask = fileRef.putData(imageData, metadata: nil) { storageMetadata, error in
-//                if error == nil && storageMetadata != nil {
-//                    paths.append(path + String(endPoint))
-//                    print(paths)
-                    
-//                    firstoreDb.collection("image").document("hhh").setData(["url": FieldValue.arrayUnion([path + String(endPoint)])])
-//                }
-//            }
+        group.notify(queue: DispatchQueue.main) { 
+            guard paths.isEmpty == false else { return }
+            var product = productFromVC
+            product.photoUrl = paths
+            let firebaseAuth = Auth.auth()
+            guard let currentUser = firebaseAuth.currentUser else { return }
+            ProductManager.shared.postProduct(withProduct: product)
+            ProductManager.shared.postProductByUser(withProduct: product, user: currentUser)
+        }
     }
 }

@@ -65,8 +65,8 @@ class AccountManager {
             .setData(blockUser.toDict) { error in
                 if error == nil {
                     
-                }
             }
+        }
     }
     
     func uploadUserPhoto(uploadedImage: UIImage, userID: String) {
