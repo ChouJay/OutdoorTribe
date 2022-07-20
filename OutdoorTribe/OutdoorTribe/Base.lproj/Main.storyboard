@@ -937,15 +937,29 @@
                                                         </stackView>
                                                     </subviews>
                                                 </stackView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qws-1p-MDB">
+                                                    <rect key="frame" x="386" y="172" width="20" height="20"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="20" id="Cif-Kn-fm4"/>
+                                                        <constraint firstAttribute="height" constant="20" id="y5W-5A-H1x"/>
+                                                    </constraints>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal" image="exclamationmark.circle" catalog="system"/>
+                                                    <connections>
+                                                        <action selector="tapReportBtn:" destination="MLn-Fr-jsU" eventType="touchUpInside" id="JZA-o6-fmn"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="LjJ-2A-6Xc" secondAttribute="trailing" constant="10" id="Kya-fk-8Ci"/>
                                                 <constraint firstItem="pRH-CI-7fs" firstAttribute="leading" secondItem="NV5-r9-K90" secondAttribute="leading" constant="20" symbolic="YES" id="Lea-AA-reI"/>
                                                 <constraint firstItem="ZAD-ns-3ro" firstAttribute="leading" secondItem="NV5-r9-K90" secondAttribute="leading" constant="15" id="Tou-xR-iDr"/>
                                                 <constraint firstAttribute="trailing" secondItem="pRH-CI-7fs" secondAttribute="trailing" constant="20" symbolic="YES" id="VKm-U8-RYJ"/>
+                                                <constraint firstAttribute="bottom" secondItem="Qws-1p-MDB" secondAttribute="bottom" constant="8" id="VOz-IQ-U5i"/>
                                                 <constraint firstItem="pRH-CI-7fs" firstAttribute="top" secondItem="NV5-r9-K90" secondAttribute="top" constant="12" id="Wfr-tX-Qy2"/>
                                                 <constraint firstItem="LjJ-2A-6Xc" firstAttribute="leading" secondItem="ZAD-ns-3ro" secondAttribute="trailing" id="kGy-3v-Uvg"/>
                                                 <constraint firstItem="ZAD-ns-3ro" firstAttribute="centerY" secondItem="NV5-r9-K90" secondAttribute="centerY" constant="8" id="sWG-Qc-bLA"/>
+                                                <constraint firstAttribute="trailing" secondItem="Qws-1p-MDB" secondAttribute="trailing" constant="8" id="sYc-lc-vnd"/>
                                                 <constraint firstItem="LjJ-2A-6Xc" firstAttribute="centerY" secondItem="ZAD-ns-3ro" secondAttribute="centerY" id="w4y-yS-Dg1"/>
                                             </constraints>
                                         </collectionViewCellContentView>
@@ -956,6 +970,7 @@
                                             <outlet property="photoImage" destination="ZAD-ns-3ro" id="eUI-Gl-u1W"/>
                                             <outlet property="postCountLabel" destination="4ob-UW-tdU" id="h0q-A8-c6R"/>
                                             <outlet property="ratingCountLabel" destination="STM-YB-bLK" id="vOd-uY-2T1"/>
+                                            <outlet property="reportBtn" destination="Qws-1p-MDB" id="Vcg-oK-Zdq"/>
                                             <outlet property="scoreLabel" destination="o0m-S0-rGh" id="dVu-lt-0BB"/>
                                         </connections>
                                     </collectionViewCell>
@@ -3485,7 +3500,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="jaS-GZ-trm"/>
+        <segue reference="ex2-Y5-saD"/>
         <segue reference="9fu-0O-WUc"/>
         <segue reference="POk-Rx-IpJ"/>
         <segue reference="gev-hz-6wC"/>
@@ -3499,6 +3514,7 @@
         <image name="chevron.backward" catalog="system" width="96" height="128"/>
         <image name="chevron.down.square.fill" catalog="system" width="128" height="114"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>
+        <image name="exclamationmark.circle" catalog="system" width="128" height="121"/>
         <image name="forestBackground" width="1080" height="2160"/>
         <image name="location.fill" catalog="system" width="128" height="121"/>
         <image name="magnifyingglass" catalog="system" width="128" height="115"/>

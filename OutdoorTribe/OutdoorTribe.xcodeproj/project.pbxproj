@@ -350,10 +350,10 @@
 		012F24702859A53D00B891C1 /* OutdoorTribe */ = {
 			isa = PBXGroup;
 			children = (
+				01985D2B285C60E200BCD866 /* Network */,
 				019C14F32886A87700ABF7B9 /* Extension */,
 				0193B1A82884039A00A60704 /* CalendarFilter */,
 				0199C6412881961F00E407DA /* CalendarDateRangePicker */,
-				01985D2B285C60E200BCD866 /* Network */,
 				01401F742873400F0024D1E1 /* WebRTC */,
 				0168A075287AA08500227491 /* CallPage */,
 				0139FC7D2869D95B003C3851 /* OutdoorTribe.entitlements */,

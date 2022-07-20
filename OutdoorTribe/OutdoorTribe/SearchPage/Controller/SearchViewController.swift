@@ -13,7 +13,10 @@ import IQKeyboardManagerSwift
 
 class SearchViewController: UIViewController {
     
-    let maskView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+    let maskView = UIView(frame: CGRect(x: 0,
+                                        y: 0,
+                                        width: UIScreen.main.bounds.width,
+                                        height: UIScreen.main.bounds.height))
     var childVC: CalendarFilterViewController?
     var products = [Product]()
     var afterFiltedProducts = [Product]()
@@ -33,8 +36,10 @@ class SearchViewController: UIViewController {
     var buttonForDoingFilter = UIButton()
     var buttonForStopFilter = UIButton()
     var backgroundView = UIView()
-    var headerView = UICollectionView(
-        frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 200),
+    var headerView = UICollectionView(frame: CGRect(x: 0,
+                                                    y: 0,
+                                                    width: UIScreen.main.bounds.width,
+                                                    height: 200),
         collectionViewLayout: UICollectionViewLayout())
     var pageController = UIPageControl()
     var startDate = Date()
@@ -64,7 +69,10 @@ class SearchViewController: UIViewController {
         view.addSubview(childVC.view)
         childVC.view.frame = CGRect(x: dateButton.frame.maxX, y: dateButton.frame.maxY + 10, width: 0, height: 0)
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
-            childVC.view.frame = CGRect(x: self.dateButton.frame.maxX, y: self.dateButton.frame.maxY + 10, width: -315, height: 415)
+            childVC.view.frame = CGRect(x: self.dateButton.frame.maxX,
+                                        y: self.dateButton.frame.maxY + 10,
+                                        width: -315,
+                                        height: 415)
             self.maskView.backgroundColor = .black.withAlphaComponent(0.5)
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -75,7 +83,10 @@ class SearchViewController: UIViewController {
         guard let childVc = childVC else { return }
         print("remove subview")
         UIView.animate(withDuration: 0.2) {
-            childVc.view.frame = CGRect(x: self.dateButton.frame.maxX, y: self.dateButton.frame.maxY + 10, width: 0, height: 0)
+            childVc.view.frame = CGRect(x: self.dateButton.frame.maxX,
+                                        y: self.dateButton.frame.maxY + 10,
+                                        width: 0,
+                                        height: 0)
             self.maskView.backgroundColor = .black.withAlphaComponent(0)
             self.view.layoutIfNeeded()
         } completion: { _ in

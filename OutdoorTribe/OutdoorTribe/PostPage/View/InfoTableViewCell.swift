@@ -15,9 +15,7 @@ protocol PassDateToPostVCDelegate {
 }
 
 class InfoTableViewCell: UITableViewCell {
-
     var passDateDelegate: PassDateToPostVCDelegate?
-    
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
@@ -31,7 +29,6 @@ class InfoTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-//        setDatePickerValueChange()
         setUpPullDownBtn()
         layoutTextView()
         // Initialization code
@@ -59,7 +56,6 @@ class InfoTableViewCell: UITableViewCell {
         descriptionTextView.layer.borderColor = UIColor.lightGray.cgColor
         descriptionTextView.translatesAutoresizingMaskIntoConstraints = true
         descriptionTextView.isScrollEnabled = false
-        
     }
     
     func setUpPullDownBtn() {
@@ -118,6 +114,4 @@ extension InfoTableViewCell: AskInfoCellDelegate {
         classificationTextField.text = ""
         dateRangeTextField.text = ""
     }
-    
-    
 }

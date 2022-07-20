@@ -122,9 +122,13 @@ extension UserViewController: UICollectionViewDataSource {
             guard let othersAccount = othersAccount else { return item }
             let totalScore = othersAccount.totalScore
             var score = 0.0
+            if currentUserID == posterUid {
+                item.reportBtn.isHidden = true
+            }
             if othersAccount.ratingCount != 0 {
                 score = totalScore / othersAccount.ratingCount
             }
+            item.reportDelegate = self
             item.scoreLabel.text = String(format: "%.1f", score)
             item.nameLabel.text = othersAccount.name
             item.followerCountLabel.text = String(othersAccount.followerCount)
@@ -203,5 +207,29 @@ extension UserViewController: userInteractDelegate {
         guard var othersAccount = othersAccount else { return }
         othersAccount.followerCount += 1
         SubscribeManager.shared.followUser(currentUserID: currentUserID, otherUser: othersAccount)
+    }
+}
+
+// MARK: - report delegate
+extension UserViewController: AskVCToReportUserDelegate {
+    func askVcToReportUser() {
+        let alertController = UIAlertController(title: "Do you want to report this user?",
+                                                message: "Please enter the reason",
+                                                preferredStyle: .alert)
+        alertController.addTextField { textField in
+    
+        }
+          
+        let defaultAction = UIAlertAction(title: "No", style: .cancel, handler: nil)
+        let alertRepotAction = UIAlertAction(title: "Report!", style: .destructive) { alertAction in
+            guard let reportReason = alertController.textFields?.first?.text else { return }
+            print(reportReason)
+            
+        }
+
+        alertController.addAction(defaultAction)
+        alertController.addAction(alertRepotAction)
+        present(alertController, animated: true, completion: nil)
+
     }
 }

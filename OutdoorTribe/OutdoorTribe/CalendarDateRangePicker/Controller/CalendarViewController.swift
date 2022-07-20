@@ -185,7 +185,8 @@ extension CalendarPickerViewController {
         guard let numberOfDaysInMonth = calendar.range(of: .day,
                                                        in: .month,
                                                        for: todayDate)?.count,
-              let firstDayOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: todayDate)) else {
+              let firstDayOfMonth = calendar.date(
+                from: calendar.dateComponents([.year, .month], from: todayDate)) else {
                     throw CalendarDataError.metadataGeneration
                 }
         let firstDayWeekday = calendar.component(.weekday, from: firstDayOfMonth)
@@ -283,33 +284,28 @@ extension CalendarPickerViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: CalendarCollectionCell.reuseIdentifier,
             for: indexPath) as? CalendarCollectionCell else { fatalError() }
-        switch indexPath.section {
-        case 0:
+        guard let monthOfCalendar = MonthOfCalendar(rawValue: indexPath.section) else { return cell}
+        switch monthOfCalendar {
+        case .first:
             cell.resetCell()
             let day = firstMonthDays[indexPath.row]
             cell.day = day
             selectBothEndsDate(for: cell, cellDay: day)
             return drawCellInChooseDateRange(for: cell, day: day, in: selectedDates)
             
-        case 1:
+        case .second:
             cell.resetCell()
             let day = secondMonthDays[indexPath.row]
             cell.day = day
             selectBothEndsDate(for: cell, cellDay: day)
             return drawCellInChooseDateRange(for: cell, day: day, in: selectedDates)
             
-        case 2:
+        case .third:
             cell.resetCell()
             let day = thirdMonthDays[indexPath.row]
             cell.day = day
             selectBothEndsDate(for: cell, cellDay: day)
             return drawCellInChooseDateRange(for: cell, day: day, in: selectedDates)
-            
-        default:
-            let day = firstMonthDays[indexPath.row]
-            cell.day = day
-            return cell
-            
         }
     }
     
