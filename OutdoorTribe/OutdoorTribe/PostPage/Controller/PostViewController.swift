@@ -46,7 +46,7 @@ class PostViewController: UIViewController {
     @IBAction func tapPost(_ sender: Any) {
         product.renter = userInfo?.name ?? ""
         product.renterUid = userInfo?.userID ?? ""
-        uploadPhoto()
+        ProductManager.shared.upload(with: uploadedPhoto, in: product)
         uploadedPhoto = []
         dismiss(animated: true)
         toInfoCellDelegate?.askToDiscardInfo()
@@ -68,11 +68,15 @@ class PostViewController: UIViewController {
         postTableView.dataSource = self
         postTableView.delegate = self
         imagePickerController.delegate = self
+        // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         guard let uid = firestoreAuth.currentUser?.uid else { return }
         AccountManager.shared.getUserInfo(by: uid) { [weak self] account in
             self?.userInfo = account
         }
-        // Do any additional setup after loading the view.
     }
     
     func convertAddressToGeoPoint(address: String) {
@@ -87,45 +91,6 @@ class PostViewController: UIViewController {
             print(latitude)
             print(longitude)
             self.product.address = GeoPoint(latitude: latitude, longitude: longitude)
-        }
-    }
-    
-    func uploadPhoto() {
-        let group: DispatchGroup = DispatchGroup()
-        let storage = Storage.storage()
-        let storageRef = storage.reference()
-        let path = "images/\(UUID().uuidString).jpg"
-        var endPoint = 0
-        var paths = [String]()
-        for image in uploadedPhoto {
-            guard let imageData = image.jpegData(compressionQuality: 0.5) else { return }
-            let fileRef = storageRef.child(path + String(endPoint))
-            group.enter()
-            fileRef.putData(imageData, metadata: nil) { storageMetadata, error in
-                if error == nil && storageMetadata != nil {
-                    fileRef.downloadURL { url, error in
-                        guard let downloadUrl = url else {
-                            print(error)
-                            return
-                        }
-                        let urlString = downloadUrl.absoluteString
-                        print(urlString)
-                        paths.append(urlString)
-                        group.leave()
-                    }
-                }
-            }
-            endPoint += 1
-        }
-        
-        group.notify(queue: DispatchQueue.main) { [weak self] in
-            guard paths.isEmpty == false else { return }
-            self?.product.photoUrl = paths
-            let firebaseAuth = Auth.auth()
-            guard let product = self?.product,
-                  let currentUser = firebaseAuth.currentUser else { return }
-            ProductManager.shared.postProduct(withProduct: product)
-            ProductManager.shared.postProductByUser(withProduct: product, user: currentUser)
         }
     }
 }

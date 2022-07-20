@@ -110,7 +110,7 @@ class ProductManager {
         fireStoreDb.collection("userPosts").document(user.uid).collection("products").document().setData(withProduct.toDict)
     }
     
-    func upload(uploadedPhotos: [UIImage], productFromVC: Product) {
+    func upload(with uploadedPhotos: [UIImage], in productFromVC: Product) {
         let group: DispatchGroup = DispatchGroup()
         let storage = Storage.storage()
         let storageRef = storage.reference()

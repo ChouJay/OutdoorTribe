@@ -103,10 +103,10 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="InfoTableViewCell" id="Z6g-mB-0se" customClass="InfoTableViewCell" customModule="OutdoorTribe" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="215.5" width="414" height="490.5"/>
+                                        <rect key="frame" x="0.0" y="215.5" width="414" height="510.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Z6g-mB-0se" id="4Pu-vx-on3">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="490.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="510.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0NZ-n3-vie">
@@ -134,10 +134,10 @@
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="description" textAlignment="justified" translatesAutoresizingMaskIntoConstraints="NO" id="Uqc-TN-mQU">
-                                                    <rect key="frame" x="20" y="370" width="374" height="100.5"/>
+                                                    <rect key="frame" x="20" y="370" width="374" height="120.5"/>
                                                     <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="0uP-c0-6af"/>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" id="0uP-c0-6af"/>
                                                     </constraints>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
@@ -196,7 +196,7 @@
                                                 <constraint firstItem="0NZ-n3-vie" firstAttribute="leading" secondItem="4Pu-vx-on3" secondAttribute="leading" constant="20" id="9QA-B0-XKV"/>
                                                 <constraint firstItem="Uqc-TN-mQU" firstAttribute="leading" secondItem="4Pu-vx-on3" secondAttribute="leading" constant="20" symbolic="YES" id="ILO-Tr-aJc"/>
                                                 <constraint firstItem="Qe5-34-imA" firstAttribute="centerY" secondItem="bxA-u5-2Hv" secondAttribute="centerY" id="Jdw-If-oqM"/>
-                                                <constraint firstItem="Uqc-TN-mQU" firstAttribute="top" secondItem="bxA-u5-2Hv" secondAttribute="bottom" constant="20" id="N5V-IV-BZc"/>
+                                                <constraint firstItem="Uqc-TN-mQU" firstAttribute="top" secondItem="4Pu-vx-on3" secondAttribute="top" constant="370" id="M0h-Xa-2OO"/>
                                                 <constraint firstItem="bxA-u5-2Hv" firstAttribute="top" secondItem="BvX-ws-AdQ" secondAttribute="bottom" constant="20" id="WSJ-T7-Nt9"/>
                                                 <constraint firstItem="2O9-fO-yKe" firstAttribute="top" secondItem="0NZ-n3-vie" secondAttribute="bottom" constant="20" id="ZR2-OD-zdb"/>
                                                 <constraint firstItem="BvX-ws-AdQ" firstAttribute="top" secondItem="Kdb-Qj-nFl" secondAttribute="bottom" constant="20" id="avT-nL-3Mn"/>
