@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable cyclomatic_complexity
 protocol PassDateRangeToDetailVCDelegate: AnyObject {
     func passDateRangeToDetailVC(dateRange: [Date])
 }
@@ -92,12 +91,11 @@ class CalendarPickerViewController: UIViewController {
   // MARK: Calendar Data Values
     private var todayDate: Date {
         didSet {
-            days = generateDaysInMonth(for: todayDate)
             dateCollectionView.reloadData()
         }
     }
 
-    private lazy var days = generateDaysInMonth(for: todayDate)
+    private lazy var firstMonthDays = generateDaysInMonth(for: todayDate)
     private var secondMonthDays = [Day]()
     private var thirdMonthDays = [Day]()
 
@@ -217,7 +215,21 @@ extension CalendarPickerViewController {
 
         return days
     }
-
+    
+    func createStartDaysOfNextMonthToFillRestItem(using firstDayOfDisplayedMonth: Date) -> [Day] {
+        // get the last weekday of this month!
+        guard let lastDayInThisMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1),
+                                                 to: firstDayOfDisplayedMonth) else { return [] }
+        let additionalDays = 7 - calendar.component(.weekday, from: lastDayInThisMonth)
+        guard additionalDays > 0 else { return [] }
+        
+        // fill this month collection item by additional days
+        let days: [Day] = (1...additionalDays).map {
+            generateDay(offsetBy: $0, for: lastDayInThisMonth, isWithinDisplayedMonth: false)
+        }
+        return days
+    }
+    
     func generateDay(offsetBy dayOffset: Int, for baseDate: Date, isWithinDisplayedMonth: Bool) -> Day {
         let date = calendar.date(byAdding: .day, value: dayOffset, to: baseDate) ?? baseDate
         if rentAvailableDates != nil { // can improve read avility
@@ -241,20 +253,6 @@ extension CalendarPickerViewController {
                        isWithinDisplayedMonth: isWithinDisplayedMonth)
         }
     }
-    
-    func createStartDaysOfNextMonthToFillRestItem(using firstDayOfDisplayedMonth: Date) -> [Day] {
-        // get the last weekday of this month!
-        guard let lastDayInThisMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1),
-                                                 to: firstDayOfDisplayedMonth) else { return [] }
-        let additionalDays = 7 - calendar.component(.weekday, from: lastDayInThisMonth)
-        guard additionalDays > 0 else { return [] }
-        
-        // fill this month collection item by additional days
-        let days: [Day] = (1...additionalDays).map {
-            generateDay(offsetBy: $0, for: lastDayInThisMonth, isWithinDisplayedMonth: false)
-        }
-        return days
-    }
 
     enum CalendarDataError: Error {
         case metadataGeneration
@@ -270,107 +268,45 @@ extension CalendarPickerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return days.count
+            return firstMonthDays.count
         case 1:
             return secondMonthDays.count
         case 2:
             return thirdMonthDays.count
         default:
-            return days.count
+            return firstMonthDays.count
         }
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: CalendarCollectionCell.reuseIdentifier,
+            for: indexPath) as? CalendarCollectionCell else { fatalError() }
         switch indexPath.section {
         case 0:
-            let day = days[indexPath.row]
-            guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: CalendarCollectionCell.reuseIdentifier,
-                for: indexPath) as? CalendarCollectionCell else { fatalError() }
-            cell.selectedState = false
-            cell.isInRange = false
+            cell.resetCell()
+            let day = firstMonthDays[indexPath.row]
             cell.day = day
+            selectBothEndsDate(for: cell, cellDay: day)
+            return drawCellInChooseDateRange(for: cell, day: day, in: selectedDates)
             
-            for selectedDate in selectedDates where cell.day?.date == selectedDate && day.isWithinDisplayedMonth {
-                cell.selectedState = true
-            }
-
-            if selectedDates.count == 2 {
-                guard let startDate = selectedDates.first,
-                      let endDate = selectedDates.last else { return cell}
-                if startDate <= day.date && day.date <= endDate && day.isWithinDisplayedMonth {
-                    cell.isInRange = true
-                    if day.date == startDate {
-                        cell.rangeLeftView.isHidden = true
-                    } else if day.date == endDate {
-                        cell.rangeRightView.isHidden = true
-                    }
-                }
-            }
-            
-            return cell
         case 1:
+            cell.resetCell()
             let day = secondMonthDays[indexPath.row]
-            guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: CalendarCollectionCell.reuseIdentifier,
-                for: indexPath) as? CalendarCollectionCell else { fatalError() }
-            cell.selectedState = false
-            cell.isInRange = false
             cell.day = day
+            selectBothEndsDate(for: cell, cellDay: day)
+            return drawCellInChooseDateRange(for: cell, day: day, in: selectedDates)
             
-            for selectedDate in selectedDates where cell.day?.date == selectedDate && day.isWithinDisplayedMonth {
-                cell.selectedState = true
-            }
-
-            if selectedDates.count == 2 {
-                guard let startDate = selectedDates.first,
-                      let endDate = selectedDates.last else { return cell}
-                print(startDate)
-                print(endDate)
-                print(day.date)
-                if startDate <= day.date && day.date <= endDate && day.isWithinDisplayedMonth {
-                    cell.isInRange = true
-                    if day.date == startDate {
-                        cell.rangeLeftView.isHidden = true
-                    } else if day.date == endDate {
-                        cell.rangeRightView.isHidden = true
-                    }
-                }
-            }
-            return cell
         case 2:
+            cell.resetCell()
             let day = thirdMonthDays[indexPath.row]
-            guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: CalendarCollectionCell.reuseIdentifier,
-                for: indexPath) as? CalendarCollectionCell else { fatalError() }
-            cell.selectedState = false
-            cell.isInRange = false
             cell.day = day
+            selectBothEndsDate(for: cell, cellDay: day)
+            return drawCellInChooseDateRange(for: cell, day: day, in: selectedDates)
             
-            for selectedDate in selectedDates where cell.day?.date == selectedDate && day.isWithinDisplayedMonth {
-                cell.selectedState = true
-            }
-
-            if selectedDates.count == 2 {
-                guard let startDate = selectedDates.first,
-                      let endDate = selectedDates.last else { return cell}
-                if startDate <= day.date && day.date <= endDate && day.isWithinDisplayedMonth {
-                    cell.isInRange = true
-                    if day.date == startDate {
-                        cell.rangeLeftView.isHidden = true
-                    } else if day.date == endDate {
-                        cell.rangeRightView.isHidden = true
-                    }
-                }
-            }
-            return cell
         default:
-            let day = days[indexPath.row]
-            guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: CalendarCollectionCell.reuseIdentifier,
-                for: indexPath) as? CalendarCollectionCell else { fatalError() }
-
+            let day = firstMonthDays[indexPath.row]
             cell.day = day
             return cell
             
@@ -391,15 +327,14 @@ extension CalendarPickerViewController: UICollectionViewDataSource {
             guard let nextMonthDay = calendar.date(byAdding: .month, value: 1, to: todayDate)
             else { return sectionHeaderView }
             sectionHeaderView.todayDate = nextMonthDay
-            
         case 2:
             guard let nextNextMonthDay = calendar.date(byAdding: .month, value: 2, to: todayDate)
             else { return sectionHeaderView }
             sectionHeaderView.todayDate = nextNextMonthDay
+            
         default:
             sectionHeaderView.todayDate = todayDate
         }
-        
         return sectionHeaderView
     }
 }
@@ -413,46 +348,22 @@ extension CalendarPickerViewController: UICollectionViewDelegate, UICollectionVi
         
         switch selectedCount {
         case 2:
-            collectionView.visibleCells.forEach { selectedCell in
-                guard let selectedCell = selectedCell as? CalendarCollectionCell else { return }
-                selectedCell.isInRange = false
-                selectedCell.selectedState = false
-                selectedCell.applyDefaultStyle(
-                    isWithinDisplayedMonth: selectedCell.day?.isWithinDisplayedMonth ?? true)
-            }
-            selectedDates = []
-            selectedCount = 0
-            selectedDates.insert(day.date, at: selectedCount)
-            cell.selectedState = true
-            selectedCount += 1
+            cleanVisibleCell(collectionView: collectionView)
+            reinsertStartDate(select: cell, selectStartDate: day.date)
         case 1:
             guard let startDate = selectedDates.first else { return}
             if startDate < day.date {
-                selectedDates.insert(day.date, at: selectedCount)
-                cell.selectedState = true
-                collectionView.reloadData()
-                selectedCount += 1
+                selectDate(in: cell, at: day)
+                collectionView.reloadData()  // reload to draw the rang view!
             } else {
-                collectionView.visibleCells.forEach { selectedCell in
-                    guard let selectedCell = selectedCell as? CalendarCollectionCell else { return }
-                    selectedCell.selectedState = false
-                    selectedCell.applyDefaultStyle(
-                        isWithinDisplayedMonth: selectedCell.day?.isWithinDisplayedMonth ?? true)
-                }
-                selectedDates = []
-                selectedCount = 0
-                selectedDates.insert(day.date, at: selectedCount)
-                cell.selectedState = true
-                selectedCount += 1
+                cleanVisibleCell(collectionView: collectionView)
+                reinsertStartDate(select: cell, selectStartDate: day.date)
             }
         case 0:
-            selectedDates.insert(day.date, at: selectedCount)
-            cell.selectedState = true
-            selectedCount += 1
+            selectDate(in: cell, at: day)
         default:
             print("default")
         }
-        print(selectedDates)
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -463,8 +374,60 @@ extension CalendarPickerViewController: UICollectionViewDelegate, UICollectionVi
         return CGSize(width: width, height: height)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize {
     return CGSize(width: collectionView.frame.width, height: 60)
     }
 }
-// swiftlint:disable cyclomatic_complexity
+
+// collection dataSource relate func
+extension CalendarPickerViewController {
+    func selectBothEndsDate(for cell: CalendarCollectionCell, cellDay: Day) {
+        for selectedDate in selectedDates where cell.day?.date == selectedDate && cellDay.isWithinDisplayedMonth {
+            cell.selectedState = true
+        }
+    }
+    
+    func drawCellInChooseDateRange(for cell: CalendarCollectionCell,
+                                   day: Day,
+                                   in selectedDates: [Date]) -> CalendarCollectionCell {
+        if selectedDates.count == 2 {
+            guard let startDate = selectedDates.first,
+                  let endDate = selectedDates.last else { return cell}
+            if startDate <= day.date && day.date <= endDate && day.isWithinDisplayedMonth {
+                cell.isInRange = true
+                if day.date == startDate {
+                    cell.rangeLeftView.isHidden = true
+                } else if day.date == endDate {
+                    cell.rangeRightView.isHidden = true
+                }
+            }
+        }
+        return cell
+    }
+    
+    func reinsertStartDate(select cell: CalendarCollectionCell, selectStartDate: Date) {
+        selectedDates = []
+        selectedCount = 0
+        selectedDates.insert(selectStartDate, at: selectedCount)
+        cell.selectedState = true
+        selectedCount += 1
+    }
+    
+    func cleanVisibleCell(collectionView: UICollectionView) {
+        collectionView.visibleCells.forEach { selectedCell in
+            guard let selectedCell = selectedCell as? CalendarCollectionCell else { return }
+            selectedCell.isInRange = false
+            selectedCell.selectedState = false
+            selectedCell.applyDefaultStyle(
+                isWithinDisplayedMonth: selectedCell.day?.isWithinDisplayedMonth ?? true)
+        }
+    }
+    
+    func selectDate(in cell: CalendarCollectionCell, at day: Day) {
+        selectedDates.insert(day.date, at: selectedCount)
+        cell.selectedState = true
+        selectedCount += 1
+    }
+}
