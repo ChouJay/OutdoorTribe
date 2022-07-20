@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct Day {
   // 1
@@ -16,4 +17,10 @@ struct Day {
     let isSelectable: Bool
   // 4
     let isWithinDisplayedMonth: Bool
+}
+
+enum MonthOfCalendar: Int {
+    case first
+    case second
+    case third
 }
