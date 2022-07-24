@@ -32,7 +32,6 @@ class MapViewController: UIViewController {
             }
         }
     }
-    var buttonForDoingFilter = UIButton()
     var startDate = Date()
     var endDate = Date()
     let maskView = UIView(frame: CGRect(x: 0,
@@ -124,8 +123,7 @@ class MapViewController: UIViewController {
                 ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
                     self?.products = postedProducts
                     self?.afterFiltedProducts = []
-                    guard let blockUsers = self?.blockUsers,
-                          let afterFiltedProducts = self?.afterFiltedProducts else { return }
+                    guard let blockUsers = self?.blockUsers else { return }
                     if blockUsers.count == 0 {
                         self?.afterFiltedProducts = postedProducts
                     } else {
@@ -336,11 +334,7 @@ extension MapViewController: UISearchBarDelegate {
                 }
             case true:
                 ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
-                    self?.products = postedProducts
-                    self?.afterFiltedProducts = postedProducts
-                    self?.tapFilterConfirmButton()
-                    self?.mapView.layoutView(from: self!.afterFiltedProducts)
-                    self?.productCollectionView.reloadData()
+                    self?.getProducts(from: postedProducts)
                 }
             }
         }
@@ -369,15 +363,17 @@ extension MapViewController: UISearchBarDelegate {
         case true:
             guard let keyWord = searchBar.text else { return }
             ProductManager.shared.searchPostedProduct(keyWord: keyWord) { [weak self] postedProducts in
-                self?.products = postedProducts
-                self?.afterFiltedProducts = postedProducts
-                self?.tapFilterConfirmButton()
-                self?.mapView.layoutView(from: self!.afterFiltedProducts)
-                self?.productCollectionView.reloadData()
+                self?.getProducts(from: postedProducts)
             }
         }
         searchBar.resignFirstResponder()
         productCollectionView.isHidden = false
+    }
+    
+    func getProducts(from postedProducts: [Product]) {
+        products = postedProducts
+        afterFiltedProducts = postedProducts
+        tapFilterConfirmButton()
     }
     
     @objc func tapFilterConfirmButton() {
@@ -488,7 +484,6 @@ extension MapViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let indexPath = sender as? IndexPath,
               let detailViewController = segue.destination as? DetailViewController else { return }
-        
         detailViewController.chooseProduct = afterFiltedProducts[indexPath.row]
     }
 }
