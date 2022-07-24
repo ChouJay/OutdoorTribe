@@ -216,12 +216,12 @@ extension UserViewController: AskVCToReportUserDelegate {
         let alertController = UIAlertController(title: "Do you want to report this user?",
                                                 message: "Please enter the reason",
                                                 preferredStyle: .alert)
-        alertController.addTextField { textField in
+        alertController.addTextField { _ in
     
         }
           
         let defaultAction = UIAlertAction(title: "No", style: .cancel, handler: nil)
-        let alertRepotAction = UIAlertAction(title: "Report!", style: .destructive) { alertAction in
+        let alertRepotAction = UIAlertAction(title: "Report!", style: .destructive) { _ in
             guard let reportReason = alertController.textFields?.first?.text else { return }
             print(reportReason)
             

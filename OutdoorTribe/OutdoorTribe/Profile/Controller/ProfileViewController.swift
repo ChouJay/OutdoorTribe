@@ -17,6 +17,7 @@ class ProfileViewController: UIViewController {
     var subscribers = [Account]()
     var allUserProducts = [Product]()
     
+    @IBOutlet weak var photoImageBorderView: UIView!
     @IBOutlet weak var photoEditBtn: UIButton!
     @IBOutlet weak var userPhotoImage: UIImageView!
     @IBOutlet weak var bookingTableView: UITableView!
@@ -45,8 +46,10 @@ class ProfileViewController: UIViewController {
         imagePickerController.delegate = self
         
         userPhotoImage.layer.cornerRadius = 70
-        userPhotoImage.layer.borderWidth = 5
-        userPhotoImage.layer.borderColor = UIColor.gray.cgColor
+        
+        photoImageBorderView.layer.cornerRadius = 150 / 2
+        photoImageBorderView.layer.borderWidth = 4
+        photoImageBorderView.layer.borderColor = UIColor.OutdoorTribeColor.mainColor.cgColor
         // Do any additional setup after loading the view.
     }
     
@@ -123,10 +126,11 @@ class ProfileViewController: UIViewController {
                             guard let err = err else { return }
                             let error = AuthErrorCode.Code(rawValue: err._code)
                             if error == .requiresRecentLogin {
-                                let alertController = UIAlertController(title: "Error!",
-                                                                        message: "Known error occur! please logout & signin again, thanks!",
-                                                                        preferredStyle: .alert)
-                                let defaultAction = UIAlertAction(title: "Logout", style: .cancel) { alertAction in
+                                let alertController = UIAlertController(
+                                    title: "Error!",
+                                    message: "Known error occur! please logout & signin again, thanks!",
+                                    preferredStyle: .alert)
+                                let defaultAction = UIAlertAction(title: "Logout", style: .cancel) { _ in
                                     let firebaseAuth = Auth.auth()
                                     do {
                                         try firebaseAuth.signOut()
@@ -149,8 +153,6 @@ class ProfileViewController: UIViewController {
         ])
     }
 }
-
-
 
 // MARK: - uploade photo delegate
 extension ProfileViewController: UploadPhotoDelegate {
