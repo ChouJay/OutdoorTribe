@@ -83,7 +83,6 @@ class ProfileViewController: UIViewController {
     }
     
     func setUpPullMenuBtn() {
-//        menuBtn.showsMenuAsPrimaryAction = true
         menuBtn.menu = UIMenu(children: [
             UIAction(title: "Logout", handler: { [weak self] _ in
                 let firebaseAuth = Auth.auth()
@@ -92,65 +91,68 @@ class ProfileViewController: UIViewController {
                 } catch {
                     print(error)
                 }
-                
                 self?.tabBarController?.selectedIndex = 0
-        }),
+            }),
             UIAction(title: "Block list", handler: { [weak self] _ in
                 guard let childVC = self?.storyboard?.instantiateViewController(
                     withIdentifier: "BlockViewController") as? BlockViewController else { return }
                 childVC.userInfo = self?.userInfo
                 self?.navigationController?.pushViewController(childVC, animated: true)
-        }),
+            }),
             UIAction(title: "Privacy policy", handler: { [weak self] _ in
                 let controller = WebView()
                 controller.url = "https://www.privacypolicies.com/live/87961b7a-bce1-4d58-b679-0517b6dec594"
                 self?.present(controller, animated: true)
-        }),
-            UIAction(title: "Delete account", handler: { _ in
-                let firebaseAuth = Auth.auth()
-                guard let currentUserID = firebaseAuth.currentUser?.uid else { return }
-                let alertController = UIAlertController(title: "Notice!",
-                                                        message: "Are you sure you want to delete account?",
-                                                        preferredStyle: .alert)
-                let alertNoAction = UIAlertAction(title: "no", style: .cancel, handler: nil)
-                let alertYesAction = UIAlertAction(title: "Yes", style: .destructive) { alertAction in
-                    firebaseAuth.currentUser?.delete(completion: { [weak self] err in
-                        if err == nil {
-                            AccountManager.shared.deleteUserAccount(userID: currentUserID)
-                            SubscribeManager.shared.deleteOthersSubscriptionWithUser(userID: currentUserID)
-                            ProductManager.shared.deleteProductWithUser(userID: currentUserID)
-                            OrderManger.shared.deleteOrderByUser(userID: currentUserID)
-                            ChatManager.shared.deleteChatRoomByUser(userID: currentUserID)
-                            self?.tabBarController?.selectedIndex = 0
-                        } else {
-                            guard let err = err else { return }
-                            let error = AuthErrorCode.Code(rawValue: err._code)
-                            if error == .requiresRecentLogin {
-                                let alertController = UIAlertController(
-                                    title: "Error!",
-                                    message: "Known error occur! please logout & signin again, thanks!",
-                                    preferredStyle: .alert)
-                                let defaultAction = UIAlertAction(title: "Logout", style: .cancel) { _ in
-                                    let firebaseAuth = Auth.auth()
-                                    do {
-                                        try firebaseAuth.signOut()
-                                    } catch {
-                                        print(error)
-                                    }
-
-                                    self?.tabBarController?.selectedIndex = 0
-                                }
-                                alertController.addAction(defaultAction)
-                                self?.present(alertController, animated: true, completion: nil)
-                            }
-                        }
-                    })
-                }
-                alertController.addAction(alertNoAction)
-                alertController.addAction(alertYesAction)
-                self.present(alertController, animated: true, completion: nil)
+            }),
+            UIAction(title: "Delete account", handler: { [weak self] _ in
+                self?.showDeleteAccountAlert()
             })
         ])
+    }
+    
+    func showDeleteAccountAlert() {
+        let firebaseAuth = Auth.auth()
+        guard let currentUserID = firebaseAuth.currentUser?.uid else { return }
+        let alertController = UIAlertController(title: "Notice!",
+                                                message: "Are you sure you want to delete account?",
+                                                preferredStyle: .alert)
+        let alertNoAction = UIAlertAction(title: "no", style: .cancel, handler: nil)
+        let alertYesAction = UIAlertAction(title: "Yes", style: .destructive) { _ in
+            firebaseAuth.currentUser?.delete(completion: { [weak self] err in
+                if err == nil {
+                    AccountManager.shared.deleteUserAccount(userID: currentUserID)
+                    SubscribeManager.shared.deleteOthersSubscriptionWithUser(userID: currentUserID)
+                    ProductManager.shared.deleteProductWithUser(userID: currentUserID)
+                    OrderManger.shared.deleteOrderByUser(userID: currentUserID)
+                    ChatManager.shared.deleteChatRoomByUser(userID: currentUserID)
+                    self?.tabBarController?.selectedIndex = 0
+                } else {
+                    guard let err = err else { return }
+                    let error = AuthErrorCode.Code(rawValue: err._code)
+                    if error == .requiresRecentLogin {
+                        let alertController = UIAlertController(
+                            title: "Error!",
+                            message: "Known error occur! please logout & signin again, thanks!",
+                            preferredStyle: .alert)
+                        let defaultAction = UIAlertAction(title: "Logout", style: .cancel) { _ in
+                            let firebaseAuth = Auth.auth()
+                            do {
+                                try firebaseAuth.signOut()
+                            } catch {
+                                print(error)
+                            }
+
+                            self?.tabBarController?.selectedIndex = 0
+                        }
+                        alertController.addAction(defaultAction)
+                        self?.present(alertController, animated: true, completion: nil)
+                    }
+                }
+            })
+        }
+        alertController.addAction(alertNoAction)
+        alertController.addAction(alertYesAction)
+        self.present(alertController, animated: true, completion: nil)
     }
 }
 
@@ -226,3 +228,4 @@ extension ProfileViewController {
         }
     }
 }
+

@@ -51,7 +51,6 @@ class BookedForLessorTableViewCell: UITableViewCell {
         bookedPhoto.layer.cornerRadius = 10
         pickUpButton.layer.cornerRadius = 10
         lessorCancelBtn.layer.cornerRadius = 10
-
     }
     
     func disablePickUpBtn() {
@@ -61,9 +60,6 @@ class BookedForLessorTableViewCell: UITableViewCell {
     
     func enablePickUpBtn() {
         pickUpButton.isEnabled = true
-        pickUpButton.backgroundColor = UIColor(red: 146 / 250, green: 182 / 250, blue: 137 / 250, alpha: 1)
+        pickUpButton.backgroundColor = UIColor.OutdoorTribeColor.btnEnableColor
     }
-
 }
-
-// MARK: - pickUP delegate

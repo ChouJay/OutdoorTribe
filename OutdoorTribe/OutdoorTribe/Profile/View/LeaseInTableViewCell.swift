@@ -22,10 +22,8 @@ class LeaseInTableViewCell: UITableViewCell {
     
     @IBOutlet weak var productPhoto: UIImageView!
     @IBOutlet weak var productName: UILabel!
-    
     @IBOutlet weak var returnDateLabel: UILabel!
     @IBOutlet weak var returnBtn: UIButton!
-    
     @IBOutlet weak var leaseInCallBtn: UIButton!
     
     @IBAction func tapReturnBtn(_ sender: Any) {
@@ -61,12 +59,11 @@ class LeaseInTableViewCell: UITableViewCell {
     
     func enableReturnBtn() {
         returnBtn.isEnabled = true
-        returnBtn.backgroundColor = UIColor(red: 146 / 250, green: 182 / 250, blue: 137 / 250, alpha: 1)
+        returnBtn.backgroundColor = UIColor.OutdoorTribeColor.btnEnableColor
     }
     
     func disableReturnBtn() {
         returnBtn.isEnabled = false
         returnBtn.backgroundColor = .gray
     }
-
 }

@@ -95,7 +95,6 @@
 		0195EB72285F76FD0015A12A /* BookedStageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB71285F76FD0015A12A /* BookedStageViewController.swift */; };
 		0195EB74285F770D0015A12A /* RentOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB73285F770D0015A12A /* RentOutViewController.swift */; };
 		0195EB76285F81900015A12A /* BookedForLessorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB75285F81900015A12A /* BookedForLessorTableViewCell.swift */; };
-		0195EB78286049490015A12A /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB77286049490015A12A /* ColorExtension.swift */; };
 		0195EB7A286050600015A12A /* RentOutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB79286050600015A12A /* RentOutTableViewCell.swift */; };
 		0195EB7C286073040015A12A /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB7B286073040015A12A /* MapView.swift */; };
 		0195EB7F2860830C0015A12A /* MapCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195EB7E2860830C0015A12A /* MapCollectionViewCell.swift */; };
@@ -214,7 +213,6 @@
 		0195EB71285F76FD0015A12A /* BookedStageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookedStageViewController.swift; sourceTree = "<group>"; };
 		0195EB73285F770D0015A12A /* RentOutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RentOutViewController.swift; sourceTree = "<group>"; };
 		0195EB75285F81900015A12A /* BookedForLessorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookedForLessorTableViewCell.swift; sourceTree = "<group>"; };
-		0195EB77286049490015A12A /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		0195EB79286050600015A12A /* RentOutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RentOutTableViewCell.swift; sourceTree = "<group>"; };
 		0195EB7B286073040015A12A /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		0195EB7E2860830C0015A12A /* MapCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -403,8 +401,6 @@
 				012F247C2859A53E00B891C1 /* LaunchScreen.storyboard */,
 				01056360287D12D90095A2E7 /* GoogleService-Info.plist */,
 				012F247F2859A53E00B891C1 /* Info.plist */,
-				0195EB77286049490015A12A /* ColorExtension.swift */,
-				014C831928644677006A4EC1 /* UserModel.swift */,
 			);
 			path = OutdoorTribe;
 			sourceTree = "<group>";
@@ -603,6 +599,14 @@
 			path = OutdoorTribeTests;
 			sourceTree = "<group>";
 		};
+		0176CE03288EEE5700991371 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				014C831928644677006A4EC1 /* UserModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		0193B19E2884004F00A60704 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -707,6 +711,7 @@
 		0195EB53285EF2E70015A12A /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				0176CE03288EEE5700991371 /* Model */,
 				0195EB55285EF30E0015A12A /* View */,
 				0195EB54285EF3010015A12A /* Controller */,
 			);
@@ -1123,7 +1128,6 @@
 				0193B1B32884047D00A60704 /* CalendarFilterSectionHeader.swift in Sources */,
 				0199C6432881964100E407DA /* CalendarViewController.swift in Sources */,
 				0195EB7C286073040015A12A /* MapView.swift in Sources */,
-				0195EB78286049490015A12A /* ColorExtension.swift in Sources */,
 				01053E87285B34680074B125 /* SearchTableViewCell.swift in Sources */,
 				012F24722859A53D00B891C1 /* AppDelegate.swift in Sources */,
 				0195EB6E285F1ECF0015A12A /* BookingInfoTableViewCell.swift in Sources */,

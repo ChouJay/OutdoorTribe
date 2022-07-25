@@ -60,6 +60,6 @@ class BookedForRenterTableViewCell: UITableViewCell {
     
     func enableDeliverBtn() {
         deliverBtn.isEnabled = true
-        deliverBtn.backgroundColor = UIColor(red: 146 / 250, green: 182 / 250, blue: 137 / 250, alpha: 1)
+        deliverBtn.backgroundColor = UIColor.OutdoorTribeColor.btnEnableColor
     }
 }
