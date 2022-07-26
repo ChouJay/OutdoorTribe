@@ -40,7 +40,7 @@ class SearchViewController: UIViewController {
                                                     y: 0,
                                                     width: UIScreen.main.bounds.width,
                                                     height: 200),
-        collectionViewLayout: UICollectionViewLayout())
+                                      collectionViewLayout: UICollectionViewLayout())
     var pageController = UIPageControl()
     var startDate = Date()
     var endDate = Date()
@@ -107,12 +107,11 @@ class SearchViewController: UIViewController {
         }
         
         layoutPageController()
-        
-        searchTableView.layer.cornerRadius = 15
         layOutHeaderView()
         
         dateButton.layer.cornerRadius = 20
         
+        searchTableView.layer.cornerRadius = 15
         searchTableView.dataSource = self
         searchTableView.delegate = self
         searchTableView.sectionHeaderTopPadding = 0
@@ -128,7 +127,6 @@ class SearchViewController: UIViewController {
         mainGalleryView.collectionViewLayout = createGalleryCompositionalLayout()
         
         tabBarController?.tabBar.clipsToBounds = true
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -137,11 +135,11 @@ class SearchViewController: UIViewController {
             self.products = productsFromFireStore
             self.afterFiltedProducts = productsFromFireStore
             self.searchTableView.reloadData()
-            
         }
         searchTableView.topAnchor.constraint(
             equalTo: view.safeAreaLayoutGuide.topAnchor,
             constant: UIScreen.main.bounds.height * 1 / 3).isActive = true
+        
         navigationController?.navigationBar.isHidden = true
         
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
@@ -228,7 +226,6 @@ extension SearchViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "SearchTableViewCell",
             for: indexPath) as? SearchTableViewCell else { fatalError() }
-        print(afterFiltedAndBlockProducts.count)
         guard let urlString = afterFiltedAndBlockProducts[indexPath.row].photoUrl.first else { return cell }
         cell.photoImage.kf.setImage(with: URL(string: urlString))
         cell.titleLabel.text = afterFiltedAndBlockProducts[indexPath.row].title
@@ -263,10 +260,8 @@ extension SearchViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let searchTableViewCell = sender as? SearchTableViewCell,
               let detailViewController = segue.destination as? DetailViewController,
-              let indexPath = searchTableView.indexPath(for: searchTableViewCell)
-        else { return }
+              let indexPath = searchTableView.indexPath(for: searchTableViewCell) else { return }
         detailViewController.chooseProduct = afterFiltedProducts[indexPath.row]
-        
     }
 }
 
@@ -360,7 +355,7 @@ extension SearchViewController: UICollectionViewDelegate {
                     ProductManager.shared.classifyPostedProduct(keyWord: keyWord) { [weak self ] classifyProducts in
                         self?.products = classifyProducts
                         self?.tapFilterConfirmButton()
-                        self?.searchTableView.reloadData()
+//                        self?.searchTableView.reloadData()
                     }
                 }
             } else {
@@ -375,7 +370,7 @@ extension SearchViewController: UICollectionViewDelegate {
                     ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
                         self?.products = postedProducts
                         self?.tapFilterConfirmButton()
-                        self?.searchTableView.reloadData()
+//                        self?.searchTableView.reloadData()
                     }
                 }
             }
@@ -393,7 +388,6 @@ extension SearchViewController: UICollectionViewDelegate {
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
         if collectionView != headerView {
-            print(indexPath)
             pageController.currentPage = indexPath.row
         }
     }
