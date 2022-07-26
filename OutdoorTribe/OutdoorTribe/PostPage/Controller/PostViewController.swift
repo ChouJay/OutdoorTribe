@@ -19,11 +19,11 @@ protocol AskInfoCellDelegate {
 
 class PostViewController: UIViewController {
   
-    var userInfo: Account?
     let firestoreAuth = Auth.auth()
+    let imagePickerController = UIImagePickerController()
+    var userInfo: Account?
     var targetCell: ImageTableViewCell?
     var uploadedPhoto = [UIImage]()
-    let imagePickerController = UIImagePickerController()
     var product = Product(renter: "Choujay",
                           renterUid: "",
                           title: "",
@@ -68,7 +68,6 @@ class PostViewController: UIViewController {
         postTableView.dataSource = self
         postTableView.delegate = self
         imagePickerController.delegate = self
-        // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -88,8 +87,6 @@ class PostViewController: UIViewController {
             }
             guard let latitude = placemarks?.first?.location?.coordinate.latitude,
                   let longitude = placemarks?.first?.location?.coordinate.longitude else { return }
-            print(latitude)
-            print(longitude)
             self.product.address = GeoPoint(latitude: latitude, longitude: longitude)
         }
     }
@@ -184,12 +181,11 @@ extension PostViewController: UploadPhotoDelegate {
 extension PostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(
         _ picker: UIImagePickerController,
-        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let image = info[.originalImage] as? UIImage {
             uploadedPhoto.append(image)
         }
         if let url = info[.mediaURL] as? URL {
-            print(url)
             let asset = AVAsset(url: url)
             let imageGenerator = AVAssetImageGenerator(asset: asset)
             var time = asset.duration
@@ -230,9 +226,6 @@ extension PostViewController: UITextFieldDelegate, UITextViewDelegate {
         switch textField.placeholder {
         case "title":
             product.title = textField.text ?? ""
-        case "rent / day":
-            guard let rentString = textField.text else { return }
-            product.rent = Int(rentString) ?? 0
         case "address":
             product.addressString = textField.text ?? ""
             guard let addressString = textField.text else { return }
@@ -243,7 +236,6 @@ extension PostViewController: UITextFieldDelegate, UITextViewDelegate {
             product.totalAmount = Int(amountString) ?? 1
         case "classification":
             product.classification = textField.text ?? ""
-
         default:
             print("error")
         }
@@ -289,7 +281,7 @@ extension PostViewController: UITextFieldDelegate, UITextViewDelegate {
 }
 
 // MARK: - pass date from cell delegate
-extension PostViewController: PassDateToPostVCDelegate {
+extension PostViewController: PassInfoToPostVCDelegate {
     func passDateRangeToVC() {
         
         let pickerController = CalendarPickerViewController(
@@ -304,14 +296,10 @@ extension PostViewController: PassDateToPostVCDelegate {
     
     func passStartDateToVC(chooseDate: Date) {
         startDate = chooseDate
-        print(startDate)
-//        daysBetweenTwoDate()
     }
     
     func passEndDateToVC(chooseDate: Date) {
         endDate = chooseDate
-        print(endDate)
-//        daysBetweenTwoDate()
     }
 }
 

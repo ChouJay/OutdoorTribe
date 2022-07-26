@@ -175,7 +175,6 @@ class SearchViewController: UIViewController {
     }
     
 // MARK: - date picker function
-    
     @objc func tapFilterConfirmButton() {
         afterFiltedProducts = []
         let offsetStartDate = startDate.addingTimeInterval(28800)
@@ -280,7 +279,6 @@ extension SearchViewController: UISearchBarDelegate {
                 ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
                     self?.products = postedProducts
                     self?.tapFilterConfirmButton()
-                    self?.searchTableView.reloadData()
                 }
             }
         }
@@ -300,7 +298,6 @@ extension SearchViewController: UISearchBarDelegate {
             ProductManager.shared.searchPostedProduct(keyWord: keyWord) { [weak self] postedProducts in
                 self?.products = postedProducts
                 self?.tapFilterConfirmButton()
-                self?.searchTableView.reloadData()
                 self?.searchBar.endEditing(true)
             }
         }
@@ -355,7 +352,6 @@ extension SearchViewController: UICollectionViewDelegate {
                     ProductManager.shared.classifyPostedProduct(keyWord: keyWord) { [weak self ] classifyProducts in
                         self?.products = classifyProducts
                         self?.tapFilterConfirmButton()
-//                        self?.searchTableView.reloadData()
                     }
                 }
             } else {
@@ -370,7 +366,6 @@ extension SearchViewController: UICollectionViewDelegate {
                     ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
                         self?.products = postedProducts
                         self?.tapFilterConfirmButton()
-//                        self?.searchTableView.reloadData()
                     }
                 }
             }
@@ -428,7 +423,6 @@ extension SearchViewController {
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .absolute(85),
             heightDimension: .absolute(85))
-        
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         

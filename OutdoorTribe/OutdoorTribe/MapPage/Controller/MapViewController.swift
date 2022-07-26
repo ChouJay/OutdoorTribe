@@ -22,6 +22,8 @@ class MapViewController: UIViewController {
     var products = [Product]()
     var afterFiltedProducts = [Product]()
     var myLocationManager = CLLocationManager()
+    var startDate = Date()
+    var endDate = Date()
     var isFilter = false {
         didSet {
             switch isFilter {
@@ -32,8 +34,7 @@ class MapViewController: UIViewController {
             }
         }
     }
-    var startDate = Date()
-    var endDate = Date()
+    
     let maskView = UIView(frame: CGRect(x: 0,
                                         y: 0,
                                         width: UIScreen.main.bounds.width,
@@ -187,7 +188,7 @@ class MapViewController: UIViewController {
         return layout
     }
         
-    func showCallUI(indexPath: IndexPath, targetUid: String) {
+    func showCallingPage(indexPath: IndexPath, targetUid: String) {
         guard let callVC = storyboard?.instantiateViewController(
             withIdentifier: "CallerViewController") as? CallerViewController else { return }
         callVC.modalPresentationStyle = .fullScreen
@@ -316,21 +317,8 @@ extension MapViewController: UISearchBarDelegate {
         if searchText == "" {
             switch isFilter {
             case false:
-                ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
-                    self?.products = postedProducts
-                    self?.afterFiltedProducts = []
-                    guard let blockUsers = self?.blockUsers else { return }
-                    if blockUsers.count == 0 {
-                        self?.afterFiltedProducts = postedProducts
-                    } else {
-                        for product in postedProducts {
-                            for blockUser in blockUsers where product.renterUid != blockUser.userID {
-                                self?.afterFiltedProducts.append(product)
-                            }
-                        }
-                    }
-                    self?.mapView.layoutView(from: self!.afterFiltedProducts)
-                    self?.productCollectionView.reloadData()
+                ProductManager.shared.retrievePostedProduct { [weak self] serverProducts in
+                    self?.fetchProductsFromServer(from: serverProducts)
                 }
             case true:
                 ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
@@ -344,21 +332,8 @@ extension MapViewController: UISearchBarDelegate {
         switch isFilter {
         case false:
             guard let keyWord = searchBar.text else { return }
-            ProductManager.shared.searchPostedProduct(keyWord: keyWord) { [weak self] postedProducts in
-                self?.products = postedProducts
-                self?.afterFiltedProducts = []
-                guard let blockUsers = self?.blockUsers else { return }
-                if blockUsers.count == 0 {
-                    self?.afterFiltedProducts = postedProducts
-                } else {
-                    for product in postedProducts {
-                        for blockUser in blockUsers where product.renterUid != blockUser.userID {
-                            self?.afterFiltedProducts.append(product)
-                        }
-                    }
-                }
-                self?.mapView.layoutView(from: self!.afterFiltedProducts)
-                self?.productCollectionView.reloadData()
+            ProductManager.shared.searchPostedProduct(keyWord: keyWord) { [weak self] serverProducts in
+                self?.fetchProductsFromServer(from: serverProducts)
             }
         case true:
             guard let keyWord = searchBar.text else { return }
@@ -374,6 +349,22 @@ extension MapViewController: UISearchBarDelegate {
         products = postedProducts
         afterFiltedProducts = postedProducts
         tapFilterConfirmButton()
+    }
+    
+    func fetchProductsFromServer(from serverProducts: [Product]) {
+        products = serverProducts
+        afterFiltedProducts = []
+        if blockUsers.count == 0 {
+            afterFiltedProducts = serverProducts
+        } else {
+            for product in serverProducts {
+                for blockUser in blockUsers where product.renterUid != blockUser.userID {
+                    afterFiltedProducts.append(product)
+                }
+            }
+        }
+        mapView.layoutView(from: afterFiltedProducts)
+        productCollectionView.reloadData()
     }
     
     @objc func tapFilterConfirmButton() {
@@ -441,15 +432,12 @@ extension MapViewController: MapRouteDelegate {
         mapView.removeOverlays(mapView.overlays)
         let buttonPosition = sender.convert(sender.bounds.origin, to: productCollectionView)
         guard let indexPath = productCollectionView.indexPathForItem(at: buttonPosition) else { return }
-        
         guard let sourceLocation = myLocationManager.location?.coordinate else { return }
         let destinationLocation = CLLocationCoordinate2D(
             latitude: afterFiltedProducts[indexPath.row].address.latitude,
             longitude: afterFiltedProducts[indexPath.row].address.longitude)
-        
         let sourcePlaceMark = MKPlacemark(coordinate: sourceLocation)
         let destinationPlaceMark = MKPlacemark(coordinate: destinationLocation)
-        
         let directionRequest = MKDirections.Request()
         directionRequest.source = MKMapItem(placemark: sourcePlaceMark)
         directionRequest.destination = MKMapItem(placemark: destinationPlaceMark)
@@ -500,7 +488,7 @@ extension MapViewController: CallDelegate {
                 // signal!
                 WebRTCClient.shared.offer { [weak self] sdp in
                     WebRTCClient.shared.send(sdp: sdp, to: calleeUid) { [weak self] in
-                        self?.showCallUI(indexPath: indexPath, targetUid: calleeUid)
+                        self?.showCallingPage(indexPath: indexPath, targetUid: calleeUid)
                     }
                 }
             }
