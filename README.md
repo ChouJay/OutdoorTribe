@@ -1,6 +1,6 @@
 # OutdoorTribe
 
-![OutdoorTribe Banner]()
+![OutdoorTribe Banner](https://github.com/ChouJay/OutdoorTribe/blob/b44c1f7d07939b6442f6a14b66de1726d083d326/OutdoorTribe/screenShot/Github%20banner.png)
 
 <p align="left">
     <img src="https://img.shields.io/badge/platform-iOS-lightgray">
