@@ -4,7 +4,7 @@
 
 <p align="left">
     <img src="https://img.shields.io/badge/platform-iOS-lightgray">
-    <img src="https://img.shields.io/badge/release-v1.0.1-green">
+    <img src="https://img.shields.io/badge/release-v1.0.0-green">
 </p>
 
 <p align="left">
