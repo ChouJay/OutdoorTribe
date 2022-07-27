@@ -1,10 +1,10 @@
 # OutdoorTribe
 
-![OutdoorTribe Banner]()
+![OutdoorTribe Banner](https://github.com/ChouJay/OutdoorTribe/blob/b44c1f7d07939b6442f6a14b66de1726d083d326/OutdoorTribe/screenShot/Github%20banner.png)
 
 <p align="left">
     <img src="https://img.shields.io/badge/platform-iOS-lightgray">
-    <img src="https://img.shields.io/badge/release-v1.0.1-green">
+    <img src="https://img.shields.io/badge/release-v1.0.0-green">
 </p>
 
 <p align="left">
@@ -19,19 +19,19 @@ A sharing economy platform for people who like to go outdoor! In this app, you c
 
 ### Borrow outdoor equipment
 
-* 
+* Borrow any kind of outdoor equipments for your low frequency adventure, don't need to buy your own one and waste space to store it.
 
 ### Post the equipment you want to lend
 
-* 
+* If there are too many equipments accumulated in your house, just lend it to somebody! Not only release your home space but also help someone who don't have equipment.
 
 ### Pick the equipment with shortest path in visulized way
 
-* 
+* Used Mapkit to help user visualize and choose the nearest equipment. Arrange your shortest path to pickup equipments.
 
 ### VoIP phone call to connect with lender and borrower
 
-* 
+* Used WebRTC to practice VoIP phone call. Let lender and borrower contact each others to help both arrange the return location and return time easily.
 
 
 ## Screenshots
