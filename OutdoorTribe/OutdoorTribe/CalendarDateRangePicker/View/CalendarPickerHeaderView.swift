@@ -73,7 +73,7 @@ class CalendarPickerHeaderView: UIView {
 
         translatesAutoresizingMaskIntoConstraints = false
         
-        backgroundColor = .systemGroupedBackground
+        backgroundColor = .white
 
         layer.maskedCorners = [
             .layerMinXMinYCorner,

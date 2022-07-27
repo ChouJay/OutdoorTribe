@@ -136,9 +136,14 @@ class CalendarCollectionCell: UICollectionViewCell {
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-
         layoutSubviews()
     }
+    
+    func resetCell() {
+        selectedState = false
+        isInRange = false
+    }
+    
 }
 
 // MARK: - Appearance

@@ -13,6 +13,7 @@ import FirebaseAuth
 
 class MapViewController: UIViewController {
     
+    var childVC: CalendarFilterViewController?
     var currentUid = ""
     var allCell = [MapCollectionViewCell]()
     var allUserInfo = [Account]()
@@ -21,6 +22,8 @@ class MapViewController: UIViewController {
     var products = [Product]()
     var afterFiltedProducts = [Product]()
     var myLocationManager = CLLocationManager()
+    var startDate = Date()
+    var endDate = Date()
     var isFilter = false {
         didSet {
             switch isFilter {
@@ -31,11 +34,18 @@ class MapViewController: UIViewController {
             }
         }
     }
-    var buttonForDoingFilter = UIButton()
-    var buttonForStopFilter = UIButton()
-    var backgroundView = UIView()
-    let startDatePicker = UIDatePicker()
-    let endDatePicker = UIDatePicker()
+    
+    let maskView = UIView(frame: CGRect(x: 0,
+                                        y: 0,
+                                        width: UIScreen.main.bounds.width,
+                                        height: UIScreen.main.bounds.height))
+    let dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.locale = Locale.autoupdatingCurrent
+        dateFormatter.setLocalizedDateFormatFromTemplate("MM/dd")
+        return dateFormatter
+    }()
     
     @IBOutlet weak var positionButton: UIButton!
     @IBOutlet weak var dateButton: UIButton!
@@ -45,9 +55,25 @@ class MapViewController: UIViewController {
     
     @IBAction func tapDatePicker(_ sender: Any) {
         dateButton.isEnabled = false
-        layoutChooseDateUI()
-        buttonForDoingFilter.isHidden = false
+        childVC = CalendarFilterViewController(todayDate: Date())
+        guard let childVC = childVC else { return }
+        childVC.filterDelegate = self
+        maskView.backgroundColor = .black.withAlphaComponent(0)
+        view.addSubview(maskView)
+        addChild(childVC)
+        view.addSubview(childVC.view)
+        childVC.view.frame = CGRect(x: dateButton.frame.maxX, y: dateButton.frame.maxY + 10, width: 0, height: 0)
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+            childVC.view.frame = CGRect(x: self.dateButton.frame.maxX,
+                                        y: self.dateButton.frame.maxY + 10,
+                                        width: -315,
+                                        height: 415)
+            self.maskView.backgroundColor = .black.withAlphaComponent(0.5)
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+        childVC.didMove(toParent: self)
     }
+    
     @IBAction func tapPositionButton(_ sender: UIButton) {
         goToUesrLocation()
     }
@@ -98,8 +124,7 @@ class MapViewController: UIViewController {
                 ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
                     self?.products = postedProducts
                     self?.afterFiltedProducts = []
-                    guard let blockUsers = self?.blockUsers,
-                          let afterFiltedProducts = self?.afterFiltedProducts else { return }
+                    guard let blockUsers = self?.blockUsers else { return }
                     if blockUsers.count == 0 {
                         self?.afterFiltedProducts = postedProducts
                     } else {
@@ -162,16 +187,41 @@ class MapViewController: UIViewController {
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }
-    
-    func layOutSearchBar() {
-    }
-    
-    func showCallUI(indexPath: IndexPath, targetUid: String) {
+        
+    func showCallingPage(indexPath: IndexPath, targetUid: String) {
         guard let callVC = storyboard?.instantiateViewController(
             withIdentifier: "CallerViewController") as? CallerViewController else { return }
         callVC.modalPresentationStyle = .fullScreen
         callVC.calleeUid = targetUid
         present(callVC, animated: true, completion: nil)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first
+        if touch?.view == maskView {
+            removeChildView()
+            tapFilterStopButton()
+        }
+    }
+    
+    @objc func removeChildView() {
+        guard let childVc = childVC else { return }
+        print("remove subview")
+        UIView.animate(withDuration: 0.2) {
+            childVc.view.frame = CGRect(x: self.dateButton.frame.maxX,
+                                        y: self.dateButton.frame.maxY + 10,
+                                        width: 0,
+                                        height: 0)
+            self.maskView.backgroundColor = .black.withAlphaComponent(0)
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+            childVc.removeFromParent()
+            childVc.view.removeFromSuperview()
+            self.maskView.removeFromSuperview()
+            childVc.didMove(toParent: nil)
+            self.childVC = nil
+            self.dateButton.isEnabled = true
+        }
     }
 }
 
@@ -217,7 +267,6 @@ extension MapViewController: UICollectionViewDataSource {
 // MARK: - collection view delegate
 extension MapViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         performSegue(withIdentifier: "mapToDetailSegue", sender: indexPath)
     }
  
@@ -268,29 +317,12 @@ extension MapViewController: UISearchBarDelegate {
         if searchText == "" {
             switch isFilter {
             case false:
-                ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
-                    self?.products = postedProducts
-                    self?.afterFiltedProducts = []
-                    guard let blockUsers = self?.blockUsers else { return }
-                    if blockUsers.count == 0 {
-                        self?.afterFiltedProducts = postedProducts
-                    } else {
-                        for product in postedProducts {
-                            for blockUser in blockUsers where product.renterUid != blockUser.userID {
-                                self?.afterFiltedProducts.append(product)
-                            }
-                        }
-                    }
-                    self?.mapView.layoutView(from: self!.afterFiltedProducts)
-                    self?.productCollectionView.reloadData()
+                ProductManager.shared.retrievePostedProduct { [weak self] serverProducts in
+                    self?.fetchProductsFromServer(from: serverProducts)
                 }
             case true:
                 ProductManager.shared.retrievePostedProduct { [weak self] postedProducts in
-                    self?.products = postedProducts
-                    self?.afterFiltedProducts = postedProducts
-                    self?.tapFilterConfirmButton()
-                    self?.mapView.layoutView(from: self!.afterFiltedProducts)
-                    self?.productCollectionView.reloadData()
+                    self?.getProducts(from: postedProducts)
                 }
             }
         }
@@ -300,127 +332,55 @@ extension MapViewController: UISearchBarDelegate {
         switch isFilter {
         case false:
             guard let keyWord = searchBar.text else { return }
-            ProductManager.shared.searchPostedProduct(keyWord: keyWord) { [weak self] postedProducts in
-                self?.products = postedProducts
-                self?.afterFiltedProducts = []
-                guard let blockUsers = self?.blockUsers else { return }
-                if blockUsers.count == 0 {
-                    self?.afterFiltedProducts = postedProducts
-                } else {
-                    for product in postedProducts {
-                        for blockUser in blockUsers where product.renterUid != blockUser.userID {
-                            self?.afterFiltedProducts.append(product)
-                        }
-                    }
-                }
-                self?.mapView.layoutView(from: self!.afterFiltedProducts)
-                self?.productCollectionView.reloadData()
+            ProductManager.shared.searchPostedProduct(keyWord: keyWord) { [weak self] serverProducts in
+                self?.fetchProductsFromServer(from: serverProducts)
             }
         case true:
             guard let keyWord = searchBar.text else { return }
             ProductManager.shared.searchPostedProduct(keyWord: keyWord) { [weak self] postedProducts in
-                self?.products = postedProducts
-                self?.afterFiltedProducts = postedProducts
-                self?.tapFilterConfirmButton()
-                self?.mapView.layoutView(from: self!.afterFiltedProducts)
-                self?.productCollectionView.reloadData()
+                self?.getProducts(from: postedProducts)
             }
         }
         searchBar.resignFirstResponder()
         productCollectionView.isHidden = false
     }
     
-// MARK: - date picker function
-    func layoutChooseDateUI() {
-        startDatePicker.datePickerMode = .date
-        startDatePicker.preferredDatePickerStyle = .compact
-        startDatePicker.timeZone = .current
-
-        endDatePicker.datePickerMode = .date
-        endDatePicker.preferredDatePickerStyle = .compact
-        endDatePicker.timeZone = .current
-        
-        backgroundView.backgroundColor = .white
-        backgroundView.layer.cornerRadius = 10
-        print(dateButton.frame)
-        view.addSubview(backgroundView)
-        backgroundView.frame = CGRect(
-            x: dateButton.frame.origin.x + dateButton.frame.width,
-            y: dateButton.frame.origin.y + dateButton.frame.height + 10,
-            width: 0,
-            height: 40)
-        print(backgroundView.frame)
-        backgroundView.alpha = 0
-
-        backgroundView.addSubview(buttonForDoingFilter)
-        buttonForDoingFilter.addTarget(self, action: #selector(tapFilterConfirmButton), for: .touchUpInside)
-        buttonForDoingFilter.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-        buttonForDoingFilter.tintColor = .darkGray
-        buttonForDoingFilter.translatesAutoresizingMaskIntoConstraints = false
-        buttonForDoingFilter.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
-        buttonForDoingFilter.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        buttonForDoingFilter.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor).isActive = true
-        buttonForDoingFilter.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
-        
-        backgroundView.addSubview(buttonForStopFilter)
-        buttonForStopFilter.addTarget(self, action: #selector(tapFilterStopButton), for: .touchUpInside)
-        buttonForStopFilter.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-        buttonForStopFilter.tintColor = .darkGray
-        buttonForStopFilter.translatesAutoresizingMaskIntoConstraints = false
-        buttonForStopFilter.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
-        buttonForStopFilter.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        buttonForStopFilter.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor).isActive = true
-        buttonForStopFilter.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
-        
-        let dashLabel = UILabel()
-        dashLabel.text = "-"
-        dashLabel.textAlignment = .center
-        
-        let hStack = UIStackView()
-        let subViews = [startDatePicker, dashLabel, endDatePicker]
-        for subView in subViews {
-            hStack.addArrangedSubview(subView)
+    func getProducts(from postedProducts: [Product]) {
+        products = postedProducts
+        afterFiltedProducts = postedProducts
+        tapFilterConfirmButton()
+    }
+    
+    func fetchProductsFromServer(from serverProducts: [Product]) {
+        products = serverProducts
+        afterFiltedProducts = []
+        if blockUsers.count == 0 {
+            afterFiltedProducts = serverProducts
+        } else {
+            for product in serverProducts {
+                for blockUser in blockUsers where product.renterUid != blockUser.userID {
+                    afterFiltedProducts.append(product)
+                }
+            }
         }
-        hStack.axis = .horizontal
-        hStack.distribution = .fillProportionally
-        backgroundView.addSubview(hStack)
-        
-        hStack.translatesAutoresizingMaskIntoConstraints = false
-        hStack.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
-        hStack.leadingAnchor.constraint(equalTo: buttonForStopFilter.trailingAnchor).isActive = true
-        hStack.trailingAnchor.constraint(equalTo: buttonForDoingFilter.leadingAnchor).isActive = true
-        hStack.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
-        
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
-            self.backgroundView.frame = CGRect(
-                x: self.dateButton.frame.origin.x + self.dateButton.frame.width - 230,
-                y: self.dateButton.frame.origin.y + self.dateButton.frame.height + 10,
-                width: 230,
-                height: 40)
-            self.backgroundView.alpha = 1
-        }, completion: nil)
+        mapView.layoutView(from: afterFiltedProducts)
+        productCollectionView.reloadData()
     }
     
     @objc func tapFilterConfirmButton() {
         afterFiltedProducts = []
-        dateButton.isEnabled = true
-        buttonForDoingFilter.isHidden = true
-        backgroundView.removeFromSuperview()
-        for subview in backgroundView.subviews {
-            subview.removeFromSuperview()
-        }
-        
+        let offsetStartDate = startDate.addingTimeInterval(28800)
+        let offsetEndDate = endDate.addingTimeInterval(28800)
+        let filterSet = Set(daysBetweenTwoDate(startDate: offsetStartDate, endDate: offsetEndDate))
         for product in products {
-            let availableSet = Set(product.availableDate)
-            let filterSet = Set(daysBetweenTwoDate(startDate: startDatePicker.date, endDate: endDatePicker.date))
+            var availableDateStrings = [String]()
+            for date in product.availableDate {
+                let dateString = dateFormatter.string(from: date)
+                availableDateStrings.append(dateString)
+            }
+            let availableSet = Set(availableDateStrings)
             if filterSet.isSubset(of: availableSet) {
-                if blockUsers.count == 0 {
-                    afterFiltedProducts.append(product)
-                } else {
-                    for blockUser in blockUsers where product.renterUid != blockUser.userID {
-                        afterFiltedProducts.append(product)
-                    }
-                }
+                afterFiltedProducts.append(product)
             }
         }
         isFilter = true
@@ -429,11 +389,6 @@ extension MapViewController: UISearchBarDelegate {
     }
     
     @objc func tapFilterStopButton() {
-        dateButton.isEnabled = true
-        backgroundView.removeFromSuperview()
-        for subview in backgroundView.subviews {
-            subview.removeFromSuperview()
-        }
         isFilter = false
         mapView.layoutView(from: afterFiltedProducts)
         productCollectionView.reloadData()
@@ -442,13 +397,11 @@ extension MapViewController: UISearchBarDelegate {
 
 // MARK: - func to get every days between two date
 extension MapViewController {
-    func daysBetweenTwoDate(startDate: Date, endDate: Date) -> [Date] {
-        var dayInterval = [Date]()
+    func daysBetweenTwoDate(startDate: Date, endDate: Date) -> [String] {
+        var dateStringArray = [String]()
         var calendar = Calendar.current
         calendar.timeZone = TimeZone(identifier: "UTC")!
-        print(startDate)
-        print(endDate)
-        guard startDate <= endDate else { return dayInterval }
+        guard startDate <= endDate else { return dateStringArray }
         guard let standardStartDate = calendar.date(
                 bySettingHour: 0,
                 minute: 0,
@@ -458,17 +411,18 @@ extension MapViewController {
                 bySettingHour: 0,
                 minute: 0,
                 second: 0,
-                of: endDate) else { return dayInterval }
+                of: endDate) else { return dateStringArray }
         let component = calendar.dateComponents([.day], from: standardStartDate, to: standardEndDate)
-        guard let days = component.day else { return dayInterval }
+        guard let days = component.day else { return dateStringArray }
         for round in 0...days {
             guard let dateBeAdded = calendar.date(
                 byAdding: .day,
                 value: round,
-                to: standardStartDate) else { return dayInterval }
-            dayInterval.append(dateBeAdded)
+                to: standardStartDate) else { return dateStringArray }
+            let dateString = dateFormatter.string(from: dateBeAdded)
+            dateStringArray.append(dateString)
         }
-        return dayInterval
+        return dateStringArray
     }
 }
 
@@ -478,15 +432,12 @@ extension MapViewController: MapRouteDelegate {
         mapView.removeOverlays(mapView.overlays)
         let buttonPosition = sender.convert(sender.bounds.origin, to: productCollectionView)
         guard let indexPath = productCollectionView.indexPathForItem(at: buttonPosition) else { return }
-        
         guard let sourceLocation = myLocationManager.location?.coordinate else { return }
         let destinationLocation = CLLocationCoordinate2D(
             latitude: afterFiltedProducts[indexPath.row].address.latitude,
             longitude: afterFiltedProducts[indexPath.row].address.longitude)
-        
         let sourcePlaceMark = MKPlacemark(coordinate: sourceLocation)
         let destinationPlaceMark = MKPlacemark(coordinate: destinationLocation)
-        
         let directionRequest = MKDirections.Request()
         directionRequest.source = MKMapItem(placemark: sourcePlaceMark)
         directionRequest.destination = MKMapItem(placemark: destinationPlaceMark)
@@ -521,7 +472,6 @@ extension MapViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let indexPath = sender as? IndexPath,
               let detailViewController = segue.destination as? DetailViewController else { return }
-        
         detailViewController.chooseProduct = afterFiltedProducts[indexPath.row]
     }
 }
@@ -538,7 +488,7 @@ extension MapViewController: CallDelegate {
                 // signal!
                 WebRTCClient.shared.offer { [weak self] sdp in
                     WebRTCClient.shared.send(sdp: sdp, to: calleeUid) { [weak self] in
-                        self?.showCallUI(indexPath: indexPath, targetUid: calleeUid)
+                        self?.showCallingPage(indexPath: indexPath, targetUid: calleeUid)
                     }
                 }
             }
@@ -551,5 +501,17 @@ extension MapViewController: CallDelegate {
             alertController.addAction(defaultAction)
             self.present(alertController, animated: true, completion: nil)
         }
+    }
+}
+
+// MARK: - date filter delegate
+extension MapViewController: AskVcToFilterByDateDelegate {
+    func askVcToStartFilter(dateRange: [Date]) {
+        removeChildView()
+        guard let startDateOfRange = dateRange.first,
+              let endDateOfRnage = dateRange.last else { return }
+        startDate = startDateOfRange
+        endDate = endDateOfRnage
+        tapFilterConfirmButton()
     }
 }

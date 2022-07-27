@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol PassDateToPostVCDelegate {
+protocol PassInfoToPostVCDelegate {
     func passEndDateToVC(chooseDate: Date)
     func passStartDateToVC(chooseDate: Date)
     func passClassificationToVC(text: String)
@@ -15,23 +15,19 @@ protocol PassDateToPostVCDelegate {
 }
 
 class InfoTableViewCell: UITableViewCell {
-
-    var passDateDelegate: PassDateToPostVCDelegate?
+    var passDateDelegate: PassInfoToPostVCDelegate?
     
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var classificationTextField: UITextField!
-    
     @IBOutlet weak var datePickerBtn: UIButton!
     @IBOutlet weak var dateRangeTextField: UITextField!
-    
     @IBOutlet weak var pullDownBtn: UIButton!
     @IBOutlet weak var descriptionTextView: UITextView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-//        setDatePickerValueChange()
         setUpPullDownBtn()
         layoutTextView()
         // Initialization code
@@ -40,24 +36,12 @@ class InfoTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        // Configure the view for the selected state
     }
-    
     
     @IBAction func tapDateRangePicker(_ sender: Any) {
         passDateDelegate?.passDateRangeToVC()
     }
-    
-//    @objc func dateChange() {
-//        print("test1")
-//        // Replace the hour (time) of both dates with 00:00
-//    }
-//    
-//    @objc func dateChangeForLast() {
-//        // call delegate func to pass date to VC
-//        print("test2")
-//    }
-    
+        
     func formatDate(date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM dd"
@@ -69,7 +53,8 @@ class InfoTableViewCell: UITableViewCell {
         descriptionTextView.layer.cornerRadius = 5
         descriptionTextView.layer.borderWidth = 0.5
         descriptionTextView.layer.borderColor = UIColor.lightGray.cgColor
-        
+        descriptionTextView.translatesAutoresizingMaskIntoConstraints = true
+        descriptionTextView.isScrollEnabled = false
     }
     
     func setUpPullDownBtn() {
@@ -128,6 +113,4 @@ extension InfoTableViewCell: AskInfoCellDelegate {
         classificationTextField.text = ""
         dateRangeTextField.text = ""
     }
-    
-    
 }

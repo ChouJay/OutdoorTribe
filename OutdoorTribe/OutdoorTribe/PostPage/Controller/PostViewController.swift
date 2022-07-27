@@ -19,11 +19,11 @@ protocol AskInfoCellDelegate {
 
 class PostViewController: UIViewController {
   
-    var userInfo: Account?
     let firestoreAuth = Auth.auth()
+    let imagePickerController = UIImagePickerController()
+    var userInfo: Account?
     var targetCell: ImageTableViewCell?
     var uploadedPhoto = [UIImage]()
-    let imagePickerController = UIImagePickerController()
     var product = Product(renter: "Choujay",
                           renterUid: "",
                           title: "",
@@ -46,7 +46,7 @@ class PostViewController: UIViewController {
     @IBAction func tapPost(_ sender: Any) {
         product.renter = userInfo?.name ?? ""
         product.renterUid = userInfo?.userID ?? ""
-        uploadPhoto()
+        ProductManager.shared.upload(with: uploadedPhoto, in: product)
         uploadedPhoto = []
         dismiss(animated: true)
         toInfoCellDelegate?.askToDiscardInfo()
@@ -68,11 +68,14 @@ class PostViewController: UIViewController {
         postTableView.dataSource = self
         postTableView.delegate = self
         imagePickerController.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         guard let uid = firestoreAuth.currentUser?.uid else { return }
         AccountManager.shared.getUserInfo(by: uid) { [weak self] account in
             self?.userInfo = account
         }
-        // Do any additional setup after loading the view.
     }
     
     func convertAddressToGeoPoint(address: String) {
@@ -84,49 +87,7 @@ class PostViewController: UIViewController {
             }
             guard let latitude = placemarks?.first?.location?.coordinate.latitude,
                   let longitude = placemarks?.first?.location?.coordinate.longitude else { return }
-            print(latitude)
-            print(longitude)
             self.product.address = GeoPoint(latitude: latitude, longitude: longitude)
-        }
-    }
-    
-    func uploadPhoto() {
-        let group: DispatchGroup = DispatchGroup()
-        let storage = Storage.storage()
-        let storageRef = storage.reference()
-        let path = "images/\(UUID().uuidString).jpg"
-        var endPoint = 0
-        var paths = [String]()
-        for image in uploadedPhoto {
-            guard let imageData = image.jpegData(compressionQuality: 0.5) else { return }
-            let fileRef = storageRef.child(path + String(endPoint))
-            group.enter()
-            fileRef.putData(imageData, metadata: nil) { storageMetadata, error in
-                if error == nil && storageMetadata != nil {
-                    fileRef.downloadURL { url, error in
-                        guard let downloadUrl = url else {
-                            print(error)
-                            return
-                        }
-                        let urlString = downloadUrl.absoluteString
-                        print(urlString)
-                        paths.append(urlString)
-                        group.leave()
-                    }
-                }
-            }
-            endPoint += 1
-        }
-        
-        group.notify(queue: DispatchQueue.main) { [weak self] in
-            guard paths.isEmpty == false else { return }
-            self?.product.photoUrl = paths
-            print(self?.product.photoUrl)
-            let firebaseAuth = Auth.auth()
-            guard let product = self?.product,
-                  let currentUser = firebaseAuth.currentUser else { return }
-            ProductManager.shared.postProduct(withProduct: product)
-            ProductManager.shared.postProductByUser(withProduct: product, user: currentUser)
         }
     }
 }
@@ -220,12 +181,11 @@ extension PostViewController: UploadPhotoDelegate {
 extension PostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(
         _ picker: UIImagePickerController,
-        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let image = info[.originalImage] as? UIImage {
             uploadedPhoto.append(image)
         }
         if let url = info[.mediaURL] as? URL {
-            print(url)
             let asset = AVAsset(url: url)
             let imageGenerator = AVAssetImageGenerator(asset: asset)
             var time = asset.duration
@@ -266,9 +226,6 @@ extension PostViewController: UITextFieldDelegate, UITextViewDelegate {
         switch textField.placeholder {
         case "title":
             product.title = textField.text ?? ""
-        case "rent / day":
-            guard let rentString = textField.text else { return }
-            product.rent = Int(rentString) ?? 0
         case "address":
             product.addressString = textField.text ?? ""
             guard let addressString = textField.text else { return }
@@ -279,7 +236,6 @@ extension PostViewController: UITextFieldDelegate, UITextViewDelegate {
             product.totalAmount = Int(amountString) ?? 1
         case "classification":
             product.classification = textField.text ?? ""
-
         default:
             print("error")
         }
@@ -325,12 +281,12 @@ extension PostViewController: UITextFieldDelegate, UITextViewDelegate {
 }
 
 // MARK: - pass date from cell delegate
-extension PostViewController: PassDateToPostVCDelegate {
+extension PostViewController: PassInfoToPostVCDelegate {
     func passDateRangeToVC() {
         
         let pickerController = CalendarPickerViewController(
             todayDate: Date())
-        pickerController.passDateDelegate = self
+        pickerController.passDateToPostVCDelegate = self
         tabBarController?.present(pickerController, animated: true, completion: nil)
     }
     
@@ -340,20 +296,16 @@ extension PostViewController: PassDateToPostVCDelegate {
     
     func passStartDateToVC(chooseDate: Date) {
         startDate = chooseDate
-        print(startDate)
-//        daysBetweenTwoDate()
     }
     
     func passEndDateToVC(chooseDate: Date) {
         endDate = chooseDate
-        print(endDate)
-//        daysBetweenTwoDate()
     }
 }
 
 // MARK: - Date range delegate
 extension PostViewController: PassDateRangeToPostVCDelegate {
-    func passDateRange(dateRange: [Date]) {
+    func passDateRangeToPostVC(dateRange: [Date]) {
         toInfoCellDelegate?.askToShowDateRange(dateRange: dateRange)
         startDate = dateRange.first ?? Date()
         endDate = dateRange.last ?? Date()
