@@ -48,9 +48,9 @@ A sharing economy platform for people who like to go outdoor! In this app, you c
 ## Techniques
 * Implemented MVC design pattern as App’s architecture to make responsibility of each component more clear. Furthermore, making the entire project more maintainable, reusable, and testable.
 
-* Implemented class inheritance, method overloading and overriding, access control, and polymorphism throughout the App to put OOP concept into practice.
+* Implemented OOP concept throughout the app by using class inheritance, method overriding, access control and class extension.
 
-* Stored, managed, and synchronized data with Firebase. For anonymous users, stored favorite pets' data in local storage via Core Data.
+* Stored and managed data with Firebase-Cloud Firestore.
 
 * Used Map Kit to locate users and calculate the navigation routes to the location of equipment.
 
@@ -67,7 +67,7 @@ A sharing economy platform for people who like to go outdoor! In this app, you c
 
 
 ## Version
-> 1.0.1  
+> 1.0.0 
 
 ## Release Notes
 Version   | Date        | Note
