@@ -61,7 +61,7 @@ class RentOutTableViewCell: UITableViewCell {
 
     func enableFinishBtn() {
         finishBtn.isEnabled = true
-        finishBtn.backgroundColor = UIColor(red: 146 / 250, green: 182 / 250, blue: 137 / 250, alpha: 1)
+        finishBtn.backgroundColor = UIColor.OutdoorTribeColor.btnEnableColor
     }
     
     func disableFinishBtn() {

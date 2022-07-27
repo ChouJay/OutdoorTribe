@@ -20,7 +20,6 @@ class ImageTableViewCell: UITableViewCell {
             imageCollectionView.reloadData()
         }
     }
-//    var mainVC: PostViewController?
     
     @IBOutlet weak var imageCollectionView: UICollectionView!
     
@@ -28,13 +27,10 @@ class ImageTableViewCell: UITableViewCell {
         super.awakeFromNib()
         imageCollectionView.dataSource = self
         imageCollectionView.delegate = self
-        
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
     }
 }
 

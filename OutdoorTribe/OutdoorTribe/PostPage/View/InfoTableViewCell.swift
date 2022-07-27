@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol PassDateToPostVCDelegate {
+protocol PassInfoToPostVCDelegate {
     func passEndDateToVC(chooseDate: Date)
     func passStartDateToVC(chooseDate: Date)
     func passClassificationToVC(text: String)
@@ -15,15 +15,14 @@ protocol PassDateToPostVCDelegate {
 }
 
 class InfoTableViewCell: UITableViewCell {
-    var passDateDelegate: PassDateToPostVCDelegate?
+    var passDateDelegate: PassInfoToPostVCDelegate?
+    
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var classificationTextField: UITextField!
-    
     @IBOutlet weak var datePickerBtn: UIButton!
     @IBOutlet weak var dateRangeTextField: UITextField!
-    
     @IBOutlet weak var pullDownBtn: UIButton!
     @IBOutlet weak var descriptionTextView: UITextView!
     
