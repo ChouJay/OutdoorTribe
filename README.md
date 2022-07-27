@@ -84,4 +84,4 @@ Version   | Date        | Note
 Jay Chou｜qwe159515@gmail.com
 
 ## Licence
-OutdoorTribe is released under the MIT license. See [LICENSE]() for details.
+OutdoorTribe is released under the MIT license. See [LICENSE](https://github.com/ChouJay/OutdoorTribe/blob/main/LICENSE) for details.
