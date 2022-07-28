@@ -7,11 +7,11 @@
 
 import UIKit
 
-protocol CallDelegate {
+protocol CallDelegate: AnyObject {
     func askVcCallOut(cell: UICollectionViewCell)
 }
 
-protocol MapRouteDelegate {
+protocol MapRouteDelegate: AnyObject {
     func showRoute(sender: MapCollectionViewCell)
 }
 
@@ -28,7 +28,6 @@ class MapCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var renterNameLabel: UILabel!
-    
     @IBAction func tapRouteButton(_ sender: UIButton) {
         routeDelegae?.showRoute(sender: self)
     }
@@ -69,7 +68,7 @@ class MapCollectionViewCell: UICollectionViewCell {
         routeButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -12).isActive = true
         routeButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 8 ).isActive = true
         routeButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 8 ).isActive = true
-        
+
     }
     
     func hideEstimateTimeLabel() {

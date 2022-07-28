@@ -11,10 +11,10 @@ import FirebaseFirestore
 import Kingfisher
 
 class ChatViewController: UIViewController {
+    let imagePickerController = UIImagePickerController()
     var userInfo: Account?
     var allUserInfo = [Account]()
     var otherUserPhotoUrlString = ""
-    let imagePickerController = UIImagePickerController()
     var messages = [Message]()
     var sendedPhoto: UIImage?
 
@@ -231,7 +231,8 @@ extension ChatViewController {
             if error == nil && storageMetadata != nil {
                 fileRef.downloadURL { url, error in
                     guard let downloadUrl = url else {
-                        print(error)
+                        guard let error = error else { return }
+                        print("downloadPhotoURL fail: \(error)")
                         return
                     }
                     urlString = downloadUrl.absoluteString
