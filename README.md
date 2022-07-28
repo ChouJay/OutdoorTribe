@@ -38,11 +38,11 @@ A sharing economy platform for people who like to go outdoor! In this app, you c
 
 ![screenshot 3](https://github.com/ChouJay/OutdoorTribe/blob/f1b21bb87e7cbae9312c6bce2e0d3d481d2a132b/OutdoorTribe/screenShot/Start.png)
 
-![screenshot 2]()
+![screenshot 2](https://github.com/ChouJay/OutdoorTribe/blob/8a86743066d43d93c2751ec56b65e3aa25bf1b0d/OutdoorTribe/screenShot/Store%20page.png)
 
-![sceenshot 1]()
+![sceenshot 1](https://github.com/ChouJay/OutdoorTribe/blob/8a86743066d43d93c2751ec56b65e3aa25bf1b0d/OutdoorTribe/screenShot/Manage%20page.png)
 
-![screenshot 4]()
+![screenshot 4](https://github.com/ChouJay/OutdoorTribe/blob/8a86743066d43d93c2751ec56b65e3aa25bf1b0d/OutdoorTribe/screenShot/Contect.png)
 
 
 ## Techniques
