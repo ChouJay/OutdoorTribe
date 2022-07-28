@@ -36,7 +36,7 @@ A sharing economy platform for people who like to go outdoor! In this app, you c
 
 ## Screenshots
 
-![screenshot 3]()
+![screenshot 3](https://github.com/ChouJay/OutdoorTribe/blob/f1b21bb87e7cbae9312c6bce2e0d3d481d2a132b/OutdoorTribe/screenShot/Start.png)
 
 ![screenshot 2]()
 
