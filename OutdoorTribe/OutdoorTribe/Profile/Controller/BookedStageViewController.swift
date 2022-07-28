@@ -14,11 +14,11 @@ class BookedStageViewController: UIViewController {
     let firestoreAuth = Auth.auth()
     var userInfo: Account?
     var bookedStateOrders = [Order]()
+    
     @IBOutlet weak var bookedTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         bookedTableView.dataSource = self
     }
     
@@ -35,6 +35,43 @@ class BookedStageViewController: UIViewController {
             }
         }
     }
+    
+    func showBookStateInfo(cell: UITableViewCell, isForRenter: Bool, cellForRowAt indexPath: IndexPath) {
+        if isForRenter {
+            guard let cell = cell as? BookedForRenterTableViewCell else { return }
+            cell.changeStateDelegate = self
+            cell.orderID = bookedStateOrders[indexPath.row].orderID
+            guard let urlString = bookedStateOrders[indexPath.row].product?.photoUrl.first,
+                  let url = URL(string: urlString) else { return }
+            if bookedStateOrders[indexPath.row].orderState == 1 {
+                cell.disableDeliverBtn()
+            }
+            cell.photoImage.kf.setImage(with: url)
+            cell.productName.text = bookedStateOrders[indexPath.row].product?.title
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy/MM/dd"
+            guard let date = bookedStateOrders[indexPath.row].leaseTerm.first else { return }
+            let dateString = dateFormatter.string(from: date)
+            cell.pickUpdateLabel.text = dateString
+        } else {
+            guard let cell = cell as? BookedForLessorTableViewCell else { return }
+            cell.changeStateDelegate = self
+            cell.orderID = bookedStateOrders[indexPath.row].orderID
+            guard let urlString = bookedStateOrders[indexPath.row].product?.photoUrl.first,
+                  let url = URL(string: urlString) else { return }
+            
+            if bookedStateOrders[indexPath.row].orderState == 2 {
+                cell.disablePickUpBtn()
+            }
+            cell.bookedPhoto.kf.setImage(with: url)
+            cell.productName.text = bookedStateOrders[indexPath.row].product?.title
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy/MM/dd"
+            guard let date = bookedStateOrders[indexPath.row].leaseTerm.first else { return }
+            let dateString = dateFormatter.string(from: date)
+            cell.pickUpDateLabel.text = dateString
+        }
+    }
 }
 
 // MARK: - table View dataSource
@@ -48,41 +85,13 @@ extension BookedStageViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "BookedForRenterTableViewCell",
                 for: indexPath) as? BookedForRenterTableViewCell else { fatalError() }
-            cell.changeStateDelegate = self
-            cell.orderID = bookedStateOrders[indexPath.row].orderID
-            guard let urlString = bookedStateOrders[indexPath.row].product?.photoUrl.first,
-                  let url = URL(string: urlString) else { return cell }
-            if bookedStateOrders[indexPath.row].orderState == 1 {
-                cell.disableDeliverBtn()
-            }
-            cell.photoImage.kf.setImage(with: url)
-            cell.productName.text = bookedStateOrders[indexPath.row].product?.title
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy/MM/dd"
-            guard let date = bookedStateOrders[indexPath.row].leaseTerm.first else { return cell}
-            let dateString = dateFormatter.string(from: date)
-            cell.pickUpdateLabel.text = dateString
+            showBookStateInfo(cell: cell, isForRenter: true, cellForRowAt: indexPath)
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "BookedForLessorTableViewCell",
                 for: indexPath) as? BookedForLessorTableViewCell else { fatalError() }
-            cell.changeStateDelegate = self
-            cell.orderID = bookedStateOrders[indexPath.row].orderID
-            guard let urlString = bookedStateOrders[indexPath.row].product?.photoUrl.first,
-                  let url = URL(string: urlString) else { return cell }
-            
-            if bookedStateOrders[indexPath.row].orderState == 2 {
-                cell.disablePickUpBtn()
-            }
-            cell.bookedPhoto.kf.setImage(with: url)
-            cell.productName.text = bookedStateOrders[indexPath.row].product?.title
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy/MM/dd"
-            guard let date = bookedStateOrders[indexPath.row].leaseTerm.first else { return cell}
-            let dateString = dateFormatter.string(from: date)
-            cell.pickUpDateLabel.text = dateString
-
+            showBookStateInfo(cell: cell, isForRenter: false, cellForRowAt: indexPath)
             return cell
         }
     }

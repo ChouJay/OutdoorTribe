@@ -15,9 +15,9 @@ protocol askDetailVCPresentDateRangeDelegate {
 class DetailInfoTableViewCell: UITableViewCell {
 
     var delegate: askDetailVCPresentDateRangeDelegate?
+    var chooseProduct: Product?
     
     @IBOutlet weak var nameLabel: UILabel!
-//    @IBOutlet weak var rentLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var dateRangeTextField: UITextField!
@@ -41,6 +41,14 @@ class DetailInfoTableViewCell: UITableViewCell {
     func setTextFieldDelegate() {
         amountTextField.delegate = self
     }
+    
+    func showInfo() {
+        guard let productName = chooseProduct?.title,
+              let addressString = chooseProduct?.addressString else { return }
+        nameLabel.text = productName
+        addressLabel.text = addressString
+        descriptionTextView.text = chooseProduct?.description ?? ""
+    }
 }
 
 // MARK: - be asked to show date range delegate
@@ -63,5 +71,3 @@ extension DetailInfoTableViewCell: UITextFieldDelegate {
         delegate?.passAmountToVC(requireAmount: amountTextField.text ?? "0")
     }
 }
-
-

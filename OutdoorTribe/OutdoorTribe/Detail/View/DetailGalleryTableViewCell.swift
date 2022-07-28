@@ -11,6 +11,7 @@ import Kingfisher
 class DetailGalleryTableViewCell: UITableViewCell {
     var imageUrlStings = [String]()
     var pageController = UIPageControl()
+    var chooseProduct: Product?
     
     @IBOutlet weak var galleryCollectionView: UICollectionView!
     
@@ -23,7 +24,6 @@ class DetailGalleryTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
         // Configure the view for the selected state
     }
     
@@ -50,11 +50,11 @@ class DetailGalleryTableViewCell: UITableViewCell {
     
 // layOut pageController func
     func layoutPageController(chooseProduct: Product) {
+        contentView.addSubview(pageController)
         pageController.addTarget(self, action: #selector(controlGallery(pageControl:)), for: .valueChanged)
         pageController.numberOfPages = chooseProduct.photoUrl.count
         pageController.currentPage = 0
         pageController.backgroundStyle = .automatic
-        contentView.addSubview(pageController)
         pageController.translatesAutoresizingMaskIntoConstraints = false
         pageController.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         pageController.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0).isActive = true
@@ -66,6 +66,13 @@ class DetailGalleryTableViewCell: UITableViewCell {
             at: IndexPath(item: page, section: 0),
             at: .centeredHorizontally,
             animated: true)
+    }
+    
+    func showGallery() {
+        guard let urlStrings = chooseProduct?.photoUrl,
+              let chooseProduct = chooseProduct else { return }
+        imageUrlStings = urlStrings
+        layoutPageController(chooseProduct: chooseProduct)
     }
 }
 
@@ -89,7 +96,9 @@ extension DetailGalleryTableViewCell: UICollectionViewDataSource {
 
 // MARK: - collection view delegate
 extension DetailGalleryTableViewCell: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
         pageController.currentPage = indexPath.row
     }
 }

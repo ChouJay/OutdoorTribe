@@ -35,4 +35,20 @@ class ChatImageTableViewCell: UITableViewCell {
         leftView.layer.cornerRadius = 10
         leftImage.layer.cornerRadius = 10
     }
+    
+    func hideOthersSideBubble() {
+        rightView.isHidden = false
+        rightTimeLabel.isHidden = false
+        leftView.isHidden = true
+        leftTimeLabel.isHidden = true
+        photoView.isHidden = true
+    }
+    
+    func hideSelfSideBubble() {
+        leftView.isHidden = false
+        leftTimeLabel.isHidden = false
+        photoView.isHidden = false
+        rightView.isHidden = true
+        rightTimeLabel.isHidden = true
+    }
 }
