@@ -13,11 +13,19 @@ class RentOutViewController: UIViewController {
     let firestoreAuth = Auth.auth()
     var rentOrders = [Order]()
     var userInfo: Account?
+    var hintImageView: UIImageView = {
+        var imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.image = UIImage(named: "hintImage")
+        return imageView
+    }()
     
     @IBOutlet weak var rentOutTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        layoutHintImage()
         rentOutTableView.dataSource = self
         
         guard let uid = firestoreAuth.currentUser?.uid else { return }
@@ -43,12 +51,27 @@ class RentOutViewController: UIViewController {
         callVC.calleeUid = targetUid
         present(callVC, animated: true, completion: nil)
     }
+    
+    func layoutHintImage() {
+        view.addSubview(hintImageView)
+        hintImageView.anchor(top: view.topAnchor,
+                             leading: view.leadingAnchor,
+                             bottom: view.bottomAnchor,
+                             trailing: view.trailingAnchor,
+                             width: UIScreen.main.bounds.width,
+                             height: view.frame.height)
+    }
 }
 
 // MARK: - table view dataSource
 extension RentOutViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        rentOrders.count
+        if rentOrders.count == 0 {
+            hintImageView.isHidden = false
+        } else {
+            hintImageView.isHidden = true
+        }
+        return rentOrders.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

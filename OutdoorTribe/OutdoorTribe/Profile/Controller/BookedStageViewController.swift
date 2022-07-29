@@ -14,11 +14,19 @@ class BookedStageViewController: UIViewController {
     let firestoreAuth = Auth.auth()
     var userInfo: Account?
     var bookedStateOrders = [Order]()
+    var hintImageView: UIImageView = {
+        var imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.image = UIImage(named: "hintImage")
+        return imageView
+    }()
     
     @IBOutlet weak var bookedTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        layoutHintImage()
         bookedTableView.dataSource = self
     }
     
@@ -72,12 +80,27 @@ class BookedStageViewController: UIViewController {
             cell.pickUpDateLabel.text = dateString
         }
     }
+    
+    func layoutHintImage() {
+        view.addSubview(hintImageView)
+        hintImageView.anchor(top: view.topAnchor,
+                             leading: view.leadingAnchor,
+                             bottom: view.bottomAnchor,
+                             trailing: view.trailingAnchor,
+                             width: UIScreen.main.bounds.width,
+                             height: view.frame.height)
+    }
 }
 
 // MARK: - table View dataSource
 extension BookedStageViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        bookedStateOrders.count
+        if bookedStateOrders.count == 0 {
+            hintImageView.isHidden = false
+        } else {
+            hintImageView.isHidden = true
+        }
+        return bookedStateOrders.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
