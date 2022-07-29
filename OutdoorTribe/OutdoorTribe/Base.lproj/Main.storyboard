@@ -1493,6 +1493,11 @@
                                                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                         <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                     </collectionViewFlowLayout>
+                                                    <view key="backgroundView" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c1W-gj-XK5">
+                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    </view>
                                                     <cells>
                                                         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ApplyCollectionViewCell" id="te0-aK-Is4" customClass="ApplyCollectionViewCell" customModule="OutdoorTribe" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="5" width="60" height="90"/>
@@ -1562,7 +1567,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1J9-Xh-l2q">
-                                                    <rect key="frame" x="90" y="15" width="44.5" height="20.5"/>
+                                                    <rect key="frame" x="90" y="15" width="309" height="20.5"/>
                                                     <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="18"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -1584,6 +1589,7 @@
                                                 <constraint firstItem="1J9-Xh-l2q" firstAttribute="top" secondItem="5en-EN-Brf" secondAttribute="top" constant="15" id="3FH-yq-jHL"/>
                                                 <constraint firstAttribute="trailing" secondItem="dpY-3A-db5" secondAttribute="trailing" constant="150" id="Hm3-HF-0kL"/>
                                                 <constraint firstAttribute="bottom" secondItem="jIK-cE-40F" secondAttribute="bottom" constant="15" id="Lex-om-TK5"/>
+                                                <constraint firstAttribute="trailing" secondItem="1J9-Xh-l2q" secondAttribute="trailing" constant="15" id="YPQ-Sn-kxt"/>
                                                 <constraint firstItem="1J9-Xh-l2q" firstAttribute="leading" secondItem="cKD-fy-RUD" secondAttribute="trailing" constant="15" id="ckh-li-aSX"/>
                                                 <constraint firstAttribute="bottom" secondItem="cKD-fy-RUD" secondAttribute="bottom" constant="10" id="jbN-al-cbC"/>
                                                 <constraint firstItem="dpY-3A-db5" firstAttribute="leading" secondItem="cKD-fy-RUD" secondAttribute="trailing" constant="15" id="kyn-mk-ZEs"/>
@@ -3512,7 +3518,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="jaS-GZ-trm"/>
-        <segue reference="9fu-0O-WUc"/>
+        <segue reference="5VR-xm-ys3"/>
         <segue reference="POk-Rx-IpJ"/>
         <segue reference="gev-hz-6wC"/>
     </inferredMetricsTieBreakers>

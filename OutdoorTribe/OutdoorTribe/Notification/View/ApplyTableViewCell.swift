@@ -11,7 +11,15 @@ import FirebaseFirestoreSwift
 import Kingfisher
 
 class ApplyTableViewCell: UITableViewCell {
-
+    
+    var noApplicationLabel: UILabel = {
+        let label = UILabel()
+        label.text = "There is no application!"
+        label.textColor = .lightGray
+        label.font = UIFont(name: "Arial Bold", size: 24)
+        return label
+    }()
+    
     var applyingOrders = [Order]() {
         didSet {
             applyCollectionView.reloadData()
@@ -24,6 +32,7 @@ class ApplyTableViewCell: UITableViewCell {
         // Initialization code
         applyCollectionView.dataSource = self
         applyCollectionView.delegate = self
+        showHintLabel()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -31,13 +40,22 @@ class ApplyTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
+    
+    func showHintLabel() {
+        contentView.addSubview(noApplicationLabel)
+        noApplicationLabel.center(inView: contentView)
+    }
 }
 
 // MARK: - collection view dataSource
 extension ApplyTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        applyingOrders.count
+        if applyingOrders.count == 0 {
+            noApplicationLabel.isHidden = false
+        } else {
+            noApplicationLabel.isHidden = true
+        }
+        return applyingOrders.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
