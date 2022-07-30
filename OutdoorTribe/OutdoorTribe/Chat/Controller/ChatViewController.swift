@@ -69,7 +69,7 @@ class ChatViewController: UIViewController {
                 return
             }
             self?.chatTableView.scrollToRow(at: IndexPath(row: indexRow - 1, section: 0), at: .top, animated: false)
-        }        // Do any additional setup after loading the view.
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,12 +82,34 @@ class ChatViewController: UIViewController {
         guard let userInfo = userInfo else { return }
         chatMessage.sender = userInfo.name
     }
+    
+    func convertDateToString(from date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        let dateString = dateFormatter.string(from: date)
+        return dateString
+    }
+    
+    func loadOtherUserPhoto(cell: Any, isImageCell: Bool) {
+        if isImageCell {
+            guard let imageCell = cell as? ChatImageTableViewCell else { return }
+            if otherUserPhotoUrlString != "" {
+                guard let url = URL(string: otherUserPhotoUrlString) else { return }
+                imageCell.photoView.kf.setImage(with: url)
+            }
+        } else {
+            guard let chatCell = cell as? ChatTableViewCell else { return }
+            if otherUserPhotoUrlString != "" {
+                guard let url = URL(string: otherUserPhotoUrlString) else { return }
+                chatCell.photoView.kf.setImage(with: url)
+            }
+        }
+    }
 }
 
 // MARK: - table view dataSource
 extension ChatViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(messages.count)
         return messages.count
     }
     
@@ -98,38 +120,16 @@ extension ChatViewController: UITableViewDataSource {
             guard let userInfo = userInfo else { return cell}
             cell.layOutTextBubble()
             if messages[indexPath.row].sender == userInfo.name {
-                cell.rightBubbleView.isHidden = false
-                cell.rightTimeLabel.isHidden = false
-                cell.leftBubbleView.isHidden = true
-                cell.leftTimeLabel.isHidden = true
-                cell.photoView.isHidden = true
+                cell.hideOtherSideBubble()
                 cell.rightTextBubble.text = messages[indexPath.row].message
-                
-                let date = messages[indexPath.row].date
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "HH:mm"
-                let dateString = dateFormatter.string(from: date)
-                cell.rightTimeLabel.text = dateString
+                cell.rightTimeLabel.text = convertDateToString(from: messages[indexPath.row].date)
                 
             } else {
-                cell.leftBubbleView.isHidden = false
-                cell.leftTimeLabel.isHidden = false
-                cell.photoView.isHidden = false
-                cell.rightBubbleView.isHidden = true
-                cell.rightTimeLabel.isHidden = true
+                cell.hideSelfBubble()
                 cell.leftTextBubble.text = messages[indexPath.row].message
-                // load otherUser photo
-                
-                let date = messages[indexPath.row].date
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "HH:mm"
-                let dateString = dateFormatter.string(from: date)
-                cell.leftTimeLabel.text = dateString
+                cell.leftTimeLabel.text = convertDateToString(from: messages[indexPath.row].date)
+                loadOtherUserPhoto(cell: cell, isImageCell: false)
 
-                if otherUserPhotoUrlString != "" {
-                    guard let url = URL(string: otherUserPhotoUrlString) else { return cell }
-                    cell.photoView.kf.setImage(with: url)
-                }
             }
             return cell
         } else {
@@ -139,35 +139,16 @@ extension ChatViewController: UITableViewDataSource {
             guard let userInfo = userInfo else { return cell}
             cell.layOutImageCell()
             if messages[indexPath.row].sender == userInfo.name {
-                cell.rightView.isHidden = false
-                cell.rightTimeLabel.isHidden = false
-                cell.leftView.isHidden = true
-                cell.leftTimeLabel.isHidden = true
-                cell.photoView.isHidden = true
+                cell.hideOthersSideBubble()
                 cell.rightImage.kf.setImage(with: url)
-                
-                let date = messages[indexPath.row].date
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "HH:mm"
-                let dateString = dateFormatter.string(from: date)
-                cell.rightTimeLabel.text = dateString
+                cell.rightTimeLabel.text = convertDateToString(from: messages[indexPath.row].date)
 
             } else {
-                cell.leftView.isHidden = false
-                cell.leftTimeLabel.isHidden = false
-                cell.rightView.isHidden = true
-                cell.rightTimeLabel.isHidden = true
-                cell.photoView.isHidden = false
-                if otherUserPhotoUrlString != "" {
-                    guard let url = URL(string: otherUserPhotoUrlString) else { return cell }
-                    cell.photoView.kf.setImage(with: url)
-                }
+                cell.hideSelfSideBubble()
                 cell.leftImage.kf.setImage(with: url)
-                let date = messages[indexPath.row].date
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "HH:mm"
-                let dateString = dateFormatter.string(from: date)
-                cell.leftTimeLabel.text = dateString
+                cell.leftTimeLabel.text = convertDateToString(from: messages[indexPath.row].date)
+                loadOtherUserPhoto(cell: cell, isImageCell: true)
+
             }
             return cell
         }

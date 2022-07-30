@@ -15,14 +15,13 @@ protocol RenterChangeStateDelegate {
 class BookedForRenterTableViewCell: UITableViewCell {
     
     var orderID = ""
+    var changeStateDelegate: RenterChangeStateDelegate?
     
     @IBOutlet weak var deliverBtn: UIButton!
     @IBOutlet weak var cancelBtn: UIButton!
     @IBOutlet weak var photoImage: UIImageView!
     @IBOutlet weak var productName: UILabel!
     @IBOutlet weak var pickUpdateLabel: UILabel!
-    
-    var changeStateDelegate: RenterChangeStateDelegate?
     
     @IBAction func tapDeliverBtn(_ sender: UIButton) {
         changeStateDelegate?.askVcChangeToDeliveredState(sender)

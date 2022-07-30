@@ -143,7 +143,7 @@
                                                     <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 </textView>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="ammount" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2O9-fO-yKe">
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="amount" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2O9-fO-yKe">
                                                     <rect key="frame" x="20" y="90" width="374" height="50"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="50" id="RNg-zj-qQx"/>
@@ -681,7 +681,7 @@
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="0" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pNi-eW-KQk">
                                                     <rect key="frame" x="104.5" y="57" width="37" height="34"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lease term:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UL3-QJ-lPT">
                                                     <rect key="frame" x="20" y="105" width="110" height="22.5"/>
@@ -722,13 +722,21 @@
                                                         <action selector="tapDateRangeBtn:" destination="eOf-ZO-ych" eventType="touchUpInside" id="s9q-SK-xRe"/>
                                                     </connections>
                                                 </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/ 10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zMw-2L-G0m">
+                                                    <rect key="frame" x="149.5" y="62.5" width="33.5" height="22.5"/>
+                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="20"/>
+                                                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="zCC-Nr-SUj" firstAttribute="leading" secondItem="fge-h7-IM2" secondAttribute="leading" constant="20" id="00v-bg-7Na"/>
                                                 <constraint firstItem="nvd-7p-7y9" firstAttribute="top" secondItem="UL3-QJ-lPT" secondAttribute="bottom" constant="20" id="0NJ-gm-VEZ"/>
+                                                <constraint firstItem="zMw-2L-G0m" firstAttribute="leading" secondItem="pNi-eW-KQk" secondAttribute="trailing" constant="8" id="73D-0t-Ywt"/>
                                                 <constraint firstItem="UL3-QJ-lPT" firstAttribute="leading" secondItem="fge-h7-IM2" secondAttribute="leading" constant="20" symbolic="YES" id="9s7-zI-0bn"/>
                                                 <constraint firstItem="T2F-48-kfk" firstAttribute="centerY" secondItem="UL3-QJ-lPT" secondAttribute="centerY" id="By8-dv-e3Q"/>
                                                 <constraint firstItem="UL3-QJ-lPT" firstAttribute="top" secondItem="XoW-mm-QKU" secondAttribute="bottom" constant="20" id="HFh-hn-ed2"/>
+                                                <constraint firstItem="zMw-2L-G0m" firstAttribute="centerY" secondItem="XoW-mm-QKU" secondAttribute="centerY" id="JoZ-WL-lfy"/>
                                                 <constraint firstItem="aFY-1Q-4DI" firstAttribute="centerY" secondItem="T2F-48-kfk" secondAttribute="centerY" id="LjZ-hm-apC"/>
                                                 <constraint firstItem="nvd-7p-7y9" firstAttribute="leading" secondItem="fge-h7-IM2" secondAttribute="leading" constant="20" symbolic="YES" id="Mrv-4v-Zjg"/>
                                                 <constraint firstItem="T2F-48-kfk" firstAttribute="leading" secondItem="UL3-QJ-lPT" secondAttribute="trailing" constant="10" id="QaK-qs-Xbc"/>
@@ -758,6 +766,7 @@
                                             <outlet property="amountTextField" destination="pNi-eW-KQk" id="yGj-US-JlZ"/>
                                             <outlet property="dateRangeTextField" destination="T2F-48-kfk" id="yb5-8O-OmQ"/>
                                             <outlet property="descriptionTextView" destination="3gW-ti-Pwe" id="Cje-rF-E23"/>
+                                            <outlet property="limitedAmount" destination="zMw-2L-G0m" id="19Y-CR-sDm"/>
                                             <outlet property="nameLabel" destination="kJp-RP-FdR" id="Zhb-NJ-hqa"/>
                                         </connections>
                                     </tableViewCell>
@@ -1493,6 +1502,11 @@
                                                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                         <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                     </collectionViewFlowLayout>
+                                                    <view key="backgroundView" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c1W-gj-XK5">
+                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    </view>
                                                     <cells>
                                                         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ApplyCollectionViewCell" id="te0-aK-Is4" customClass="ApplyCollectionViewCell" customModule="OutdoorTribe" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="5" width="60" height="90"/>
@@ -1562,7 +1576,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1J9-Xh-l2q">
-                                                    <rect key="frame" x="90" y="15" width="44.5" height="20.5"/>
+                                                    <rect key="frame" x="90" y="15" width="309" height="20.5"/>
                                                     <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="18"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -1584,6 +1598,7 @@
                                                 <constraint firstItem="1J9-Xh-l2q" firstAttribute="top" secondItem="5en-EN-Brf" secondAttribute="top" constant="15" id="3FH-yq-jHL"/>
                                                 <constraint firstAttribute="trailing" secondItem="dpY-3A-db5" secondAttribute="trailing" constant="150" id="Hm3-HF-0kL"/>
                                                 <constraint firstAttribute="bottom" secondItem="jIK-cE-40F" secondAttribute="bottom" constant="15" id="Lex-om-TK5"/>
+                                                <constraint firstAttribute="trailing" secondItem="1J9-Xh-l2q" secondAttribute="trailing" constant="15" id="YPQ-Sn-kxt"/>
                                                 <constraint firstItem="1J9-Xh-l2q" firstAttribute="leading" secondItem="cKD-fy-RUD" secondAttribute="trailing" constant="15" id="ckh-li-aSX"/>
                                                 <constraint firstAttribute="bottom" secondItem="cKD-fy-RUD" secondAttribute="bottom" constant="10" id="jbN-al-cbC"/>
                                                 <constraint firstItem="dpY-3A-db5" firstAttribute="leading" secondItem="cKD-fy-RUD" secondAttribute="trailing" constant="15" id="kyn-mk-ZEs"/>
@@ -3511,7 +3526,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="jaS-GZ-trm"/>
+        <segue reference="ex2-Y5-saD"/>
         <segue reference="9fu-0O-WUc"/>
         <segue reference="POk-Rx-IpJ"/>
         <segue reference="gev-hz-6wC"/>

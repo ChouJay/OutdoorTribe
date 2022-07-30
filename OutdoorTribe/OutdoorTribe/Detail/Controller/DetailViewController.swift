@@ -17,9 +17,8 @@ protocol AskDetailInfoCellDelegate {
 
 class DetailViewController: UIViewController {
     
-    var askDetailInfoCellDelegate: AskDetailInfoCellDelegate?
-    
     let firestoreAuth = Auth.auth()
+    var askDetailInfoCellDelegate: AskDetailInfoCellDelegate?
     var pageController = UIPageControl()
     var renterAccount: Account?
     var userInfo: Account?
@@ -79,14 +78,11 @@ class DetailViewController: UIViewController {
             chatRoom.users = [chaterOneName, chaterTwoName]
             chatRoom.chaterOneUid = userInfo?.userID ?? "Fake Uid"
             chatRoom.chaterTwoUid = chooseProduct?.renterUid ?? "Fake Uid"
-            print(chaterOneName)
-            print(chaterTwoName)
             ChatManager.shared.createChatRoomIfNeed(
                 chatRoom: chatRoom,
                 chaterOne: chaterOneName,
                 chaterTwo: chaterTwoName) { [weak self] existChatRoom in
                     self?.chatRoom = existChatRoom
-                    print(self?.chatRoom)
                     self?.performSegue(withIdentifier: "DetailtoChatRoomSegue", sender: nil)
             }
         }
@@ -123,7 +119,6 @@ class DetailViewController: UIViewController {
                 self?.chatBtn.alpha = 0.5
                 self?.applyBtn.isEnabled = false
                 self?.applyBtn.alpha = 0.5
-                
             }
         }
     }
@@ -148,6 +143,22 @@ class DetailViewController: UIViewController {
             destinationVC.posterUid = posterUid
         }
     }
+    
+    func loadingRenterInfo(renterAccount: Account, cell: Any) {
+        guard let cell = cell as? RenterTableViewCell else { return }
+        let totalScore = renterAccount.totalScore
+        var score = 0.0
+        
+        if renterAccount.ratingCount != 0 {
+            score = totalScore / renterAccount.ratingCount
+        }
+        cell.scoreLabel.text = String(format: "%.1f", score) + "(\(String(Int(renterAccount.ratingCount))))"
+
+        if renterAccount.photo != "" {
+            guard let url = URL(string: renterAccount.photo) else { return }
+            cell.renterPhotoImage.kf.setImage(with: url)
+        }
+    }
 }
 
 // MARK: - tableView dataSource
@@ -162,30 +173,17 @@ extension DetailViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "DetailGalleryTableViewCell",
                 for: indexPath) as? DetailGalleryTableViewCell else { fatalError() }
-            guard let urlStrings = chooseProduct?.photoUrl else { return cell}
-            cell.imageUrlStings = urlStrings
-            guard let chooseProduct = chooseProduct else { return cell}
-            cell.layoutPageController(chooseProduct: chooseProduct)
+            cell.chooseProduct = chooseProduct
+            cell.showGallery()
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "RenterTableViewCell",
                 for: indexPath) as? RenterTableViewCell else { fatalError() }
             guard let renterAccount = renterAccount else { return cell }
+                cell.nameLabel.text = renterAccount.name
             cell.photoLayOut()
-            cell.nameLabel.text = renterAccount.name
-            let totalScore = renterAccount.totalScore
-            var score = 0.0
-            if renterAccount.ratingCount != 0 {
-                score = totalScore / renterAccount.ratingCount
-            }
-            cell.scoreLabel.text = String(format: "%.1f", score) + "(\(String(Int(renterAccount.ratingCount))))"
-        
-            if renterAccount.photo != "" {
-                guard let url = URL(string: renterAccount.photo) else { return cell }
-                cell.renterPhotoImage.kf.setImage(with: url)
-            }
-
+            loadingRenterInfo(renterAccount: renterAccount, cell: cell)
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(
@@ -193,12 +191,8 @@ extension DetailViewController: UITableViewDataSource {
                 for: indexPath) as? DetailInfoTableViewCell else { fatalError() }
             askDetailInfoCellDelegate = cell
             cell.delegate = self
-            guard let productName = chooseProduct?.title,
-                  let addressString = chooseProduct?.addressString,
-                  let rent = chooseProduct?.rent else { return cell }
-            cell.nameLabel.text = productName
-            cell.addressLabel.text = addressString
-            cell.descriptionTextView.text = chooseProduct?.description ?? ""
+            cell.chooseProduct = chooseProduct
+            cell.showInfo()
             return cell
 
         default:

@@ -50,7 +50,6 @@ extension BookingViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "BookingPhotoTableViewCell",
                 for: indexPath) as? BookingPhotoTableViewCell else { fatalError() }
-            guard let product = applyingOrder?.product else { return cell }
             guard let urlStringArray = applyingOrder?.product?.photoUrl else { return cell }
             cell.galleryUrlStrings = urlStringArray
             cell.layoutPageController()
