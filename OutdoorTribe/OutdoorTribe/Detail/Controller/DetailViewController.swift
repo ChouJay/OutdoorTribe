@@ -190,6 +190,7 @@ extension DetailViewController: UITableViewDataSource {
                 withIdentifier: "DetailInfoTableViewCell",
                 for: indexPath) as? DetailInfoTableViewCell else { fatalError() }
             askDetailInfoCellDelegate = cell
+            cell.delegate = self
             cell.chooseProduct = chooseProduct
             cell.showInfo()
             return cell

@@ -115,6 +115,7 @@ extension PostViewController: UITableViewDataSource {
             cell.descriptionTextView.delegate = self
             cell.titleTextField.delegate = self
             cell.addressTextField.delegate = self
+            cell.amountTextField.delegate = self
             cell.passDateDelegate = self
             cell.classificationTextField.delegate = self
             return cell
