@@ -8,7 +8,8 @@
 import UIKit
 
 class RenterTableViewCell: UITableViewCell {
-
+    var renterAccount: Account?
+    
     @IBOutlet weak var renterPhotoImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!

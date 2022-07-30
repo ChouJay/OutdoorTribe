@@ -19,11 +19,19 @@ class NotificatoinViewController: UIViewController {
     var applyingOrders = [Order]()
     var chatRooms = [ChatRoom]()
     lazy var collectionViewFromCell = UICollectionView()
-    
+    var hintImageView: UIImageView = {
+        var imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.image = UIImage(named: "hintImage")
+        return imageView
+    }()
+        
     @IBOutlet weak var chatRoomTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        layoutHintImage()
         
         AccountManager.shared.getAllUserInfo { [weak self] allUserInfoFromServer in
             self?.allUserInfo = allUserInfoFromServer
@@ -49,19 +57,7 @@ class NotificatoinViewController: UIViewController {
                 self?.userInfo = account
                 guard let userInfo = self?.userInfo else { return }
                 ChatManager.shared.loadingChatRoom(userName: userInfo.name) { [weak self] chatRoomsFromServer in
-                    if self?.blockUsers.count == 0 {
-                        self?.chatRooms = chatRoomsFromServer
-                    } else {
-                        self?.chatRooms = []
-                        for chatRoom in chatRoomsFromServer {
-                            guard let blockUsers = self?.blockUsers else { return }
-                            for blockUser in blockUsers {
-                                if chatRoom.chaterOne != blockUser.name && chatRoom.chaterTwo != blockUser.name {
-                                    self?.chatRooms.append(chatRoom)
-                                }
-                            }
-                        }
-                    }
+                    self?.showChatRoom(from: chatRoomsFromServer)
                     self?.chatRoomTableView.reloadSections(IndexSet(integer: 1), with: .none)
                 }
                 OrderManger.shared.retrieveApplyingOrder(userName: userInfo.name) { ordersFromFirestore in
@@ -71,10 +67,8 @@ class NotificatoinViewController: UIViewController {
                         self?.applyingOrders = []
                         for order in ordersFromFirestore {
                             guard let blockUsers = self?.blockUsers else { return }
-                            for blockUser in blockUsers {
-                                if order.lessorUid != blockUser.userID {
-                                    self?.applyingOrders.append(order)
-                                }
+                            for blockUser in blockUsers where order.lessorUid != blockUser.userID {
+                                self?.applyingOrders.append(order)
                             }
                         }
                     }
@@ -82,6 +76,57 @@ class NotificatoinViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    func showChatRoom(from chatRoomsFromServer: [ChatRoom]) {
+        if blockUsers.count == 0 {
+            chatRooms = chatRoomsFromServer
+        } else {
+            chatRooms = []
+            for chatRoom in chatRoomsFromServer {
+                for blockUser in blockUsers {
+                    if chatRoom.chaterOne != blockUser.name && chatRoom.chaterTwo != blockUser.name {
+                        chatRooms.append(chatRoom)
+                    }
+                }
+            }
+        }
+    }
+    
+    func loadChatListInfo(in cell: ChatListTableViewCell, by indexPath: IndexPath) {
+        guard let usersInChatRoom = chatRooms[indexPath.row].users,
+              let userInfo = userInfo else { return }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd HH:mm"
+        for name in usersInChatRoom where name != userInfo.name {
+            cell.chatListName.text =  name
+            cell.lastMessageLabel.text = chatRooms[indexPath.row].lastMessage
+            let lastDate = chatRooms[indexPath.row].lastDate
+            let lastDateString = dateFormatter.string(from: lastDate)
+            cell.lastSendTimeLabel.text = lastDateString
+            loadChatListPhoto(in: cell, otherPersonName: name)
+        }
+    }
+    
+    func loadChatListPhoto(in cell: ChatListTableViewCell, otherPersonName: String) {
+        for user in allUserInfo where user.name == otherPersonName {
+            guard user.photo != "" else { break }
+            if let url = URL(string: user.photo) {
+                cell.otherUserPhotoUrlString = user.photo
+                cell.chatListPhoto.kf.setImage(with: url)
+            }
+        }
+    }
+    
+    func layoutHintImage() {
+        chatRoomTableView.addSubview(hintImageView)
+        
+        hintImageView.anchor(top: chatRoomTableView.topAnchor,
+                             leading: chatRoomTableView.leadingAnchor,
+                             bottom: chatRoomTableView.bottomAnchor,
+                             trailing: chatRoomTableView.trailingAnchor,
+                             paddingTop: 188, width: UIScreen.main.bounds.width,
+                             height: chatRoomTableView.frame.height - 188)
     }
 }
 
@@ -96,6 +141,11 @@ extension NotificatoinViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
+            if chatRooms.count == 0 {
+                hintImageView.isHidden = false
+            } else {
+                hintImageView.isHidden = true
+            }
             return chatRooms.count
         default:
             return 0
@@ -109,7 +159,6 @@ extension NotificatoinViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "ApplyTableViewCell",
                 for: indexPath) as? ApplyTableViewCell else { fatalError() }
-        
             cell.applyingOrders = applyingOrders
             collectionViewFromCell = cell.applyCollectionView
             return cell
@@ -117,24 +166,7 @@ extension NotificatoinViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "ChatListTableViewCell",
                 for: indexPath) as? ChatListTableViewCell else { fatalError() }
-            guard let usersInChatRoom = chatRooms[indexPath.row].users,
-                  let userInfo = userInfo else { return cell }
-            for name in usersInChatRoom where name != userInfo.name {
-                cell.chatListName.text =  name
-                cell.lastMessageLabel.text = chatRooms[indexPath.row].lastMessage
-                let lastDate = chatRooms[indexPath.row].lastDate
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy/MM/dd HH:mm"
-                let lastDateString = dateFormatter.string(from: lastDate)
-                cell.lastSendTimeLabel.text = lastDateString
-                for user in allUserInfo where user.name == name {
-                    guard user.photo != "" else { break }
-                    if let url = URL(string: user.photo) {
-                        cell.otherUserPhotoUrlString = user.photo
-                        cell.chatListPhoto.kf.setImage(with: url)
-                    }
-                }
-            }
+            loadChatListInfo(in: cell, by: indexPath)
             return cell
         default:
             guard let cell = tableView.dequeueReusableCell(

@@ -14,11 +14,19 @@ class BookedStageViewController: UIViewController {
     let firestoreAuth = Auth.auth()
     var userInfo: Account?
     var bookedStateOrders = [Order]()
+    var hintImageView: UIImageView = {
+        var imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.image = UIImage(named: "profileHintPage")
+        return imageView
+    }()
+    
     @IBOutlet weak var bookedTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        layoutHintImage()
         bookedTableView.dataSource = self
     }
     
@@ -35,23 +43,14 @@ class BookedStageViewController: UIViewController {
             }
         }
     }
-}
-
-// MARK: - table View dataSource
-extension BookedStageViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        bookedStateOrders.count
-    }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if bookedStateOrders[indexPath.row].renter == userInfo?.name {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "BookedForRenterTableViewCell",
-                for: indexPath) as? BookedForRenterTableViewCell else { fatalError() }
+    func showBookStateInfo(cell: UITableViewCell, isForRenter: Bool, cellForRowAt indexPath: IndexPath) {
+        if isForRenter {
+            guard let cell = cell as? BookedForRenterTableViewCell else { return }
             cell.changeStateDelegate = self
             cell.orderID = bookedStateOrders[indexPath.row].orderID
             guard let urlString = bookedStateOrders[indexPath.row].product?.photoUrl.first,
-                  let url = URL(string: urlString) else { return cell }
+                  let url = URL(string: urlString) else { return }
             if bookedStateOrders[indexPath.row].orderState == 1 {
                 cell.disableDeliverBtn()
             }
@@ -59,18 +58,15 @@ extension BookedStageViewController: UITableViewDataSource {
             cell.productName.text = bookedStateOrders[indexPath.row].product?.title
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy/MM/dd"
-            guard let date = bookedStateOrders[indexPath.row].leaseTerm.first else { return cell}
+            guard let date = bookedStateOrders[indexPath.row].leaseTerm.first else { return }
             let dateString = dateFormatter.string(from: date)
             cell.pickUpdateLabel.text = dateString
-            return cell
         } else {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "BookedForLessorTableViewCell",
-                for: indexPath) as? BookedForLessorTableViewCell else { fatalError() }
+            guard let cell = cell as? BookedForLessorTableViewCell else { return }
             cell.changeStateDelegate = self
             cell.orderID = bookedStateOrders[indexPath.row].orderID
             guard let urlString = bookedStateOrders[indexPath.row].product?.photoUrl.first,
-                  let url = URL(string: urlString) else { return cell }
+                  let url = URL(string: urlString) else { return }
             
             if bookedStateOrders[indexPath.row].orderState == 2 {
                 cell.disablePickUpBtn()
@@ -79,10 +75,46 @@ extension BookedStageViewController: UITableViewDataSource {
             cell.productName.text = bookedStateOrders[indexPath.row].product?.title
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy/MM/dd"
-            guard let date = bookedStateOrders[indexPath.row].leaseTerm.first else { return cell}
+            guard let date = bookedStateOrders[indexPath.row].leaseTerm.first else { return }
             let dateString = dateFormatter.string(from: date)
             cell.pickUpDateLabel.text = dateString
+        }
+    }
+    
+    func layoutHintImage() {
+        view.addSubview(hintImageView)
+        hintImageView.anchor(top: view.topAnchor,
+                             leading: view.leadingAnchor,
+                             bottom: view.bottomAnchor,
+                             trailing: view.trailingAnchor,
+                             width: UIScreen.main.bounds.width,
+                             height: view.frame.height)
+    }
+}
 
+// MARK: - table View dataSource
+extension BookedStageViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if bookedStateOrders.count == 0 {
+            hintImageView.isHidden = false
+        } else {
+            hintImageView.isHidden = true
+        }
+        return bookedStateOrders.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if bookedStateOrders[indexPath.row].renter == userInfo?.name {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "BookedForRenterTableViewCell",
+                for: indexPath) as? BookedForRenterTableViewCell else { fatalError() }
+            showBookStateInfo(cell: cell, isForRenter: true, cellForRowAt: indexPath)
+            return cell
+        } else {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "BookedForLessorTableViewCell",
+                for: indexPath) as? BookedForLessorTableViewCell else { fatalError() }
+            showBookStateInfo(cell: cell, isForRenter: false, cellForRowAt: indexPath)
             return cell
         }
     }

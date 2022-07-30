@@ -15,14 +15,13 @@ protocol LessorChangeStateDelegate {
 class BookedForLessorTableViewCell: UITableViewCell {
 
     var orderID = ""
+    var changeStateDelegate: LessorChangeStateDelegate?
     
     @IBOutlet weak var bookedPhoto: UIImageView!
     @IBOutlet weak var pickUpButton: UIButton!
     @IBOutlet weak var lessorCancelBtn: UIButton!
     @IBOutlet weak var productName: UILabel!
     @IBOutlet weak var pickUpDateLabel: UILabel!
-    
-    var changeStateDelegate: LessorChangeStateDelegate?
     
     @IBAction func tapPickUpButton(_ sender: UIButton) {
         changeStateDelegate?.askVcChangeToPickUpState(sender)

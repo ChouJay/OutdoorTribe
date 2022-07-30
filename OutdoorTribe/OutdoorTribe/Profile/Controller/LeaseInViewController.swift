@@ -12,11 +12,19 @@ class LeaseInViewController: UIViewController {
     let firestoreAuth = Auth.auth()
     var leaseOrders = [Order]()
     var userInfo: Account?
+    var hintImageView: UIImageView = {
+        var imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.image = UIImage(named: "profileHintPage")
+        return imageView
+    }()
 
     @IBOutlet weak var leaseInTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        layoutHintImage()
         leaseInTableView.dataSource = self
         
         guard let uid = firestoreAuth.currentUser?.uid else { return }
@@ -38,12 +46,27 @@ class LeaseInViewController: UIViewController {
         callVC.calleeUid = targetUid
         present(callVC, animated: true, completion: nil)
     }
+    
+    func layoutHintImage() {
+        view.addSubview(hintImageView)
+        hintImageView.anchor(top: view.topAnchor,
+                             leading: view.leadingAnchor,
+                             bottom: view.bottomAnchor,
+                             trailing: view.trailingAnchor,
+                             width: UIScreen.main.bounds.width,
+                             height: view.frame.height)
+    }
 }
 
 // MARK: - table view dataSource
 extension LeaseInViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        leaseOrders.count
+        if leaseOrders.count == 0 {
+            hintImageView.isHidden = false
+        } else {
+            hintImageView.isHidden = true
+        }
+        return leaseOrders.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

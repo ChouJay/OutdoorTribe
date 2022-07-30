@@ -23,7 +23,6 @@ class RentOutTableViewCell: UITableViewCell {
     @IBOutlet weak var rentOutCallBtn: UIButton!
     @IBOutlet weak var productName: UILabel!
     @IBOutlet weak var productPhoto: UIImageView!
-    
     @IBOutlet weak var returnDateLabel: UILabel!
     @IBOutlet weak var finishBtn: UIButton!
     
