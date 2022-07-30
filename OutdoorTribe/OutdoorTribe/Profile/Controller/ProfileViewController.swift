@@ -58,6 +58,7 @@ class ProfileViewController: UIViewController {
         guard let uid = firestoreAuth.currentUser?.uid else { return }
         AccountManager.shared.getUserInfo(by: uid) { [weak self] account in
             self?.userInfo = account
+            self?.userPhotoImage.image = UIImage(systemName: "person.crop.circle")
             if let url = URL(string: account.photo) {
                 self?.userPhotoImage.kf.setImage(with: url)
             }
