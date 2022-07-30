@@ -16,7 +16,7 @@ class LeaseInViewController: UIViewController {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "hintImage")
+        imageView.image = UIImage(named: "profileHintPage")
         return imageView
     }()
 
