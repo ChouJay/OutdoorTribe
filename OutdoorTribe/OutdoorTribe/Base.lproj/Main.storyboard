@@ -1502,7 +1502,7 @@
                                                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                         <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                     </collectionViewFlowLayout>
-                                                    <view key="backgroundView" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c1W-gj-XK5">
+                                                    <view key="backgroundView" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c1W-gj-XK5">
                                                         <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -2080,6 +2080,9 @@
                                         <state key="normal" title="Reject">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="tapRejectButton:" destination="R8s-SP-BTd" eventType="touchUpInside" id="xwh-MW-4zH"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2hd-of-rFN">
                                         <rect key="frame" x="208" y="0.0" width="206" height="70"/>

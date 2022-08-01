@@ -28,6 +28,12 @@ class BookingViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    @IBAction func tapRejectButton(_ sender: Any) {
+        guard let documentID = applyingOrder?.orderID else { return }
+        OrderManger.shared.deleteOrderByCancelBtn(documentID)
+        navigationController?.popViewController(animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         bookInfoTableView.dataSource = self
