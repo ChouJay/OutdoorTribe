@@ -60,8 +60,6 @@ class TabBarController: UITabBarController {
         plusButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         plusButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
     }
-    
-    
 }
 
 extension TabBarController: UITabBarControllerDelegate {

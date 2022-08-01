@@ -32,5 +32,8 @@ class ChatListTableViewCell: UITableViewCell {
         chatListPhoto.layer.cornerRadius = chatListPhoto.frame.height / 2
         chatListPhoto.contentMode = .scaleAspectFill
     }
-
+    
+    override func prepareForReuse() {
+        chatListPhoto.image = UIImage(systemName: "person.crop.circle")
+    }
 }
