@@ -169,7 +169,7 @@ extension ProfileViewController: UploadPhotoDelegate {
             NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Bold", size: 20)!,
             NSAttributedString.Key.foregroundColor: UIColor.black
         ]
-        let titleString = NSAttributedString(string: "Please upload some photo or video", attributes: titleAttributes)
+        let titleString = NSAttributedString(string: "Please upload some photos", attributes: titleAttributes)
         controller.setValue(titleString, forKey: "attributedTitle")
         controller.view.tintColor = UIColor.gray
         // 相機

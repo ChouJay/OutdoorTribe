@@ -145,7 +145,7 @@ extension PostViewController: UploadPhotoDelegate {
             NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Bold", size: 20)!,
             NSAttributedString.Key.foregroundColor: UIColor.black
         ]
-        let titleString = NSAttributedString(string: "Please upload some photo or video", attributes: titleAttributes)
+        let titleString = NSAttributedString(string: "Please upload some photos", attributes: titleAttributes)
         controller.setValue(titleString, forKey: "attributedTitle")
         controller.view.tintColor = UIColor.gray
         // 相機
@@ -173,7 +173,7 @@ extension PostViewController: UploadPhotoDelegate {
     /// 開啟圖庫
     func openPhotoLibrary() {
         imagePickerController.sourceType = .photoLibrary
-        imagePickerController.mediaTypes = ["public.image", "public.movie"]
+        imagePickerController.mediaTypes = ["public.image"]
         self.present(imagePickerController, animated: true)
     }
 }
