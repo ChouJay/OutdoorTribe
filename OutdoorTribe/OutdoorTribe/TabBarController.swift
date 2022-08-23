@@ -84,7 +84,6 @@ extension TabBarController: UITabBarControllerDelegate {
 // SignalClient delegate
 extension TabBarController: SignalClientDelegate {
     
-    
     func signalClient(_ signalClient: SignalingClient,
                       didReceiveRemoteSdp sdp: RTCSessionDescription,
                       didReceiveSender sender: String?) {
