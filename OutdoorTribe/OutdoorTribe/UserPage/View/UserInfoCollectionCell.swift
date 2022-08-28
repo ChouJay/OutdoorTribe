@@ -34,4 +34,9 @@ class UserInfoCollectionCell: UICollectionViewCell {
     func layoutPhotoImage() {
         photoImage.layer.cornerRadius = photoImage.frame.width / 2
     }
+    
+    func prepareToShowData(infoViewModel: UserInfoViewModel, userID: String, posterUid: String, userPostCount: Int) {
+        infoViewModel.updateData(currentUserID: userID, posterUid: posterUid, item: self, userPosetCount: userPostCount)
+
+    }
 }

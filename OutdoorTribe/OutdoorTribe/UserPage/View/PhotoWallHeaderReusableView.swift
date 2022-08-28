@@ -29,5 +29,4 @@ class PhotoWallHeaderReusableView: UICollectionReusableView {
         blockBtn.isEnabled = false
         blockBtn.alpha = 0.7
     }
-    
 }

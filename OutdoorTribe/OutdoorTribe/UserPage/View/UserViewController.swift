@@ -13,14 +13,20 @@ class UserViewController: UIViewController {
     let firebaseAuth = Auth.auth()
     var posterUid = ""
     var othersAccount: Account?
-    var allUserProducts = [Product]()
-    var currentUserSubscriptions = [Account]()
     var currentUserID = ""
+    
+    private var userPostViewModel = UserPostViewModel()
+    private var headerViewModel = HeaderViewModel()
+    var userInfoViewModel = UserInfoViewModel()
     
     @IBOutlet weak var productCollectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        setupUserPostBinder()
+        setupHeaderBinder()
+        setupUserAccountBinder()
         
         productCollectionView.register(
             UINib(nibName: "PhotoWallHeaderReusableView", bundle: nil),
@@ -36,14 +42,33 @@ class UserViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        AccountManager.shared.getUserPost(byUserID: posterUid) { [weak self] productsFromServer in
-            self?.allUserProducts = productsFromServer
-            self?.productCollectionView.reloadData()
-        }
+        userPostViewModel.getUserPosts(posterUid: posterUid)
         
         if firebaseAuth.currentUser?.uid != nil {
-            SubscribeManager.shared.loadingSubscriber(currentUserID: currentUserID) { [weak self] accountsFromServer in
-                self?.currentUserSubscriptions = accountsFromServer
+            headerViewModel.getAllUserInfos(currentUserID: currentUserID)
+        }
+    }
+    
+    private func setupUserPostBinder() {
+        userPostViewModel.bindedPostUrl.bind { [weak self] postUrls in
+            if postUrls != nil {
+                self?.productCollectionView.reloadData()
+            }
+        }
+    }
+    
+    private func setupHeaderBinder() {
+        headerViewModel.bindedUserInfos.bind { [weak self] userInfo in
+            if userInfo != nil {
+                self?.productCollectionView.reloadData()
+            }
+        }
+    }
+
+    private func setupUserAccountBinder() {
+        userInfoViewModel.bindedUserAccount.bind { [weak self] account in
+            if account != nil {
+                self?.productCollectionView.reloadSections(IndexSet(integer: 0))
             }
         }
     }
@@ -105,11 +130,12 @@ extension UserViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         2
     }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
             return 1
         } else {
-            return allUserProducts.count
+            return userPostViewModel.bindedPostUrl.value?.count ?? 0
         }
     }
     
@@ -119,33 +145,19 @@ extension UserViewController: UICollectionViewDataSource {
             guard let item = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "UserInfoCollectionCell",
                 for: indexPath) as? UserInfoCollectionCell else { fatalError() }
-            guard let othersAccount = othersAccount else { return item }
-            let totalScore = othersAccount.totalScore
-            var score = 0.0
-            if currentUserID == posterUid {
-                item.reportBtn.isHidden = true
-            }
-            if othersAccount.ratingCount != 0 {
-                score = totalScore / othersAccount.ratingCount
-            }
+            let userPostCount = userPostViewModel.bindedPostUrl.value?.count ?? 0
+            item.prepareToShowData(infoViewModel: userInfoViewModel,
+                                   userID: currentUserID,
+                                   posterUid: posterUid,
+                                   userPostCount: userPostCount)
             item.reportDelegate = self
-            item.scoreLabel.text = String(format: "%.1f", score)
-            item.nameLabel.text = othersAccount.name
-            item.followerCountLabel.text = String(othersAccount.followerCount)
-            item.postCountLabel.text = String(allUserProducts.count)
-            item.ratingCountLabel.text = "(\(String(Int(othersAccount.ratingCount))))"
             item.layoutPhotoImage()
-            if othersAccount.photo != "" {
-                guard let url = URL(string: othersAccount.photo) else { return item }
-                item.photoImage.kf.setImage(with: url)
-            }
-            
             return item
         } else {
             guard let item = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "UserPostCollectionCell",
                 for: indexPath) as? UserPostCollectionCell else { fatalError() }
-            guard let urlString = allUserProducts[indexPath.row].photoUrl.first else { return item}
+            guard let urlString = userPostViewModel.bindedPostUrl.value?[indexPath.row] else { return item }
             let url = URL(string: urlString)
             item.postImage.kf.setImage(with: url)
             return item
@@ -160,33 +172,19 @@ extension UserViewController: UICollectionViewDataSource {
             withReuseIdentifier: "photoWall",
             for: indexPath) as? PhotoWallHeaderReusableView else { fatalError() }
         
-        if currentUserID == "" {
-            headerView.blockBtn.isEnabled = false
-            headerView.followBtn.isEnabled = false
-            headerView.blockBtn.alpha = 0.5
-            headerView.followBtn.alpha = 0.5
-        } else {
-            if currentUserID == posterUid {
-                headerView.blockBtn.isEnabled = false
-                headerView.followBtn.isEnabled = false
-                headerView.blockBtn.alpha = 0.5
-                headerView.followBtn.alpha = 0.5
-            } else {
-                headerView.followBtn.isEnabled = true
-                headerView.followBtn.alpha = 1
-                for account in currentUserSubscriptions where account.userID == othersAccount?.userID {
-                    headerView.followBtn.isEnabled = false
-                    headerView.followBtn.alpha = 0.5
-                }
-                headerView.blockBtn.isEnabled = true
-                headerView.blockBtn.alpha = 1
-            }
-        }
         headerView.delegate = self
         headerView.followBtn.layer.cornerRadius = 5
         headerView.blockBtn.layer.cornerRadius = 5
         headerView.blockBtn.layer.borderWidth = 1
         headerView.blockBtn.layer.borderColor = UIColor.lightGray.cgColor
+        
+        guard let userAccount = userInfoViewModel.bindedUserAccount.value,
+              let allAccounts = headerViewModel.bindedUserInfos.value else { return headerView }
+        headerViewModel.judgeHeaderBtnStatus(targetView: headerView,
+                                             userID: currentUserID,
+                                             whoPost: posterUid,
+                                             search: allAccounts,
+                                             ifExist: userAccount)
         return headerView
     }
 }
@@ -198,15 +196,11 @@ extension UserViewController: UICollectionViewDelegate {
 // MARK: - follow user delegate
 extension UserViewController: userInteractDelegate {
     func askVcBlockUser() {
-        guard let otherAccount = othersAccount else { return }
-
-        AccountManager.shared.blockUser(byUserID: currentUserID, blockUser: otherAccount)
+        userInfoViewModel.addBlockUerToVM(to: currentUserID)
     }
     
     func askVcFollowUser() {
-        guard var othersAccount = othersAccount else { return }
-        othersAccount.followerCount += 1
-        SubscribeManager.shared.followUser(currentUserID: currentUserID, otherUser: othersAccount)
+        userInfoViewModel.addFollowerToVM(to: currentUserID)
     }
 }
 
@@ -230,6 +224,5 @@ extension UserViewController: AskVCToReportUserDelegate {
         alertController.addAction(defaultAction)
         alertController.addAction(alertRepotAction)
         present(alertController, animated: true, completion: nil)
-
     }
 }

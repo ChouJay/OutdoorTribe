@@ -139,7 +139,7 @@ class DetailViewController: UIViewController {
         } else {
             guard let destinationVC = segue.destination as? UserViewController,
                   let posterUid =  chooseProduct?.renterUid else { return }
-            destinationVC.othersAccount = renterAccount
+            destinationVC.userInfoViewModel.bindedUserAccount.value = renterAccount
             destinationVC.posterUid = posterUid
         }
     }
