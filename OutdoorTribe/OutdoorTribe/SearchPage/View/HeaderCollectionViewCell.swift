@@ -9,7 +9,7 @@ import UIKit
 
 class HeaderCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "\(HeaderCollectionViewCell.self)"
-
+    
     var selectedState = false {
         didSet {
             if selectedState {
@@ -36,16 +36,16 @@ class HeaderCollectionViewCell: UICollectionViewCell {
         changeVectorImageColor(color: .OutdoorTribeColor.mainColor)
         titleLabel.textColor = .OutdoorTribeColor.mainColor
 
-//        if selectedState {
-//            selectedView.isHidden = false
-//            changeVectorImageColor(color: .white)
-//            titleLabel.textColor = .white
-//            
-//        } else {
-//            selectedView.isHidden = true
-//            changeVectorImageColor(color: .OutdoorTribeColor.mainColor)
-//            titleLabel.textColor = .OutdoorTribeColor.mainColor
-//        }
+        if selectedState {
+            selectedView.isHidden = false
+            changeVectorImageColor(color: .white)
+            titleLabel.textColor = .white
+            
+        } else {
+            selectedView.isHidden = true
+            changeVectorImageColor(color: .OutdoorTribeColor.mainColor)
+            titleLabel.textColor = .OutdoorTribeColor.mainColor
+        }
     }
     
     func changeVectorImageColor(color: UIColor) {

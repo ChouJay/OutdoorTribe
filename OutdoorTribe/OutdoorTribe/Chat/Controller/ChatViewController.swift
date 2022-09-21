@@ -82,7 +82,7 @@ class ChatViewController: UIViewController {
         guard let userInfo = userInfo else { return }
         chatMessage.sender = userInfo.name
     }
-    
+        
     func convertDateToString(from date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"

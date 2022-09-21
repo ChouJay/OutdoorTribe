@@ -120,6 +120,4 @@ extension TabBarController: SignalClientDelegate {
     func signalClientDidDisconnect(_ signalClient: SignalingClient) {
 //        self.signalingConnected = false
     }
-    
-    
 }

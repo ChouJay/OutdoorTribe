@@ -288,18 +288,18 @@ extension SearchViewController: UISearchBarDelegate {
         guard let keyWord = searchBar.text else { return }
         switch isFilter {
         case false:
-            ProductManager.shared.searchPostedProduct(keyWord: keyWord) { [weak self] postedProducts in
-                self?.products = postedProducts
-                self?.afterFiltedProducts = postedProducts
-                self?.searchTableView.reloadData()
-                self?.searchBar.endEditing(true)
-            }
+            afterFiltedProducts = products.filter({ product in
+                product.title.lowercased().contains(keyWord.lowercased())
+            })
+            searchTableView.reloadData()
+            searchBar.endEditing(true)
         case true:
-            ProductManager.shared.searchPostedProduct(keyWord: keyWord) { [weak self] postedProducts in
-                self?.products = postedProducts
-                self?.tapFilterConfirmButton()
-                self?.searchBar.endEditing(true)
-            }
+            tapFilterConfirmButton()
+            afterFiltedProducts = afterFiltedProducts.filter({ product in
+                product.title.lowercased().contains(keyWord.lowercased())
+            })
+            searchTableView.reloadData()
+            searchBar.endEditing(true)
         }
     }
 }
@@ -338,6 +338,7 @@ extension SearchViewController: UICollectionViewDelegate {
         if collectionView != mainGalleryView {
             guard let cell = headerView.cellForItem(at: indexPath) as? HeaderCollectionViewCell else { return }
             cell.selectedState = !cell.selectedState
+
             if cell.selectedState {
                 searchBar.text = ""
                 let keyWord = Classification.shared.differentOutdoorType[indexPath.row]

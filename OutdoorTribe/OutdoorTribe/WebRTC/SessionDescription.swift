@@ -44,7 +44,6 @@ struct SessionDescription: Codable {
         }
     }
     
-    // what is this?? some kind of closure??
     var rtcSessionDescription: RTCSessionDescription {
         return RTCSessionDescription(type: self.type.rtcSdpType, sdp: self.sdp)
     }
